@@ -1,0 +1,49 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TestDemoApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ControlLibrary="using:ControlLibrary"
+    x:Class="TestDemoApp.BlankPage2"
+    mc:Ignorable="d" IsTabStop="false">
+
+    <Grid Background="Brown">
+        <Button x:Name="btOK" Content="能点到我吗？" Click="btOK_Click_1" HorizontalAlignment="Left" Margin="366,134,0,0" VerticalAlignment="Top" Width="133"/>
+        <ControlLibrary:PopupGrid x:Name="popupGrid" Height="500" Width="800">
+            <ControlLibrary:PopupGrid.ChildrenAddGrid>
+                <Grid x:Name="grid">
+                    <Image Source="http://ww4.sinaimg.cn/bmiddle/61d542e4jw1dqp5xqb2nkj.jpg" Stretch="Uniform"/>
+                </Grid>
+            </ControlLibrary:PopupGrid.ChildrenAddGrid>
+        </ControlLibrary:PopupGrid>
+        
+        <ControlLibrary:PopupBorder x:Name="popupBorder">
+            <ControlLibrary:PopupBorder.ChildrenAddHeadGrid>
+                <Grid x:Name="gridA">
+                    <Rectangle Fill="Yellow" Height="100" Width="800"></Rectangle>
+                </Grid>
+            </ControlLibrary:PopupBorder.ChildrenAddHeadGrid>
+            <ControlLibrary:PopupBorder.ChildrenAddGrid>
+                <Grid x:Name="gridB" Height="500" Width="800">
+                    <Image Source="http://ww4.sinaimg.cn/bmiddle/61d542e4jw1dqp5xqb2nkj.jpg" Stretch="Uniform" Height="500" Width="800"/>
+                </Grid>
+            </ControlLibrary:PopupBorder.ChildrenAddGrid>
+            <ControlLibrary:PopupBorder.ChildrenAddFootGrid>
+                <Grid x:Name="gridc" Height="100" Width="200" Background="Black">
+                    <Button Content="试试" Background="Red"/>
+                </Grid>
+            </ControlLibrary:PopupBorder.ChildrenAddFootGrid>
+        </ControlLibrary:PopupBorder>
+        
+        <Button Content="打开" HorizontalAlignment="Left" Margin="66,134,0,0" VerticalAlignment="Top" Width="133" Click="Button_Click_1"/>
+        <Button Content="关闭" HorizontalAlignment="Left" Margin="66,204,0,0" VerticalAlignment="Top" Width="133" Click="Button_Click_2"/>
+        <Button x:Name="bt" Content="返回" HorizontalAlignment="Left" VerticalAlignment="Top" Click="bt_Click_1"/>
+        <Button x:Name="bt_Copy" Content="关闭IsZoom" HorizontalAlignment="Left" VerticalAlignment="Top" Click="bt_Copy_Click_1"  Margin="228,63,0,0" Width="133"/>
+        <Button x:Name="bt_Copy1" Content="开发IsZoom" HorizontalAlignment="Left" VerticalAlignment="Top" Click="bt_Copy1_Click_1"  Margin="66,63,0,0" Width="133"/>
+        <Button Content="打开复合" HorizontalAlignment="Left" Margin="66,271,0,0" VerticalAlignment="Top" Width="133" Click="Button_Click_3"/>
+        <Button Content="关闭复合" HorizontalAlignment="Left" Margin="66,339,0,0" VerticalAlignment="Top" Width="133" Click="Button_Click_4"/>
+        <Button Content="关闭动画" HorizontalAlignment="Left" Margin="266,439,0,0" VerticalAlignment="Top" Width="133" Click="Button_Click_5"/>
+        <Button Content="打开动画" HorizontalAlignment="Left" Margin="66,439,0,0" VerticalAlignment="Top" Width="133" Click="Button_Click_6"/>
+    </Grid>
+</Page>

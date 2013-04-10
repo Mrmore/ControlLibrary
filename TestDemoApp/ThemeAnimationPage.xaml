@@ -1,0 +1,78 @@
+﻿<Page
+    x:Class="TestDemoApp.ThemeAnimationPage"
+    IsTabStop="false"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TestDemoApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.Resources>
+            <Storyboard x:Name="downAnimation">
+                <PointerDownThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="upAnimation">
+                <PointerUpThemeAnimation  TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="dragItemThemeAnimation">
+                <DragItemThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="dragOverThemeAnimation">
+                <DragOverThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="dropTargetItemThemeAnimation">
+                <DropTargetItemThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="fadeInThemeAnimation">
+                <FadeInThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="fadeOutThemeAnimation">
+                <FadeOutThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="popInThemeAnimation">
+                <PopInThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="popOutThemeAnimation">
+                <PopOutThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="repositionThemeAnimation">
+                <RepositionThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="splitOpenThemeAnimation">
+                <SplitOpenThemeAnimation OpenedTargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="splitCloseThemeAnimation">
+                <SplitCloseThemeAnimation  ClosedTargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="swipeBackThemeAnimation">
+                <SwipeBackThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+            <Storyboard x:Name="swipeHintThemeAnimation">
+                <SwipeHintThemeAnimation TargetName="rectangle" />
+            </Storyboard>
+        </Grid.Resources>
+
+        <Rectangle x:Name="rectangle" Fill="Red" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="128,146,1138,585"
+                   Width="100" Height="38" PointerPressed="Rectangle_PointerPressed" PointerReleased="rectangle_PointerReleased" />
+        <TextBlock x:Name="tb" Text="按下矩形有按下和抬起效果" Foreground="White" FontSize="16" TextWrapping="Wrap" TextTrimming="WordEllipsis" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="128,224,1138,503"
+        	Width="100" Height="41" PointerPressed="Rectangle_PointerPressed" PointerReleased="rectangle_PointerReleased" />
+        <ComboBox x:Name="cb" HorizontalAlignment="Left" Margin="302,146,0,0" VerticalAlignment="Top" Width="222" Height="38" SelectedIndex="0">
+            <ComboBoxItem Content="swipeHintThemeAnimation" />
+            <ComboBoxItem Content="swipeBackThemeAnimation" />
+            <ComboBoxItem Content="splitCloseThemeAnimation" />
+            <ComboBoxItem Content="splitOpenThemeAnimation" />
+            <ComboBoxItem Content="repositionThemeAnimation" />
+            <ComboBoxItem Content="popOutThemeAnimation" />
+            <ComboBoxItem Content="popInThemeAnimation" />
+            <ComboBoxItem Content="fadeOutThemeAnimation" />
+            <ComboBoxItem Content="fadeInThemeAnimation" />
+            <ComboBoxItem Content="dropTargetItemThemeAnimation" />
+            <ComboBoxItem Content="dragOverThemeAnimation" />
+            <ComboBoxItem Content="dragItemThemeAnimation" />
+        </ComboBox>
+        <Button Content="动画" HorizontalAlignment="Left" Margin="302,224,0,0" VerticalAlignment="Top" Width="222" Click="Button_Click_1"/>
+        <Button HorizontalAlignment="Left" VerticalAlignment="Top" Content="返回" Margin="10,10,0,0" Click="Button_Click_2"></Button>
+    </Grid>
+</Page>

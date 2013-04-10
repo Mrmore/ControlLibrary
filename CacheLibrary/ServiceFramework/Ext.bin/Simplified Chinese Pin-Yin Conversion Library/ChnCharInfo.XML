@@ -1,0 +1,282 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ChnCharInfo</name>
+    </assembly>
+    <members>
+        <member name="T:Microsoft.International.Converters.PinYinConverter.AssemblyResource">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.AssemblyResource.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.AssemblyResource.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.AssemblyResource.CHARACTER_NOT_SUPPORTED">
+            <summary>
+              Looks up a localized string similar to The character is not in extended character set of Simplified Chinese..
+            </summary>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.AssemblyResource.EXCEED_BORDER_EXCEPTION">
+            <summary>
+              Looks up a localized string similar to The number of strokes cannot be a negative value or greater than the maximum number of strokes  in the Chinese character..
+            </summary>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.AssemblyResource.INDEX_OUT_OF_RANGE">
+            <summary>
+              Looks up a localized string similar to The index is out of range..
+            </summary>
+        </member>
+        <member name="T:Microsoft.International.Converters.PinYinConverter.ChineseChar">
+            <summary>
+            It encapsulates fundamental data of Simplified Chinese characters, including sounds and strokes.   
+            </summary>
+            <example>
+            The following code demonstrates the returning stroke number of a given character in user scenario.
+            <code source = "../../Example_CS/Program.cs" lang = "cs"></code>
+            <code source = "../../Example_VB/Main.vb" lang = "vbnet"></code>
+            <code source = "../../Example_CPP/Example_CPP.cpp" lang = "cpp"></code>
+            </example>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.#ctor(System.Char)">
+            <summary>
+            Constructor of class ChineseChar.
+            </summary>
+            <param name="ch">The specified Chinese character.</param>
+            <exception cref="T:System.NotSupportedException">
+            The character is not in extended character set of Simplified Chinese.
+            </exception>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.HasSound(System.String)">
+            <summary>
+            Identifies whether the character has the given Pinyin.
+            </summary>
+            <param name="pinyin">Specifies the Pinyin to be identified.</param>
+            <returns>
+            true if pinyin is in the pinyin collection of the instance char; otherwise, false.
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">
+            pinyin is a null reference.
+            </exception>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.IsHomophone(System.Char)">
+            <summary>
+            Identifies whether the given character is homophone of the instance char.
+            </summary>
+            <param name="ch">Specifies the given character to be identified.</param>
+            <returns>
+            true if the given character is a homophone of the instance char; otherwise, false.
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.IsHomophone(System.Char,System.Char)">
+            <summary>
+            Identifies whether the two given characters are homophones.
+            </summary>
+            <param name="ch1">Indicates the first  character.</param>
+            <param name="ch2">Indicates the second character.</param>
+            <returns>
+            true, if the two given characters are homophones; otherwise, false.
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.CompareStrokeNumber(System.Char)">
+            <summary>
+            Compares stroke number of the given char with the instance char.
+            </summary>
+            <param name="ch">Indicates the given char.</param>
+            <returns>
+            Returns Value that represents the result of the comparison operation.
+            Returns Value = 0, if the given char and instance char have the same stroke number.
+            Returns Value &gt; 0, if the instance char has more strokes than the given char.
+            Returns Value &lt; 0, if the instance char has less strokes than the given char.
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.GetChars(System.String)">
+            <summary>
+            Gets all homophones for the given pinyin.
+            </summary>
+            <param name="pinyin">Indicates the sound.</param>
+            <returns>
+            Returns char list in which each character has the same specified pinyin.
+            Returns null if pinyin is invalid.
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">
+            pinyin is a null reference.
+            </exception>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.IsValidPinyin(System.String)">
+            <summary> 
+            Indicates whether a given pinyin is a valid PinYin string.
+            </summary>
+            <param name="pinyin">Indicates the string to be identified.</param>
+            <returns>
+            true, if the specified string is a valid pinyin string; otherwise, false.
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">
+            pinyin is a null reference.
+            </exception>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.IsValidChar(System.Char)">
+            <summary>
+            Indicates whether the given character is a valid Chinese character.
+            </summary>
+            <param name="ch">Indicates the character to be identified.</param>
+            <returns>
+            true if the specified character is a valid Chinese character; otherwise, false. 
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.IsValidStrokeNumber(System.Int16)">
+            <summary>
+            Identifies whether the given stroke number is a valid stroke number.
+            </summary>
+            <param name="strokeNumber">Indicates the stroke number to be identified.</param>
+            <returns>
+            true if the specified stroke number is valid; otherwise, false. 
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.GetHomophoneCount(System.String)">
+            <summary>
+            Retrieves the number of characters having the given Pinyin.
+            </summary>
+            <param name="pinyin">Indicates the pinyin string to be identified.</param>
+            <returns>
+            Returns the number of characters having the given Pinyin.
+            Returns -1 if pinyin is invalid
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">
+            pinyin is a null reference.
+            </exception>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.GetStrokeNumber(System.Char)">
+            <summary>
+            Retrieves the stroke number of a given character.
+            </summary>
+            <param name="ch">Indicates the character to be identified.</param>
+            <returns>
+            Returns the stroke number of the specified character.
+            Returns -1 if the character is invalid.
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.GetChars(System.Int16)">
+            <summary>
+            Retrieves all characters having the given stroke number.
+            </summary>
+            <param name="strokeNumber">Indicates the stroke number to be identified.</param>
+            <returns>
+            Returns the char list of the specified stroke number.
+            Returns null if strokeNumber is invalid.
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="M:Microsoft.International.Converters.PinYinConverter.ChineseChar.GetCharCount(System.Int16)">
+            <summary>
+            Retrieves the number of characters having the given stroke number.
+            </summary>
+            <param name="strokeNumber">Indicates the stroke number to be identified.</param>
+            <returns>
+            Returns the number of characters with the specified number of strokes.
+            Returns -1 if strokeNumber is invalid.
+            </returns>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.ChineseChar.PinyinCount">
+            <summary>
+            Gets the Pinyin number of this character.
+            </summary>
+            <value>
+            The Pinyin number of this character.
+            </value>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.ChineseChar.StrokeNumber">
+            <summary>
+            Gets the stroke number of this character.
+            </summary>
+            <value>
+            Stroke number of this character.
+            </value>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.ChineseChar.IsPolyphone">
+            <summary>
+            Identifies whether this character is a polyphone or not.
+            </summary>
+            <value>
+            The bool value indicating whether this character is a polyphone or not.
+            </value>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.ChineseChar.Pinyins">
+            <summary>
+            Gets the Pinyin set of this character.
+            </summary>
+            <value>
+            The Pinyin set of this character.
+            </value>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+        <member name="P:Microsoft.International.Converters.PinYinConverter.ChineseChar.ChineseCharacter">
+            <summary>
+            Gets the Chinese character.
+            </summary>
+            <value>
+            The Chinese character.
+            </value>
+            <remarks>
+            See <see cref="T:Microsoft.International.Converters.PinYinConverter.ChineseChar"/> for an example of using ChineseChar.
+            </remarks>
+        </member>
+    </members>
+</doc>

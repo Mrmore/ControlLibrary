@@ -1,0 +1,63 @@
+﻿<Page
+    x:Class="TestDemoApp.CeShiGifPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TestDemoApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:ControlLibrary="using:ControlLibrary">
+
+    <!--如果前面Background 绑定的是静态资源，后台更改了Background 属性，并且自动的对静态资源做了修改，全局发生了变化-->
+    <Grid x:Name="grid" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <Button x:Name="btCursor" HorizontalAlignment="Left" VerticalAlignment="Top" Content="返回" Margin="10,10,0,0" Click="Button_Click_1"></Button>
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBox x:Name="tb" Text="http://ww1.sinaimg.cn/bmiddle/69cb4e25jw1dwdgxhaurlg.gif" Width="450" KeyDown="tb_KeyDown_1"/>
+                    <Button Content="确定" Click="Button_Click_2"></Button>
+                    <Button Content="停止" Click="Button_Click_3"></Button>
+                    <Button Content="开始" Click="Button_Click_6"></Button>
+                    <Button Content="变化1" Click="Button_Click_4"></Button>
+                    <Button Content="变化2" Click="Button_Click_5"></Button>
+                    <Button Content="变化3静态图片" Click="Button_Click_7"></Button>
+                    <Button Content="本地静态" Click="Button_Click_8"></Button>
+                    <Button Content="本地动态" Click="Button_Click_9"></Button>
+                    <Button Content="流" Click="Button_Click_10"></Button>
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,0,0,0">
+                        <ControlLibrary:ColorPicker Height="23" x:Name="colorPicker1" Width="150" Color="Red" ColorChanged="colorPicker1_ColorChanged">
+                        </ControlLibrary:ColorPicker>
+                        <ControlLibrary:ColorBox Margin="0,15,0,0" Height="25" x:Name="colorBox" Width="150" ColorChanged="colorBox_ColorChanged_1"/>
+                    </StackPanel>
+                </StackPanel>
+            <Grid>
+                <Image x:Name="image" Width="150" Height="150" Stretch="Uniform" HorizontalAlignment="Left"/>
+                <ControlLibrary:ImageGif x:Name="imageGif" Width="150" Height="150" HorizontalAlignment="Right" />
+                <!--<ScrollViewer Width="450" Height="150" HorizontalAlignment="Center">
+                    <ControlLibrary:ImageGif Width="150" Height="150" x:Name="imageGif" HorizontalAlignment="Center" />
+                </ScrollViewer>-->
+                    <!--测试压缩-->
+                    <ControlLibrary:ImageGif Width="150" Height="150" x:Name="gifYaSuo" HorizontalAlignment="Right" Margin="0,0,200,0"/>
+
+                    <StackPanel Orientation="Vertical" Width="150" Height="150" HorizontalAlignment="Right" Margin="0,0,200,0">
+                        <Image x:Name="ceshiImage" Height="130" Width="150" />
+                        <ProgressBar x:Name="pbar" Height="20" Width="150" Value="0" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Grid>
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="448,101,0,0">
+            <Button x:Name="btSaveGif" Content="保存Gif" Click="btSaveGif_Click"/>
+            <Button x:Name="btSave" Content="保存离线" Click="btSave_Click" Margin="20,0,0,0"/>
+            <Button x:Name="btFolderSize" Content="查看文件夹的大小" Click="btFolderSize_Click" Margin="20,0,0,0"/>
+            <Button x:Name="btLoad" Content="读取离线" Click="btLoad_Click" Margin="20,0,0,0"/>
+
+            <Button x:Name="btceshi" Content="测试异常GIF" Click="btceshi_Click" Margin="20,0,0,0"/>
+
+            <Button x:Name="btyasuo" Content="测试压缩GIF" Click="btyasuo_Click" Margin="20,0,0,0"/>
+            <Button x:Name="btPause" Content="Pause" Click="btPause_Click" Margin="10,0,0,0"/>
+            <Button x:Name="btContinue" Content="恢复" Click="btContinue_Click" Margin="10,0,0,0"/>
+        </StackPanel>
+        <TextBlock x:Name="tbTime" HorizontalAlignment="Left" Margin="10,86,0,0" TextWrapping="Wrap" Text="" FontSize="22" VerticalAlignment="Top" Height="28" Width="166"/>
+    </Grid>
+</Page>

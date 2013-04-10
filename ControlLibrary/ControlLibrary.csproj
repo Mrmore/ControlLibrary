@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{44CF0B68-7375-4FFA-9A42-350F45533281}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ControlLibrary</RootNamespace>
+    <AssemblyName>ControlLibrary</AssemblyName>
+    <DefaultLanguage>zh-CN</DefaultLanguage>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>ExpressRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Dll\WriteableBitmapEx.WinRT.dll" />
+    <Content Include="Icons\Visit.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Themes\Transparent.png" />
+    <Content Include="Tools\Async\Credits.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnimationMat\MatAnimationType.cs" />
+    <Compile Include="AnimationMat\MotionParameters.cs" />
+    <Compile Include="AwesomeMenu\AwesomeMenu.cs" />
+    <Compile Include="AwesomeMenu\AwesomeMenuRadianType.cs" />
+    <Compile Include="AwesomeMenu\AwesomeMenuType.cs" />
+    <Compile Include="AwesomeMenu\AwesomMenuItem.cs" />
+    <Compile Include="CacheImage\CacheImage.cs" />
+    <Compile Include="CacheManagement\CacheBitmapImage.cs" />
+    <Compile Include="CacheManagement\CacheManagement.cs" />
+    <Compile Include="CacheManagement\CacheText.cs" />
+    <Compile Include="Charting\Common\DisposableObject.cs" />
+    <Compile Include="Charting\Common\EventHandlerList.cs" />
+    <Compile Include="ClipImageBrush\ClipImageBrush.cs" />
+    <Compile Include="ClipImage\ClipImage.cs" />
+    <Compile Include="ColorBox\ColorBox.cs" />
+    <Compile Include="ColorPicker\ColorBoard.cs" />
+    <Compile Include="ColorPicker\ColorHelper.cs" />
+    <Compile Include="ColorPicker\ColorPicker.cs" />
+    <Compile Include="ColorPicker\PredefinedColor.cs" />
+    <Compile Include="ColorPicker\PredefinedColorItem.cs" />
+    <Compile Include="CommonControl\BitStateChangedEventArgs.cs" />
+    <Compile Include="CommonControl\BitVector32.cs" />
+    <Compile Include="CommonControl\DisposableObject.cs" />
+    <Compile Include="CommonControl\SuspendableObject.cs" />
+    <Compile Include="Common\NumericExtensions.cs" />
+    <Compile Include="ControlBase\MatContentControl.cs" />
+    <Compile Include="Converter\ParallaxConverter.cs" />
+    <Compile Include="DataControlBase\DataControlBase.cs" />
+    <Compile Include="Data\CurrentItemChangingEventArgs.cs" />
+    <Compile Include="Data\DataGroup.cs" />
+    <Compile Include="Data\DataSourceGroup.cs" />
+    <Compile Include="Data\DataSourceItem.cs" />
+    <Compile Include="Data\DataSourceItemFactory.cs" />
+    <Compile Include="Data\IDataSourceItemFactory.cs" />
+    <Compile Include="CommonControl\ItemPropertyChangedEventArgs.cs" />
+    <Compile Include="Data\MatListSourceCurrency.cs" />
+    <Compile Include="Data\MatListSourceDataCursor.cs" />
+    <Compile Include="Data\WeakEventHandler.cs" />
+    <Compile Include="Data\CurrencyManagementMode.cs" />
+    <Compile Include="Data\ICurrencyManager.cs" />
+    <Compile Include="Data\IDataSourceGroup.cs" />
+    <Compile Include="Data\IDataSourceItem.cs" />
+    <Compile Include="DisposableBase.cs" />
+    <Compile Include="Extensions\ExtensionMethods.cs" />
+    <Compile Include="Extensions\FrameworkElementExtensions.cs" />
+    <Compile Include="Extensions\IEnumerableToObservableCollection.cs" />
+    <Compile Include="GifSynthesis\AnimatedGifEncoder.cs" />
+    <Compile Include="GifSynthesis\GifInformation.cs" />
+    <Compile Include="GifSynthesis\GifSynthesisHelper.cs" />
+    <Compile Include="GifSynthesis\LZWEncoder.cs" />
+    <Compile Include="GifSynthesis\NeuQuant.cs" />
+    <Compile Include="GifSynthesis\WriteableBitmapExpansion.cs" />
+    <Compile Include="Helper\CacheImageHelper\CacheImageDateManage.cs" />
+    <Compile Include="Helper\CacheImageHelper\CacheImageDateType.cs" />
+    <Compile Include="Helper\CacheImageHelper\CacheServiceImageInitializationHelper.cs" />
+    <Compile Include="ImageGif\BitFrame.cs" />
+    <Compile Include="ImageGif\GifCache.cs" />
+    <Compile Include="ImageGif\GifCacheDictionaryHelper.cs" />
+    <Compile Include="ImageGif\ImageGif.cs" />
+    <Compile Include="MatButton\MatButton.cs" />
+    <Compile Include="Meter\Meter.cs" />
+    <Compile Include="MyToolkit\PageUtilities.cs" />
+    <Compile Include="MyToolkit\SingleEvent.cs" />
+    <Compile Include="PopupBorder\PopupBorderBase.cs" />
+    <Compile Include="PopupBorder\PopupBorder.cs" />
+    <Compile Include="Primitives\Gestures\DoubleTapGesture.cs" />
+    <Compile Include="Primitives\Gestures\FlickGesture.cs" />
+    <Compile Include="Primitives\Gestures\Gesture.cs" />
+    <Compile Include="Primitives\Gestures\GestureBehavior.cs" />
+    <Compile Include="Primitives\Gestures\GestureEventArgs.cs" />
+    <Compile Include="Primitives\Gestures\HoldGesture.cs" />
+    <Compile Include="Primitives\Gestures\IPinchListener.cs" />
+    <Compile Include="Primitives\Gestures\KnownGesture.cs" />
+    <Compile Include="Primitives\Gestures\PanGesture.cs" />
+    <Compile Include="Primitives\Gestures\PinchCompleteGesture.cs" />
+    <Compile Include="Primitives\Gestures\PinchGesture.cs" />
+    <Compile Include="Primitives\Gestures\PinchProcessor.cs" />
+    <Compile Include="Primitives\Gestures\SingleTouchPointGesture.cs" />
+    <Compile Include="Primitives\Gestures\TapGesture.cs" />
+    <Compile Include="Primitives\Gestures\TwoTouchPointGesture.cs" />
+    <Compile Include="Primitives\LoopingList\DragDirection.cs" />
+    <Compile Include="Primitives\Pagination\IListSourceProvider.cs" />
+    <Compile Include="Data\MatListSource.cs" />
+    <Compile Include="DragDrop\Animation.cs" />
+    <Compile Include="DragDrop\DragEvent.cs" />
+    <Compile Include="DragDrop\DragSource.cs" />
+    <Compile Include="DragDrop\DropEvent.cs" />
+    <Compile Include="DragDrop\DropTarget.cs" />
+    <Compile Include="DragDrop\InitialValues.cs" />
+    <Compile Include="Flickr\AlbumLiveTile.cs" />
+    <Compile Include="FeedTile\PhotoLiveTile.cs" />
+    <Compile Include="FeedTile\PhotoLiveTileBase.cs" />
+    <Compile Include="HubTiles\CustomMosaicTile.cs" />
+    <Compile Include="HubTiles\MosaicTile.cs" />
+    <Compile Include="HubTiles\TitleImageHubTile.cs" />
+    <Compile Include="HubTiles\Tools\EnumerableExtensions.cs" />
+    <Compile Include="HubTiles\HubTileBase.cs" />
+    <Compile Include="Exceptions\MissingTemplatePartException.cs" />
+    <Compile Include="HubTiles\PictureHubTile.cs" />
+    <Compile Include="ControlBase\MatControl.cs" />
+    <Compile Include="HubTiles\MatHubTileService.cs" />
+    <Compile Include="HubTiles\MosaicHubTile.cs" />
+    <Compile Include="HubTiles\Tools\FrameCorner.cs" />
+    <Compile Include="HubTiles\Tools\HsvColor.cs" />
+    <Compile Include="HubTiles\Tools\MosaicFlipMode.cs" />
+    <Compile Include="HubTiles\Tools\VisualStateEnumerator.cs" />
+    <Compile Include="Data\WeakReferenceList.cs" />
+    <Compile Include="HubTile\HubTile.cs" />
+    <Compile Include="HubTile\HubTileService.cs" />
+    <Compile Include="HubTile\MultipleToSingleLineStringConverter.cs" />
+    <Compile Include="OfflineTextBlock\OfflineTextBlock.cs" />
+    <Compile Include="HubTiles\PictureRotatorHubTile.cs" />
+    <Compile Include="PopupGrid\PopupGrid.cs" />
+    <Compile Include="PopupGrid\PopupGridBase.cs" />
+    <Compile Include="Primitives\Pagination\IPageProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Flickr\Slide.cs" />
+    <Compile Include="HubTiles\TitleImageRotatorHubTile.cs" />
+    <Compile Include="SlideView\FlipManipulationBehavior.cs" />
+    <Compile Include="SlideView\SlideManipulationBehavior.cs" />
+    <Compile Include="SlideView\SlideView.cs" />
+    <Compile Include="SlideView\SlideViewAdjacentItemsPreviewMode.cs" />
+    <Compile Include="SlideView\SlideViewAnimationState.cs" />
+    <Compile Include="SlideView\SlideViewItem.cs" />
+    <Compile Include="SlideView\SlideViewItemRealizationMode.cs" />
+    <Compile Include="SlideView\SlideViewManipulationBehavior.cs" />
+    <Compile Include="SlideView\SlideViewPanel.cs" />
+    <Compile Include="SlideView\SlideViewTransitionMode.cs" />
+    <Compile Include="SlideView\TemplateProviderControl.cs" />
+    <Compile Include="Tools\ApplicationDataHelper.cs" />
+    <Compile Include="Tools\Async\AsyncAutoResetEvent.cs" />
+    <Compile Include="Tools\Async\AsyncBarrier.cs" />
+    <Compile Include="Tools\Async\AsyncCountdownEvent.cs" />
+    <Compile Include="Tools\Async\AsyncLock.cs" />
+    <Compile Include="Tools\Async\AsyncManualResetEvent.cs" />
+    <Compile Include="Tools\Async\AsyncReaderWriterLock.cs" />
+    <Compile Include="Tools\Async\AsyncSemaphore.cs" />
+    <Compile Include="Tools\CompressionGif\CompressionHelper.cs" />
+    <Compile Include="Tools\CompressionGif\CompressionImage.cs" />
+    <Compile Include="Tools\CompressionGif\OpenFrame.cs" />
+    <Compile Include="Tools\CompressionGif\SynthesisGifEncoder.cs" />
+    <Compile Include="Tools\Constants.cs" />
+    <Compile Include="Tools\FlickrHelp.cs" />
+    <Compile Include="Tools\ImageType\ImageType.cs" />
+    <Compile Include="Tools\ImageType\ImageTypeCheck.cs" />
+    <Compile Include="Tools\ImageType\ImageUriType.cs" />
+    <Compile Include="Tools\InternetTime\InternetTimeHelper.cs" />
+    <Compile Include="Tools\JudgmentCharacter\JudgmentCharacter.cs" />
+    <Compile Include="Tools\LocationLanguageHelper.cs" />
+    <Compile Include="Tools\MicrosoftStreamExtensions.cs" />
+    <Compile Include="Tools\NewGuide.cs" />
+    <Compile Include="Tools\NotificationHelper.cs" />
+    <Compile Include="Tools\SettingsHelper.cs" />
+    <Compile Include="Tools\SizeLongToString.cs" />
+    <Compile Include="Tools\UIUtil.cs" />
+    <Compile Include="Tools\UniqueID\HelperUniqueID.cs" />
+    <Compile Include="VirtualizingWrapPanel\VirtualizingWrapPanel.cs" />
+    <Compile Include="WrapPanelSil\WrapPanelSil.cs" />
+    <Compile Include="WrapPanel\OrientedSize.cs" />
+    <Compile Include="WrapPanel\WrapPanel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="AnimationMat\AnimationsMat\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CacheLibrary\CacheServiceImpl\CacheServiceImpl.csproj">
+      <Project>{41bb9540-5f43-4686-8d87-27ff07fcf3d0}</Project>
+      <Name>CacheServiceImpl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CacheLibrary\RenrenEntites\RenrenEntites.csproj">
+      <Project>{6a5e8d9e-8c83-4102-af2d-84ac17a4cf00}</Project>
+      <Name>RenrenEntites</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CacheLibrary\ServiceFacade\ServiceFacade.csproj">
+      <Project>{386b5d8a-3fa1-49bd-b724-efc331bcc6c2}</Project>
+      <Name>ServiceFacade</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CacheLibrary\ServiceFramework\ServiceFramework.csproj">
+      <Project>{508e9bcf-2b76-4de6-8828-1662104f7653}</Project>
+      <Name>ServiceFramework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NotificationsExtensions\NotificationsExtensions.csproj">
+      <Project>{5f0af0d0-2007-4499-ba0f-d44e2931cda6}</Project>
+      <Name>NotificationsExtensions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="WriteableBitmapEx.WinRT, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\WriteableBitmapEx.WinRT.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">
+    <VisualStudioVersion>11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
