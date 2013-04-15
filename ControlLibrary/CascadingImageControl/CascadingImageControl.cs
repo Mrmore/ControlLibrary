@@ -32,6 +32,10 @@ namespace ControlLibrary
         private static readonly Random Random = new Random();
 
         private Viewbox viewbox = null;
+
+        private double H, W = double.NaN;
+        private double RH, RW = double.NaN;
+        private SizeChangedEventHandler sizeChanged = null;
         #endregion
 
         #region Columns
@@ -407,7 +411,7 @@ namespace ControlLibrary
                 "CascadeDirection",
                 typeof(CascadeDirection),
                 typeof(CascadingImageControl),
-                new PropertyMetadata(CascadeDirection.Shuffle));
+                new PropertyMetadata(CascadeDirection.Shuffle, new PropertyChangedCallback(OnCascadeDirectionChanged)));
 
         /// <summary>
         /// Gets or sets the CascadeDirection property. This dependency property 
@@ -417,6 +421,15 @@ namespace ControlLibrary
         {
             get { return (CascadeDirection)GetValue(CascadeDirectionProperty); }
             set { SetValue(CascadeDirectionProperty, value); }
+        }
+
+        private static void OnCascadeDirectionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var cascadingImageControl = sender as CascadingImageControl;
+            if (cascadingImageControl != null && cascadingImageControl._layoutGrid != null)
+            {
+                cascadingImageControl.Cascade();
+            }
         }
         #endregion
 
@@ -451,7 +464,7 @@ namespace ControlLibrary
                 "CascadeSequence",
                 typeof(CascadeSequence),
                 typeof(CascadingImageControl),
-                new PropertyMetadata(CascadeSequence.EqualDuration));
+                new PropertyMetadata(CascadeSequence.EqualDuration, new PropertyChangedCallback(OnCascadeSequencePropertyChanged)));
 
         /// <summary>
         /// Gets or sets the CascadeSequence property. This dependency property 
@@ -461,6 +474,15 @@ namespace ControlLibrary
         {
             get { return (CascadeSequence)GetValue(CascadeSequenceProperty); }
             set { SetValue(CascadeSequenceProperty, value); }
+        }
+
+        private static void OnCascadeSequencePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var cascadingImageControl = sender as CascadingImageControl;
+            if (cascadingImageControl != null && cascadingImageControl._layoutGrid != null)
+            {
+                cascadingImageControl.Cascade();
+            }
         }
         #endregion
 
@@ -494,6 +516,7 @@ namespace ControlLibrary
 
         public void Cascade()
         {
+            RH = RW = double.NaN;
             if (!_isLoaded ||
                 _layoutGrid == null)
             {
@@ -581,7 +604,8 @@ namespace ControlLibrary
 
             List<Tuple<int, int>> rectCoords = new List<Tuple<int, int>>(Rows * Columns);
             List<Rectangle> rects = new List<Rectangle>(Rows * Columns);
-            List<PlaneProjection> projs = new List<PlaneProjection>(Rows * Columns);
+            //List<PlaneProjection> projs = new List<PlaneProjection>(Rows * Columns);
+            //List<CompositeTransform> ct = new List<CompositeTransform>(Rows * Columns);
 
             for (int row = startRow; row != exclusiveEndRow; row = row + rowIncrement)
                 for (int column = startColumn; column != exclusiveEndColumn; column = column + columnIncrement)
@@ -608,91 +632,133 @@ namespace ControlLibrary
                     var projection = new PlaneProjection();
                     projection.CenterOfRotationY = 0;
                     rect.Projection = projection;
-                    projs.Add(projection);
+                    //projs.Add(projection);
+
+                    var rectTransform = new CompositeTransform();
+                    rectTransform.CenterX = rectTransform.CenterY = 0.5;
+                    rectTransform.TranslateX = -column;
+                    rectTransform.TranslateY = -row;
+                    rectTransform.Rotation = 0;
+                    rect.RenderTransformOrigin = new Windows.Foundation.Point(0.5, 0.5);
+                    rect.RenderTransform = rectTransform;
+                    //ct.Add(rectTransform);
+
+                    //if (!double.IsNaN(RH) && !double.IsNaN(RW))
+                    //{
+                    //    rect.Margin = new Thickness(column * 52, row * 50, 0, 0);
+                    //}
 
                     _layoutGrid.Children.Add(rect);
+                    
                 }
-
-            var indices = new List<int>(Rows * Columns);
-
-            for (int i = 0; i < Rows * Columns; i++)
-                indices.Add(i);
-
-            if (direction == CascadeDirection.Shuffle)
+            //GetRHAndRW();
+            if (double.IsNaN(RH) || double.IsNaN(RW))
             {
-                indices = indices.Shuffle();
-            }
+                rects[0].SizeChanged -= sizeChanged;
+                rects[0].SizeChanged += sizeChanged = (ss, ee) =>
+                {
+                    this.RH = ee.NewSize.Height;
+                    this.RW = ee.NewSize.Width;
 
-            for (int ii = 0; ii < indices.Count; ii++)
+                    var indices = new List<int>(Rows * Columns);
+
+                    for (int i = 0; i < Rows * Columns; i++)
+                        indices.Add(i);
+
+                    if (direction == CascadeDirection.Shuffle)
+                    {
+                        indices = indices.Shuffle();
+                    }
+
+                    for (int ii = 0; ii < indices.Count; ii++)
+                    {
+                        var i = indices[ii];
+                        //var projection = projs[i];
+                        var projection = rects[i].Projection;                     
+                        var rect = rects[i];
+                        var column = rectCoords[ii].Item1;
+                        var row = rectCoords[ii].Item2;
+                        //Debug.WriteLine("i: {0}, p: {1}, rect: {2}, c: {3}, r: {4}", i, projection.GetHashCode(), rect.GetHashCode(), column, row);
+                        var rotationAnimation = new DoubleAnimationUsingKeyFrames();
+                        Storyboard.SetTarget(rotationAnimation, projection);
+                        Storyboard.SetTargetProperty(rotationAnimation, "RotationX");
+
+                        var endKeyTime =
+                            this.CascadeSequence == CascadeSequence.EndTogether
+                                ? TimeSpan.FromSeconds(totalDurationInSeconds)
+                                : TimeSpan.FromSeconds(
+                                    (double)row * RowDelay.TotalSeconds +
+                                    (double)column * ColumnDelay.TotalSeconds +
+                                    TileDuration.TotalSeconds);
+
+                        rotationAnimation.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.Zero,
+                                Value = 90
+                            });
+                        rotationAnimation.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                                Value = 90
+                            });
+                        rotationAnimation.KeyFrames.Add(
+                            new EasingDoubleKeyFrame
+                            {
+                                KeyTime = endKeyTime,
+                                EasingFunction = CascadeInEasingFunction,
+                                Value = 0
+                            });
+
+                        sb.Children.Add(rotationAnimation);
+
+                        var opacityAnimation = new DoubleAnimationUsingKeyFrames();
+                        Storyboard.SetTarget(opacityAnimation, rect);
+                        Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
+
+                        opacityAnimation.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.Zero,
+                                Value = 0
+                            });
+                        opacityAnimation.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                                Value = 0
+                            });
+                        opacityAnimation.KeyFrames.Add(
+                            new EasingDoubleKeyFrame
+                            {
+                                KeyTime = endKeyTime,
+                                EasingFunction = CascadeInEasingFunction,
+                                Value = 1
+                            });
+
+                        sb.Children.Add(opacityAnimation);
+                    }
+
+                    sb.Begin();
+                };
+            }       
+        }
+
+        protected override Windows.Foundation.Size MeasureOverride(Windows.Foundation.Size availableSize)
+        {
+            this.H = availableSize.Height;
+            this.W = availableSize.Width;
+            return base.MeasureOverride(availableSize);
+        }
+
+        private void GetRHAndRW()
+        {
+            if (!double.IsNaN(this.H) && !double.IsNaN(this.W))
             {
-                var i = indices[ii];
-                var projection = projs[i];
-                var rect = rects[i];
-                var column = rectCoords[ii].Item1;
-                var row = rectCoords[ii].Item2;
-                //Debug.WriteLine("i: {0}, p: {1}, rect: {2}, c: {3}, r: {4}", i, projection.GetHashCode(), rect.GetHashCode(), column, row);
-                var rotationAnimation = new DoubleAnimationUsingKeyFrames();
-                Storyboard.SetTarget(rotationAnimation, projection);
-                Storyboard.SetTargetProperty(rotationAnimation, "RotationX");
-
-                var endKeyTime =
-                    this.CascadeSequence == CascadeSequence.EndTogether
-                        ? TimeSpan.FromSeconds(totalDurationInSeconds)
-                        : TimeSpan.FromSeconds(
-                            (double)row * RowDelay.TotalSeconds +
-                            (double)column * ColumnDelay.TotalSeconds +
-                            TileDuration.TotalSeconds);
-
-                rotationAnimation.KeyFrames.Add(
-                    new DiscreteDoubleKeyFrame
-                    {
-                        KeyTime = TimeSpan.Zero,
-                        Value = 90
-                    });
-                rotationAnimation.KeyFrames.Add(
-                    new DiscreteDoubleKeyFrame
-                    {
-                        KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
-                        Value = 90
-                    });
-                rotationAnimation.KeyFrames.Add(
-                    new EasingDoubleKeyFrame
-                    {
-                        KeyTime = endKeyTime,
-                        EasingFunction = CascadeInEasingFunction,
-                        Value = 0
-                    });
-
-                sb.Children.Add(rotationAnimation);
-
-                var opacityAnimation = new DoubleAnimationUsingKeyFrames();
-                Storyboard.SetTarget(opacityAnimation, rect);
-                Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
-
-                opacityAnimation.KeyFrames.Add(
-                    new DiscreteDoubleKeyFrame
-                    {
-                        KeyTime = TimeSpan.Zero,
-                        Value = 0
-                    });
-                opacityAnimation.KeyFrames.Add(
-                    new DiscreteDoubleKeyFrame
-                    {
-                        KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
-                        Value = 0
-                    });
-                opacityAnimation.KeyFrames.Add(
-                    new EasingDoubleKeyFrame
-                    {
-                        KeyTime = endKeyTime,
-                        EasingFunction = CascadeInEasingFunction,
-                        Value = 1
-                    });
-
-                sb.Children.Add(opacityAnimation);
+                this.RH = (int)(this.H / this.Rows + 0.5);
+                this.RW = (int)(this.W / this.Columns + 0.5);
             }
-
-            sb.Begin();
         }
     }
 }

@@ -68,6 +68,22 @@
                 <ComboBoxItem Content="Fill"/>
                 <ComboBoxItem Content="UniformToFill"/>
             </ComboBox>
+            <TextBlock
+                Text="CascadeDirection" Margin="0,20,0,0"/>
+            <ComboBox Margin="0,20,0,0" x:Name="comboboxCascadeDirection" SelectionChanged="comboboxCascadeDirection_SelectionChanged">
+                <ComboBoxItem Content="TopLeft"/>
+                <ComboBoxItem Content="TopRight"/>
+                <ComboBoxItem Content="BottomRight"/>
+                <ComboBoxItem Content="BottomLeft"/>
+                <ComboBoxItem Content="Random"/>
+                <ComboBoxItem Content="Shuffle"  IsSelected="True"/>
+            </ComboBox>
+            <TextBlock
+                Text="CascadeSequence" Margin="0,20,0,0"/>
+            <ComboBox Margin="0,20,0,0" x:Name="comboboxCascadeSequence" SelectionChanged="comboboxCascadeSequence_SelectionChanged">
+                <ComboBoxItem Content="EndTogether"/>
+                <ComboBoxItem Content="EqualDuration" IsSelected="True"/>
+            </ComboBox>
         </StackPanel>
         <Grid
             Grid.Row="1"

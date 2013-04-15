@@ -55,5 +55,23 @@ namespace TestDemoApp
                 //cascadingImageControl.ImageStretch = (Stretch)Enum.Parse(typeof(Stretch), ss.Content.ToString());
             }
         }
+
+        private void comboboxCascadeDirection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboboxCascadeDirection != null)
+            {
+                var ss = comboboxCascadeDirection.SelectedItem as ComboBoxItem;
+                cascadingImageControl.CascadeDirection = (CascadeDirection)Enum.Parse(typeof(CascadeDirection), ss.Content.ToString());
+            }
+        }
+
+        private void comboboxCascadeSequence_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboboxCascadeSequence != null)
+            {
+                var ss = comboboxCascadeSequence.SelectedItem as ComboBoxItem;
+                cascadingImageControl.CascadeSequence = (CascadeSequence)Enum.Parse(typeof(CascadeSequence), ss.Content.ToString());
+            }
+        }
     }
 }
