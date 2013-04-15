@@ -636,8 +636,9 @@ namespace ControlLibrary
 
                     var rectTransform = new CompositeTransform();
                     rectTransform.CenterX = rectTransform.CenterY = 0.5;
-                    rectTransform.TranslateX = -column;
-                    rectTransform.TranslateY = -row;
+                    ////////////////////////写到这
+                    //rectTransform.TranslateX = -column;
+                    //rectTransform.TranslateY = -row;
                     rectTransform.Rotation = 0;
                     rect.RenderTransformOrigin = new Windows.Foundation.Point(0.5, 0.5);
                     rect.RenderTransform = rectTransform;
@@ -663,7 +664,14 @@ namespace ControlLibrary
                     var indices = new List<int>(Rows * Columns);
 
                     for (int i = 0; i < Rows * Columns; i++)
+                    {
                         indices.Add(i);
+
+                        ////////////////////////写到这
+                        //var transform = rects[i].RenderTransform as CompositeTransform;
+                        //transform.TranslateX = transform.TranslateX * RW;
+                        //transform.TranslateY = transform.TranslateY * RH;
+                    }
 
                     if (direction == CascadeDirection.Shuffle)
                     {
