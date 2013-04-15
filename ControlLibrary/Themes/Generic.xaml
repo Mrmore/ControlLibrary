@@ -2250,4 +2250,17 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local:CascadingImageControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:CascadingImageControl">
+                    <!--<Viewbox x:Name="LayoutViewbox" Stretch="Fill">-->
+                    <Grid
+                        x:Name="PART_LayoutGrid" />
+                    <!--</Viewbox>-->
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

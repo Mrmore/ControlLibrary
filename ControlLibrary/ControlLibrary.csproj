@@ -124,6 +124,9 @@
     <Compile Include="CacheManagement\CacheBitmapImage.cs" />
     <Compile Include="CacheManagement\CacheManagement.cs" />
     <Compile Include="CacheManagement\CacheText.cs" />
+    <Compile Include="CascadingImageControl\CascadeDirection.cs" />
+    <Compile Include="CascadingImageControl\CascadeSequence.cs" />
+    <Compile Include="CascadingImageControl\CascadingImageControl.cs" />
     <Compile Include="Charting\Common\DisposableObject.cs" />
     <Compile Include="Charting\Common\EventHandlerList.cs" />
     <Compile Include="ClipImageBrush\ClipImageBrush.cs" />
@@ -157,6 +160,7 @@
     <Compile Include="Data\IDataSourceGroup.cs" />
     <Compile Include="Data\IDataSourceItem.cs" />
     <Compile Include="DisposableBase.cs" />
+    <Compile Include="Extensions\EnumerableExtensions.cs" />
     <Compile Include="Extensions\ExtensionMethods.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.cs" />
     <Compile Include="Extensions\IEnumerableToObservableCollection.cs" />

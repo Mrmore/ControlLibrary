@@ -148,5 +148,10 @@ namespace TestDemoApp
         {
             this.Frame.Navigate(typeof(BlankPageGifSynthesis));
         }
+
+        private void BtCascadingImage_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(CascadingImageBlankPage));
+        }
     }
 }

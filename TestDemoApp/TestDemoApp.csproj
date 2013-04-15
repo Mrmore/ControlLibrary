@@ -158,9 +158,13 @@
     <Compile Include="BP5CeShi.xaml.cs">
       <DependentUpon>BP5CeShi.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CascadingImageBlankPage.xaml.cs">
+      <DependentUpon>CascadingImageBlankPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CeShiGifPage.xaml.cs">
       <DependentUpon>CeShiGifPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converter\DoubleToIntConverter.cs" />
     <Compile Include="Helper\CacheManageHelper\CacheImageManageHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
@@ -204,6 +208,7 @@
     <Content Include="Images\AwesomMenu\icon-plus-highlighted.png" />
     <Content Include="Images\AwesomMenu\icon-plus.png" />
     <Content Include="Images\AwesomMenu\icon-star.png" />
+    <Content Include="Images\CascadingImage.jpg" />
     <Content Include="Images\HubTile\comment1.png" />
     <Content Include="Images\HubTile\comment2.png" />
     <Content Include="Images\HubTile\comment3.png" />
@@ -314,6 +319,10 @@
     <Page Include="BP5CeShi.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CascadingImageBlankPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CeShiGifPage.xaml">
       <SubType>Designer</SubType>
