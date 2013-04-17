@@ -260,6 +260,7 @@
     <Compile Include="Tools\CompressionGif\OpenFrame.cs" />
     <Compile Include="Tools\CompressionGif\SynthesisGifEncoder.cs" />
     <Compile Include="Tools\Constants.cs" />
+    <Compile Include="Tools\CustomQueue.cs" />
     <Compile Include="Tools\FlickrHelp.cs" />
     <Compile Include="Tools\ImageType\ImageType.cs" />
     <Compile Include="Tools\ImageType\ImageTypeCheck.cs" />
