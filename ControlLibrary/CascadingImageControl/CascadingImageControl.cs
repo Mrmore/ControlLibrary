@@ -607,6 +607,10 @@ namespace ControlLibrary
             //List<PlaneProjection> projs = new List<PlaneProjection>(Rows * Columns);
             //List<CompositeTransform> ct = new List<CompositeTransform>(Rows * Columns);
 
+            //**********************开始的位置
+            List<double> translateXInfo = new List<double>();
+            List<double> translateYInfo = new List<double>();
+
             for (int row = startRow; row != exclusiveEndRow; row = row + rowIncrement)
                 for (int column = startColumn; column != exclusiveEndColumn; column = column + columnIncrement)
                 {
@@ -651,6 +655,7 @@ namespace ControlLibrary
 
                     _layoutGrid.Children.Add(rect);
                     
+
                 }
             //GetRHAndRW();
             if (double.IsNaN(RH) || double.IsNaN(RW))
@@ -668,9 +673,29 @@ namespace ControlLibrary
                         indices.Add(i);
 
                         ////////////////////////写到这
+                        var transform = rects[i].RenderTransform as CompositeTransform;
                         //var transform = rects[i].RenderTransform as CompositeTransform;
                         //transform.TranslateX = transform.TranslateX * RW;
                         //transform.TranslateY = transform.TranslateY * RH;
+
+                        //*****************************恶心点，随便弄个起始位置，到时候可以根据行列信息或者奇偶信息来设置起始位置
+                        //transform.TranslateX = i * RW;
+                        //transform.TranslateY = i * RH;
+
+                        if (i < Rows * Columns / 2)
+                        {
+                            transform.TranslateX = -RW;
+                            transform.TranslateY = -RH;
+                        }
+                        else
+                        {
+                            transform.TranslateX = RW;
+                            transform.TranslateY = RH;
+                        }
+
+                        translateXInfo.Add(transform.TranslateX);
+                        translateYInfo.Add(transform.TranslateY);
+                        System.Diagnostics.Debug.WriteLine("TX = " + transform.TranslateX + " TY = " + transform.TranslateY + "\n");
                     }
 
                     if (direction == CascadeDirection.Shuffle)
@@ -686,6 +711,8 @@ namespace ControlLibrary
                         var rect = rects[i];
                         var column = rectCoords[ii].Item1;
                         var row = rectCoords[ii].Item2;
+                        //*******************拿到当前的transform
+                        var transfrom = rect.RenderTransform as CompositeTransform;
                         //Debug.WriteLine("i: {0}, p: {1}, rect: {2}, c: {3}, r: {4}", i, projection.GetHashCode(), rect.GetHashCode(), column, row);
                         var rotationAnimation = new DoubleAnimationUsingKeyFrames();
                         Storyboard.SetTarget(rotationAnimation, projection);
@@ -721,6 +748,60 @@ namespace ControlLibrary
 
                         sb.Children.Add(rotationAnimation);
 
+                        //****************************y,z的效果可以研究下如何加比较好
+                        rotationAnimation = new DoubleAnimationUsingKeyFrames();
+                        Storyboard.SetTarget(rotationAnimation, projection);
+                        Storyboard.SetTargetProperty(rotationAnimation, "RotationY");
+
+                        rotationAnimation.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.Zero,
+                                Value = 180
+                            });
+                        rotationAnimation.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                                Value = 90
+                            });
+                        rotationAnimation.KeyFrames.Add(
+                            new EasingDoubleKeyFrame
+                            {
+                                KeyTime = endKeyTime,
+                                EasingFunction = CascadeInEasingFunction,
+                                Value = 0
+                            });
+
+                        sb.Children.Add(rotationAnimation);
+
+                        rotationAnimation = new DoubleAnimationUsingKeyFrames();
+                        Storyboard.SetTarget(rotationAnimation, projection);
+                        Storyboard.SetTargetProperty(rotationAnimation, "RotationZ");
+
+                        rotationAnimation.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.Zero,
+                                Value = 180
+                            });
+                        rotationAnimation.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                                Value = 90
+                            });
+                        rotationAnimation.KeyFrames.Add(
+                            new EasingDoubleKeyFrame
+                            {
+                                KeyTime = endKeyTime,
+                                EasingFunction = CascadeInEasingFunction,
+                                Value = 0
+                            });
+
+                        sb.Children.Add(rotationAnimation); 
+
+
                         var opacityAnimation = new DoubleAnimationUsingKeyFrames();
                         Storyboard.SetTarget(opacityAnimation, rect);
                         Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
@@ -746,6 +827,24 @@ namespace ControlLibrary
                             });
 
                         sb.Children.Add(opacityAnimation);
+
+                        //******************** 效果差不错出来了,主要是起始点的设置，还有，这里的动画要不要弄成关键祯？
+                        var translateXanimation = new DoubleAnimation();
+                        translateXanimation.From = translateXInfo[i];
+                        translateXanimation.To = 0;
+                        translateXanimation.Duration = endKeyTime;
+                        Storyboard.SetTarget(translateXanimation, transfrom);
+                        Storyboard.SetTargetProperty(translateXanimation, "TranslateX");
+                        sb.Children.Add(translateXanimation);
+
+                        var translateYanimation = new DoubleAnimation();
+                        translateYanimation.From = translateYInfo[i];
+                        translateYanimation.To = 0;
+                        translateYanimation.Duration = endKeyTime;
+                        Storyboard.SetTarget(translateYanimation, transfrom);
+                        Storyboard.SetTargetProperty(translateYanimation, "TranslateY");
+                        sb.Children.Add(translateYanimation);
+
                     }
 
                     sb.Begin();

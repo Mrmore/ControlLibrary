@@ -113,6 +113,6 @@
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
             Stretch="Uniform"
-            Source="/Images/CascadingImage.jpg" Opacity="0"/>
+            Source="/Images/CascadingImage.jpg" Opacity="0" Visibility="Collapsed"/>
     </Grid>
 </Page>
