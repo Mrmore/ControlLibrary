@@ -626,6 +626,7 @@ namespace ControlLibrary
                     brush.Stretch = this.Stretch;
                     rect.Fill = brush;
 
+                    //设置图片的笔刷位置
                     var transform = new CompositeTransform();
                     transform.TranslateX = -column;
                     transform.ScaleX = Columns;
@@ -633,11 +634,13 @@ namespace ControlLibrary
                     transform.ScaleY = Rows;
                     brush.RelativeTransform = transform;
 
+                    //设置填充图片笔刷矩形的透视投影
                     var projection = new PlaneProjection();
                     projection.CenterOfRotationY = 0;
                     rect.Projection = projection;
                     //projs.Add(projection);
 
+                    //设置填充图片笔刷矩形的呈现位置
                     var rectTransform = new CompositeTransform();
                     rectTransform.CenterX = rectTransform.CenterY = 0.5;
                     ////////////////////////写到这
@@ -674,7 +677,6 @@ namespace ControlLibrary
 
                         ////////////////////////写到这
                         var transform = rects[i].RenderTransform as CompositeTransform;
-                        //var transform = rects[i].RenderTransform as CompositeTransform;
                         //transform.TranslateX = transform.TranslateX * RW;
                         //transform.TranslateY = transform.TranslateY * RH;
 
@@ -749,23 +751,23 @@ namespace ControlLibrary
                         sb.Children.Add(rotationAnimation);
 
                         //****************************y,z的效果可以研究下如何加比较好
-                        rotationAnimation = new DoubleAnimationUsingKeyFrames();
-                        Storyboard.SetTarget(rotationAnimation, projection);
-                        Storyboard.SetTargetProperty(rotationAnimation, "RotationY");
+                        var rotationAnimationY = new DoubleAnimationUsingKeyFrames();
+                        Storyboard.SetTarget(rotationAnimationY, projection);
+                        Storyboard.SetTargetProperty(rotationAnimationY, "RotationY");
 
-                        rotationAnimation.KeyFrames.Add(
+                        rotationAnimationY.KeyFrames.Add(
                             new DiscreteDoubleKeyFrame
                             {
                                 KeyTime = TimeSpan.Zero,
                                 Value = 180
                             });
-                        rotationAnimation.KeyFrames.Add(
+                        rotationAnimationY.KeyFrames.Add(
                             new DiscreteDoubleKeyFrame
                             {
                                 KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
                                 Value = 90
                             });
-                        rotationAnimation.KeyFrames.Add(
+                        rotationAnimationY.KeyFrames.Add(
                             new EasingDoubleKeyFrame
                             {
                                 KeyTime = endKeyTime,
@@ -773,25 +775,25 @@ namespace ControlLibrary
                                 Value = 0
                             });
 
-                        sb.Children.Add(rotationAnimation);
+                        sb.Children.Add(rotationAnimationY);
 
-                        rotationAnimation = new DoubleAnimationUsingKeyFrames();
-                        Storyboard.SetTarget(rotationAnimation, projection);
-                        Storyboard.SetTargetProperty(rotationAnimation, "RotationZ");
+                        var rotationAnimationZ = new DoubleAnimationUsingKeyFrames();
+                        Storyboard.SetTarget(rotationAnimationZ, projection);
+                        Storyboard.SetTargetProperty(rotationAnimationZ, "RotationZ");
 
-                        rotationAnimation.KeyFrames.Add(
+                        rotationAnimationZ.KeyFrames.Add(
                             new DiscreteDoubleKeyFrame
                             {
                                 KeyTime = TimeSpan.Zero,
                                 Value = 180
                             });
-                        rotationAnimation.KeyFrames.Add(
+                        rotationAnimationZ.KeyFrames.Add(
                             new DiscreteDoubleKeyFrame
                             {
                                 KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
                                 Value = 90
                             });
-                        rotationAnimation.KeyFrames.Add(
+                        rotationAnimationZ.KeyFrames.Add(
                             new EasingDoubleKeyFrame
                             {
                                 KeyTime = endKeyTime,
@@ -799,8 +801,8 @@ namespace ControlLibrary
                                 Value = 0
                             });
 
-                        sb.Children.Add(rotationAnimation); 
-
+                        sb.Children.Add(rotationAnimationZ);
+                        //****************************
 
                         var opacityAnimation = new DoubleAnimationUsingKeyFrames();
                         Storyboard.SetTarget(opacityAnimation, rect);
@@ -844,7 +846,7 @@ namespace ControlLibrary
                         Storyboard.SetTarget(translateYanimation, transfrom);
                         Storyboard.SetTargetProperty(translateYanimation, "TranslateY");
                         sb.Children.Add(translateYanimation);
-
+                        //****************************
                     }
 
                     sb.Begin();
