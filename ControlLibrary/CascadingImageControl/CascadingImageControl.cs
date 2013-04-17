@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
 using ControlLibrary.Extensions;
+using System.Collections.Concurrent;
 
 // “用户控件”项模板在 http://go.microsoft.com/fwlink/?LinkId=234235 上有介绍
 
@@ -660,7 +661,6 @@ namespace ControlLibrary
 
                     _layoutGrid.Children.Add(rect);
                     
-
                 }
             //GetRHAndRW();
             if (double.IsNaN(RH) || double.IsNaN(RW))
