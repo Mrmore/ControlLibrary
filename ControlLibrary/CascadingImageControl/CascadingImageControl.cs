@@ -608,8 +608,10 @@ namespace ControlLibrary
             //List<CompositeTransform> ct = new List<CompositeTransform>(Rows * Columns);
 
             //**********************开始的位置
+            /*
             List<double> translateXInfo = new List<double>();
             List<double> translateYInfo = new List<double>();
+            */
 
             for (int row = startRow; row != exclusiveEndRow; row = row + rowIncrement)
                 for (int column = startColumn; column != exclusiveEndColumn; column = column + columnIncrement)
@@ -644,8 +646,8 @@ namespace ControlLibrary
                     var rectTransform = new CompositeTransform();
                     rectTransform.CenterX = rectTransform.CenterY = 0.5;
                     ////////////////////////写到这
-                    //rectTransform.TranslateX = -column;
-                    //rectTransform.TranslateY = -row;
+                    rectTransform.TranslateX = -column;
+                    rectTransform.TranslateY = -row;
                     rectTransform.Rotation = 0;
                     rect.RenderTransformOrigin = new Windows.Foundation.Point(0.5, 0.5);
                     rect.RenderTransform = rectTransform;
@@ -677,13 +679,14 @@ namespace ControlLibrary
 
                         ////////////////////////写到这
                         var transform = rects[i].RenderTransform as CompositeTransform;
-                        //transform.TranslateX = transform.TranslateX * RW;
-                        //transform.TranslateY = transform.TranslateY * RH;
+                        transform.TranslateX = transform.TranslateX * RW;
+                        transform.TranslateY = transform.TranslateY * RH;
 
                         //*****************************恶心点，随便弄个起始位置，到时候可以根据行列信息或者奇偶信息来设置起始位置
                         //transform.TranslateX = i * RW;
                         //transform.TranslateY = i * RH;
 
+                        /*
                         if (i < Rows * Columns / 2)
                         {
                             transform.TranslateX = -RW;
@@ -698,6 +701,7 @@ namespace ControlLibrary
                         translateXInfo.Add(transform.TranslateX);
                         translateYInfo.Add(transform.TranslateY);
                         System.Diagnostics.Debug.WriteLine("TX = " + transform.TranslateX + " TY = " + transform.TranslateY + "\n");
+                        */
                     }
 
                     if (direction == CascadeDirection.Shuffle)
@@ -832,7 +836,8 @@ namespace ControlLibrary
 
                         //******************** 效果差不错出来了,主要是起始点的设置，还有，这里的动画要不要弄成关键祯？
                         var translateXanimation = new DoubleAnimation();
-                        translateXanimation.From = translateXInfo[i];
+                        /*translateXanimation.From = translateXInfo[i];*/
+                        translateXanimation.From = transfrom.TranslateX;
                         translateXanimation.To = 0;
                         translateXanimation.Duration = endKeyTime;
                         Storyboard.SetTarget(translateXanimation, transfrom);
@@ -840,7 +845,8 @@ namespace ControlLibrary
                         sb.Children.Add(translateXanimation);
 
                         var translateYanimation = new DoubleAnimation();
-                        translateYanimation.From = translateYInfo[i];
+                        /*translateYanimation.From = translateYInfo[i];*/
+                        translateYanimation.From = transfrom.TranslateY;
                         translateYanimation.To = 0;
                         translateYanimation.Duration = endKeyTime;
                         Storyboard.SetTarget(translateYanimation, transfrom);
