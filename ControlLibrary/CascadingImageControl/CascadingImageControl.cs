@@ -489,6 +489,38 @@ namespace ControlLibrary
         }
         #endregion
 
+        #region IsClip
+        public static readonly DependencyProperty IsClipProperty =
+            DependencyProperty.Register(
+                "IsClip",
+                typeof(bool),
+                typeof(CascadingImageControl),
+                new PropertyMetadata(false, new PropertyChangedCallback(OnIsClipPropertyChanged)));
+
+        public bool IsClip
+        {
+            get { return (bool)GetValue(IsClipProperty); }
+            set { SetValue(IsClipProperty, value); }
+        }
+
+         private static void OnIsClipPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var cascadingImageControl = sender as CascadingImageControl;
+            if (cascadingImageControl != null && cascadingImageControl._layoutGrid != null)
+            {
+                if (cascadingImageControl.IsClip)
+                {
+                    cascadingImageControl.AddMask();
+                }
+                else
+                {
+                    cascadingImageControl._layoutGrid.Clip = null;
+                }
+            }
+        }
+        
+        #endregion
+
         public CascadingImageControl()
         {
             this.DefaultStyleKey = typeof(CascadingImageControl);
@@ -842,6 +874,11 @@ namespace ControlLibrary
                         translateXanimation.From = transfrom.TranslateX;
                         translateXanimation.To = 0;
                         translateXanimation.Duration = endKeyTime;
+                        translateXanimation.EasingFunction = CascadeInEasingFunction;
+                        //BackEase(缓动函数) BounceEase(弹跳效果) CircleEase(加速和/或减速) CubicEase( f(t) = t3 创建加速和/或减速) 
+                        //ElasticEase(弹簧来回振动直到停止) ExponentialEase(指数公式创建加速和/或减速) PowerEase(f(t) = tp 创建加速和/或减速)
+                        //QuadraticEase(f(t) = t2 创建加速和/或减速) QuarticEase(f(t) = t4 创建加速和/或减速) QuinticEase(f(t) = t5 创建加速和/或减速) 
+                        //SineEase(正弦方程式（见下面的备注）创建加速和/或减速)
                         Storyboard.SetTarget(translateXanimation, transfrom);
                         Storyboard.SetTargetProperty(translateXanimation, "TranslateX");
                         sb.Children.Add(translateXanimation);
@@ -851,6 +888,7 @@ namespace ControlLibrary
                         translateYanimation.From = transfrom.TranslateY;
                         translateYanimation.To = 0;
                         translateYanimation.Duration = endKeyTime;
+                        translateXanimation.EasingFunction = CascadeInEasingFunction;
                         Storyboard.SetTarget(translateYanimation, transfrom);
                         Storyboard.SetTargetProperty(translateYanimation, "TranslateY");
                         sb.Children.Add(translateYanimation);
@@ -872,7 +910,10 @@ namespace ControlLibrary
             this.H = finalSize.Height;
             this.W = finalSize.Width;
             this.size = finalSize;
-            AddMask();
+            if (IsClip)
+            {
+                AddMask();
+            }
             return base.ArrangeOverride(finalSize);
         }
 
@@ -890,6 +931,7 @@ namespace ControlLibrary
         {
             if (!double.IsNaN(this.Width) && !double.IsNaN(this.Height))
             {
+                var ss = _layoutGrid.Clip;
                 _layoutGrid.Clip = new RectangleGeometry() { Rect = new Rect(new Point(), new Size(this.Width, this.Height)) };
             }
             else
@@ -900,7 +942,10 @@ namespace ControlLibrary
 
         private void CascadingImageControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            AddMask();
+            if (IsClip)
+            {
+                AddMask();
+            }
         }
     }
 }

@@ -73,5 +73,14 @@ namespace TestDemoApp
                 cascadingImageControl.CascadeSequence = (CascadeSequence)Enum.Parse(typeof(CascadeSequence), ss.Content.ToString());
             }
         }
+
+        private void comboboxIsClip_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboboxIsClip != null)
+            {
+                var ss = comboboxIsClip.SelectedItem as ComboBoxItem;
+                cascadingImageControl.IsClip = (bool)bool.Parse(ss.Content.ToString());
+            }
+        }
     }
 }
