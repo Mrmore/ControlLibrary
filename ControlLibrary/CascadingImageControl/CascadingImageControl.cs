@@ -12,6 +12,7 @@ using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Shapes;
 using ControlLibrary.Extensions;
 using System.Collections.Concurrent;
+using Windows.Foundation;
 
 // “用户控件”项模板在 http://go.microsoft.com/fwlink/?LinkId=234235 上有介绍
 
@@ -37,6 +38,7 @@ namespace ControlLibrary
         private double H, W = double.NaN;
         private double RH, RW = double.NaN;
         private SizeChangedEventHandler sizeChanged = null;
+        private Size size;
         #endregion
 
         #region Columns
@@ -506,6 +508,8 @@ namespace ControlLibrary
                 Debug.WriteLine("CascadingImageControl requires a Grid called PART_LayoutGrid in its template.");
             }
 
+            this.SizeChanged -= CascadingImageControl_SizeChanged;
+            this.SizeChanged += CascadingImageControl_SizeChanged;
             Cascade();
         }
 
@@ -645,10 +649,9 @@ namespace ControlLibrary
 
                     //设置填充图片笔刷矩形的呈现位置
                     var rectTransform = new CompositeTransform();
-                    rectTransform.CenterX = rectTransform.CenterY = 0.5;
-                    ////////////////////////写到这
-                    rectTransform.TranslateX = -column;
-                    rectTransform.TranslateY = -row;
+                    //rectTransform.CenterX = rectTransform.CenterY = 0.5;
+                    rectTransform.TranslateX = column;
+                    rectTransform.TranslateY = row;
                     rectTransform.Rotation = 0;
                     rect.RenderTransformOrigin = new Windows.Foundation.Point(0.5, 0.5);
                     rect.RenderTransform = rectTransform;
@@ -676,8 +679,7 @@ namespace ControlLibrary
                     for (int i = 0; i < Rows * Columns; i++)
                     {
                         indices.Add(i);
-
-                        ////////////////////////写到这
+                        
                         var transform = rects[i].RenderTransform as CompositeTransform;
                         transform.TranslateX = transform.TranslateX * RW;
                         transform.TranslateY = transform.TranslateY * RH;
@@ -861,10 +863,17 @@ namespace ControlLibrary
         }
 
         protected override Windows.Foundation.Size MeasureOverride(Windows.Foundation.Size availableSize)
-        {
-            this.H = availableSize.Height;
-            this.W = availableSize.Width;
+        {          
             return base.MeasureOverride(availableSize);
+        }
+
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            this.H = finalSize.Height;
+            this.W = finalSize.Width;
+            this.size = finalSize;
+            AddMask();
+            return base.ArrangeOverride(finalSize);
         }
 
         private void GetRHAndRW()
@@ -874,6 +883,24 @@ namespace ControlLibrary
                 this.RH = (int)(this.H / this.Rows + 0.5);
                 this.RW = (int)(this.W / this.Columns + 0.5);
             }
+        }
+
+        //剪裁显示大小
+        private void AddMask()
+        {
+            if (!double.IsNaN(this.Width) && !double.IsNaN(this.Height))
+            {
+                _layoutGrid.Clip = new RectangleGeometry() { Rect = new Rect(new Point(), new Size(this.Width, this.Height)) };
+            }
+            else
+            {
+                _layoutGrid.Clip = new RectangleGeometry() { Rect = new Rect(new Point(), size) };
+            }
+        }
+
+        private void CascadingImageControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            AddMask();
         }
     }
 }
