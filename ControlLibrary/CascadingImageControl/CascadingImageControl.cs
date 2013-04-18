@@ -676,6 +676,9 @@ namespace ControlLibrary
                     //设置填充图片笔刷矩形的透视投影
                     var projection = new PlaneProjection();
                     projection.CenterOfRotationY = 0;
+                    //projection.CenterOfRotationX = projection.CenterOfRotationZ = 0;
+                    //projection.GlobalOffsetX = column;
+                    //projection.GlobalOffsetY = row;
                     rect.Projection = projection;
                     //projs.Add(projection);
 
@@ -711,14 +714,14 @@ namespace ControlLibrary
                     for (int i = 0; i < Rows * Columns; i++)
                     {
                         indices.Add(i);
-                        
+
                         var transform = rects[i].RenderTransform as CompositeTransform;
                         transform.TranslateX = transform.TranslateX * RW;
                         transform.TranslateY = transform.TranslateY * RH;
 
-                        //*****************************恶心点，随便弄个起始位置，到时候可以根据行列信息或者奇偶信息来设置起始位置
-                        //transform.TranslateX = i * RW;
-                        //transform.TranslateY = i * RH;
+                        //var transform = rects[i].Projection as PlaneProjection;
+                        //transform.GlobalOffsetX = transform.GlobalOffsetX * RW;
+                        //transform.GlobalOffsetY = transform.GlobalOffsetY * RH;
 
                         /*
                         if (i < Rows * Columns / 2)
@@ -874,7 +877,7 @@ namespace ControlLibrary
                         translateXanimation.From = transfrom.TranslateX;
                         translateXanimation.To = 0;
                         translateXanimation.Duration = endKeyTime;
-                        translateXanimation.EasingFunction = CascadeInEasingFunction;
+                        //translateXanimation.EasingFunction = CascadeInEasingFunction;
                         //BackEase(缓动函数) BounceEase(弹跳效果) CircleEase(加速和/或减速) CubicEase( f(t) = t3 创建加速和/或减速) 
                         //ElasticEase(弹簧来回振动直到停止) ExponentialEase(指数公式创建加速和/或减速) PowerEase(f(t) = tp 创建加速和/或减速)
                         //QuadraticEase(f(t) = t2 创建加速和/或减速) QuarticEase(f(t) = t4 创建加速和/或减速) QuinticEase(f(t) = t5 创建加速和/或减速) 
@@ -888,11 +891,63 @@ namespace ControlLibrary
                         translateYanimation.From = transfrom.TranslateY;
                         translateYanimation.To = 0;
                         translateYanimation.Duration = endKeyTime;
-                        translateXanimation.EasingFunction = CascadeInEasingFunction;
+                        //translateXanimation.EasingFunction = CascadeInEasingFunction;
                         Storyboard.SetTarget(translateYanimation, transfrom);
                         Storyboard.SetTargetProperty(translateYanimation, "TranslateY");
                         sb.Children.Add(translateYanimation);
                         //****************************
+
+                        var globalOffsetY = new DoubleAnimationUsingKeyFrames();
+                        Storyboard.SetTarget(globalOffsetY, projection);
+                        Storyboard.SetTargetProperty(globalOffsetY, "GlobalOffsetY");
+
+                        globalOffsetY.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.Zero,
+                                Value = 180
+                            });
+                        globalOffsetY.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                                Value = 90
+                            });
+                        globalOffsetY.KeyFrames.Add(
+                            new EasingDoubleKeyFrame
+                            {
+                                KeyTime = endKeyTime,
+                                EasingFunction = CascadeInEasingFunction,
+                                Value = 0
+                            });
+
+                        //sb.Children.Add(globalOffsetY);
+
+                        var globalOffsetX = new DoubleAnimationUsingKeyFrames();
+                        Storyboard.SetTarget(globalOffsetX, projection);
+                        Storyboard.SetTargetProperty(globalOffsetX, "GlobalOffsetX");
+
+                        globalOffsetX.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.Zero,
+                                Value = 180
+                            });
+                        globalOffsetX.KeyFrames.Add(
+                            new DiscreteDoubleKeyFrame
+                            {
+                                KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                                Value = 90
+                            });
+                        globalOffsetX.KeyFrames.Add(
+                            new EasingDoubleKeyFrame
+                            {
+                                KeyTime = endKeyTime,
+                                EasingFunction = CascadeInEasingFunction,
+                                Value = 0
+                            });
+
+                        //sb.Children.Add(globalOffsetX);
                     }
 
                     sb.Begin();
