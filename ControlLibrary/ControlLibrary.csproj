@@ -164,6 +164,7 @@
     <Compile Include="Extensions\ExtensionMethods.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.cs" />
     <Compile Include="Extensions\IEnumerableToObservableCollection.cs" />
+    <Compile Include="Extensions\StoryboardAsyncAwaitExtensions.cs" />
     <Compile Include="GifSynthesis\AnimatedGifEncoder.cs" />
     <Compile Include="GifSynthesis\GifInformation.cs" />
     <Compile Include="GifSynthesis\GifSynthesisHelper.cs" />
@@ -255,6 +256,7 @@
     <Compile Include="Tools\Async\AsyncManualResetEvent.cs" />
     <Compile Include="Tools\Async\AsyncReaderWriterLock.cs" />
     <Compile Include="Tools\Async\AsyncSemaphore.cs" />
+    <Compile Include="Tools\AwaitableUI\EventAsync.cs" />
     <Compile Include="Tools\CompressionGif\CompressionHelper.cs" />
     <Compile Include="Tools\CompressionGif\CompressionImage.cs" />
     <Compile Include="Tools\CompressionGif\OpenFrame.cs" />

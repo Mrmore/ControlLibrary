@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Shapes;
 using ControlLibrary.Extensions;
 using System.Collections.Concurrent;
 using Windows.Foundation;
+using System.Threading.Tasks;
 
 // “用户控件”项模板在 http://go.microsoft.com/fwlink/?LinkId=234235 上有介绍
 
@@ -551,7 +552,7 @@ namespace ControlLibrary
             Cascade();
         }
 
-        public void Cascade()
+        public async void Cascade()
         {
             RH = RW = double.NaN;
             if (!_isLoaded ||
@@ -566,7 +567,7 @@ namespace ControlLibrary
                 Columns = 1;
 
             _layoutCanvas.Children.Clear();
-
+            
             var sb = new Storyboard();
 
             var totalDurationInSeconds = RowDelay.TotalSeconds * (Rows - 1) +
@@ -667,7 +668,7 @@ namespace ControlLibrary
                     //设置填充图片笔刷矩形的透视投影
                     var projection = new PlaneProjection();
                     projection.CenterOfRotationY = projection.CenterOfRotationX = 0.5;
-                    projection.RotationX = 0;
+                    projection.RotationX = 90;
                     rect.Projection = projection;
 
                     //设置填充图片笔刷矩形的呈现位置
@@ -710,6 +711,7 @@ namespace ControlLibrary
 
                 for (int ii = 0; ii < indices.Count; ii++)
                 {
+                    //sb = new Storyboard();
                     var i = indices[ii];
                     var projection = rects[i].Projection;
                     var rect = rects[i];
@@ -925,6 +927,7 @@ namespace ControlLibrary
                         });
 
                     sb.Children.Add(scaleTransformYAanimation);
+                    //await sb.BeginAsync();
                 }
 
                 sb.Begin();
