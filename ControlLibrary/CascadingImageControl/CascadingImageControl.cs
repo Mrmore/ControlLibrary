@@ -882,6 +882,7 @@ namespace ControlLibrary
                             Value = ((Point)rects[i].Tag).Y * rects[i].Height
                         });
                     */
+
                     //另外一种
                     var translateYAanimation = new DoubleAnimationUsingKeyFrames();
                     Storyboard.SetTarget(translateYAanimation, transfrom);
