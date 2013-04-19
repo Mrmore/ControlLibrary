@@ -444,7 +444,7 @@ namespace ControlLibrary
                 "CascadeInEasingFunction",
                 typeof(EasingFunctionBase),
                 typeof(CascadingImageControl),
-                new PropertyMetadata(new ElasticEase { EasingMode = EasingMode.EaseOut, Oscillations = 3, Springiness = 0.0 }));
+                new PropertyMetadata(new PowerEase { EasingMode = EasingMode.EaseOut, Power = 4 }));
 
         /// <summary>
         /// Gets or sets the CascadeInEasingFunction property. This dependency property 
@@ -668,7 +668,6 @@ namespace ControlLibrary
                     var projection = new PlaneProjection();
                     projection.CenterOfRotationY = projection.CenterOfRotationX = 0.5;
                     projection.RotationX = 0;
-                    //projection.RotationY = 25;
                     rect.Projection = projection;
 
                     //设置填充图片笔刷矩形的呈现位置
@@ -676,7 +675,7 @@ namespace ControlLibrary
                     //rectTransform.CenterX = rectTransform.CenterY = 0.5;
                     rectTransform.TranslateX = column;
                     rectTransform.TranslateY = this.H;//row;
-                    rectTransform.Rotation = 0;
+                    rectTransform.ScaleY = 1;
                     rect.RenderTransformOrigin = new Windows.Foundation.Point(0.5, 0.5);
                     rect.RenderTransform = rectTransform;
 
@@ -699,7 +698,7 @@ namespace ControlLibrary
                     rects[i].SetValue(Canvas.LeftProperty, ((Point)rects[i].Tag).X * this.RW);
                     rects[i].SetValue(Canvas.TopProperty, 0);
 
-                    var transform = rects[i].RenderTransform as CompositeTransform;
+                    //var transform = rects[i].RenderTransform as CompositeTransform;
                     //transform.TranslateX = transform.TranslateX * RW;
                     //transform.TranslateY = transform.TranslateY * RH;
                 }
@@ -732,16 +731,17 @@ namespace ControlLibrary
                                 TileDuration.TotalSeconds);
 
                     rotationAnimation.KeyFrames.Add(
-                        new DiscreteDoubleKeyFrame
+                        new SplineDoubleKeyFrame
                         {
                             KeyTime = TimeSpan.Zero,
                             Value = 90
                         });
                     rotationAnimation.KeyFrames.Add(
-                        new DiscreteDoubleKeyFrame
+                        new SplineDoubleKeyFrame
                         {
-                            KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
-                            Value = 90
+                            //KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                            KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
+                            Value = 40
                         });
                     rotationAnimation.KeyFrames.Add(
                         new EasingDoubleKeyFrame
@@ -753,7 +753,7 @@ namespace ControlLibrary
 
                     sb.Children.Add(rotationAnimation);
 
-                    //****************************y,z的效果可以研究下如何加比较好
+                    #region RotationY 和 RotationZ 没有加入到动画中(暂时不要)
                     var rotationAnimationY = new DoubleAnimationUsingKeyFrames();
                     Storyboard.SetTarget(rotationAnimationY, projection);
                     Storyboard.SetTargetProperty(rotationAnimationY, "RotationY");
@@ -805,7 +805,7 @@ namespace ControlLibrary
                         });
 
                     //sb.Children.Add(rotationAnimationZ);
-                    //****************************
+                    #endregion
 
                     var opacityAnimation = new DoubleAnimationUsingKeyFrames();
                     Storyboard.SetTarget(opacityAnimation, rect);
@@ -827,29 +827,31 @@ namespace ControlLibrary
                         new EasingDoubleKeyFrame
                         {
                             KeyTime = endKeyTime,
-                            EasingFunction = CascadeInEasingFunction,
+                            EasingFunction = new ElasticEase 
+                            { 
+                                EasingMode = EasingMode.EaseOut, Oscillations = 3, Springiness = 0.0 
+                            },
                             Value = 1
                         });
 
                     sb.Children.Add(opacityAnimation);
 
-                    //******************** 效果差不错出来了,主要是起始点的设置，还有，这里的动画要不要弄成关键祯？
-                    var translateXanimation = new DoubleAnimation();
-                    /*translateXanimation.From = translateXInfo[i];*/
-                    translateXanimation.From = transfrom.TranslateX;
-                    translateXanimation.To = 0;
-                    translateXanimation.Duration = endKeyTime;
-                    //translateXanimation.EasingFunction = CascadeInEasingFunction;
                     //BackEase(缓动函数) BounceEase(弹跳效果) CircleEase(加速和/或减速) CubicEase( f(t) = t3 创建加速和/或减速) 
                     //ElasticEase(弹簧来回振动直到停止) ExponentialEase(指数公式创建加速和/或减速) PowerEase(f(t) = tp 创建加速和/或减速)
                     //QuadraticEase(f(t) = t2 创建加速和/或减速) QuarticEase(f(t) = t4 创建加速和/或减速) QuinticEase(f(t) = t5 创建加速和/或减速) 
                     //SineEase(正弦方程式（见下面的备注）创建加速和/或减速)
-                    Storyboard.SetTarget(translateXanimation, transfrom);
-                    Storyboard.SetTargetProperty(translateXanimation, "TranslateX");
-                    sb.Children.Add(translateXanimation);
+                    var translateXAanimation = new DoubleAnimation();
+                    translateXAanimation.From = transfrom.TranslateX;
+                    translateXAanimation.To = 0;
+                    translateXAanimation.Duration = endKeyTime;
+                    //translateXAanimation.EasingFunction = CascadeInEasingFunction;
+                    Storyboard.SetTarget(translateXAanimation, transfrom);
+                    Storyboard.SetTargetProperty(translateXAanimation, "TranslateX");
+                    sb.Children.Add(translateXAanimation);
 
+                    /*
+                    //暂且不要
                     var translateYanimation = new DoubleAnimation();
-                    /*translateYanimation.From = translateYInfo[i];*/
                     translateYanimation.From = transfrom.TranslateY;
                     translateYanimation.To = ((Point)rects[i].Tag).Y * rects[i].Height;
                     translateYanimation.Duration = endKeyTime;
@@ -857,8 +859,72 @@ namespace ControlLibrary
                     Storyboard.SetTarget(translateYanimation, transfrom);
                     Storyboard.SetTargetProperty(translateYanimation, "TranslateY");
                     sb.Children.Add(translateYanimation);
-                    //****************************
+                    */
 
+                    /*
+                    //一种形式的动画
+                    var translateYAanimation = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(translateYAanimation, transfrom);
+                    Storyboard.SetTargetProperty(translateYAanimation, "TranslateY");
+
+                    translateYAanimation.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.Zero,
+                            Value = transfrom.TranslateY
+                        });
+                    translateYAanimation.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            Value = ((Point)rects[i].Tag).Y * rects[i].Height
+                        });
+                    */
+                    //另外一种
+                    var translateYAanimation = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(translateYAanimation, transfrom);
+                    Storyboard.SetTargetProperty(translateYAanimation, "TranslateY");
+
+                    translateYAanimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.Zero,
+                            Value = transfrom.TranslateY
+                        });
+                    translateYAanimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
+                            Value = ((Point)rects[i].Tag).Y * rects[i].Height / 4 * 3
+                        });
+                    translateYAanimation.KeyFrames.Add(
+                        new EasingDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            EasingFunction = CascadeInEasingFunction,
+                            Value = ((Point)rects[i].Tag).Y * rects[i].Height
+                        });
+
+                    sb.Children.Add(translateYAanimation);
+
+                    var scaleTransformYAanimation = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(scaleTransformYAanimation, transfrom);
+                    Storyboard.SetTargetProperty(scaleTransformYAanimation, "ScaleY");
+
+                    scaleTransformYAanimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
+                            Value = -1
+                        });
+                    scaleTransformYAanimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            Value = 1
+                        });
+
+                    sb.Children.Add(scaleTransformYAanimation);
                 }
 
                 sb.Begin();
