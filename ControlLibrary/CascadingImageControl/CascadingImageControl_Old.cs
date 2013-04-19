@@ -891,7 +891,7 @@ namespace ControlLibrary
                         translateYanimation.From = transfrom.TranslateY;
                         translateYanimation.To = 0;
                         translateYanimation.Duration = endKeyTime;
-                        //translateXanimation.EasingFunction = CascadeInEasingFunction;
+                        //translateYanimation.EasingFunction = CascadeInEasingFunction;
                         Storyboard.SetTarget(translateYanimation, transfrom);
                         Storyboard.SetTargetProperty(translateYanimation, "TranslateY");
                         sb.Children.Add(translateYanimation);

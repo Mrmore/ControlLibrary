@@ -17,6 +17,10 @@ namespace ControlLibrary
         BottomLeft,
         //Left,
         Random,
-        Shuffle
+        Shuffle,
+        TopCenter,
+        BottomCenter,
+        LeftCenter,
+        RightCenter
     }
 }
