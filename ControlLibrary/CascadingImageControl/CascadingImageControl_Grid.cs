@@ -37,7 +37,7 @@ namespace ControlLibrary
 
         private double H, W = double.NaN;
         private double RH, RW = double.NaN;
-        private SizeChangedEventHandler sizeChanged = null;
+        //private SizeChangedEventHandler sizeChanged = null;
         private Size size;
         #endregion
 
@@ -648,8 +648,6 @@ namespace ControlLibrary
                     var rect = new Rectangle();
                     rects.Add(rect);
 
-                    //Grid.SetRow(rect, row);
-                    //Grid.SetColumn(rect, column);
                     //row代表高Y,column代表宽X
                     rect.Tag = new Point(column, row);
                     rectCoords.Add(new Tuple<int, int>(column, row));

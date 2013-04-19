@@ -18,16 +18,16 @@ using Windows.Foundation;
 
 namespace ControlLibrary
 {
-    [TemplatePart(Name = LayoutGridName, Type = typeof(Grid))]
+    [TemplatePart(Name = LayoutCanvasName, Type = typeof(Canvas))]
     [TemplatePart(Name = LayoutViewboxName, Type = typeof(Viewbox))]
     public sealed class CascadingImageControl : Control
     {
         #region Private Variable
-        private const string LayoutGridName = "PART_LayoutGrid";
+        private const string LayoutCanvasName = "PART_LayoutCanvas";
 
         private const string LayoutViewboxName = "LayoutViewbox";
 
-        private Grid _layoutGrid;
+        private Canvas _layoutCanvas;
 
         private bool _isLoaded;
 
@@ -37,7 +37,6 @@ namespace ControlLibrary
 
         private double H, W = double.NaN;
         private double RH, RW = double.NaN;
-        private SizeChangedEventHandler sizeChanged = null;
         private Size size;
         #endregion
 
@@ -216,7 +215,7 @@ namespace ControlLibrary
         private static void OnStretchPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var cascadingImageControl = sender as CascadingImageControl;
-            if (cascadingImageControl != null && cascadingImageControl._layoutGrid != null)
+            if (cascadingImageControl != null && cascadingImageControl._layoutCanvas != null)
             {
                 cascadingImageControl.Cascade();
             }
@@ -429,7 +428,7 @@ namespace ControlLibrary
         private static void OnCascadeDirectionChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var cascadingImageControl = sender as CascadingImageControl;
-            if (cascadingImageControl != null && cascadingImageControl._layoutGrid != null)
+            if (cascadingImageControl != null && cascadingImageControl._layoutCanvas != null)
             {
                 cascadingImageControl.Cascade();
             }
@@ -482,7 +481,7 @@ namespace ControlLibrary
         private static void OnCascadeSequencePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var cascadingImageControl = sender as CascadingImageControl;
-            if (cascadingImageControl != null && cascadingImageControl._layoutGrid != null)
+            if (cascadingImageControl != null && cascadingImageControl._layoutCanvas != null)
             {
                 cascadingImageControl.Cascade();
             }
@@ -506,7 +505,7 @@ namespace ControlLibrary
          private static void OnIsClipPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var cascadingImageControl = sender as CascadingImageControl;
-            if (cascadingImageControl != null && cascadingImageControl._layoutGrid != null)
+            if (cascadingImageControl != null && cascadingImageControl._layoutCanvas != null)
             {
                 if (cascadingImageControl.IsClip)
                 {
@@ -514,7 +513,7 @@ namespace ControlLibrary
                 }
                 else
                 {
-                    cascadingImageControl._layoutGrid.Clip = null;
+                    cascadingImageControl._layoutCanvas.Clip = null;
                 }
             }
         }
@@ -531,13 +530,13 @@ namespace ControlLibrary
         {
             base.OnApplyTemplate();
 
-            _layoutGrid = GetTemplateChild(LayoutGridName) as Grid;
+            _layoutCanvas = GetTemplateChild(LayoutCanvasName) as Canvas;
 
             //viewbox = GetTemplateChild(LayoutViewboxName) as Viewbox;
 
-            if (_layoutGrid == null)
+            if (_layoutCanvas == null)
             {
-                Debug.WriteLine("CascadingImageControl requires a Grid called PART_LayoutGrid in its template.");
+                Debug.WriteLine("CascadingImageControl requires a Grid called PART_LayoutCanvas in its template.");
                 return;
             }
 
@@ -556,7 +555,7 @@ namespace ControlLibrary
         {
             RH = RW = double.NaN;
             if (!_isLoaded ||
-                _layoutGrid == null)
+                _layoutCanvas == null)
             {
                 return;
             }
@@ -566,7 +565,7 @@ namespace ControlLibrary
             if (Columns < 1)
                 Columns = 1;
 
-            _layoutGrid.Children.Clear();
+            _layoutCanvas.Children.Clear();
 
             var sb = new Storyboard();
 
@@ -648,8 +647,6 @@ namespace ControlLibrary
                     var rect = new Rectangle();
                     rects.Add(rect);
 
-                    //Grid.SetRow(rect, row);
-                    //Grid.SetColumn(rect, column);
                     //row代表高Y,column代表宽X
                     rect.Tag = new Point(column, row);
                     rectCoords.Add(new Tuple<int, int>(column, row));
@@ -670,7 +667,7 @@ namespace ControlLibrary
                     //设置填充图片笔刷矩形的透视投影
                     var projection = new PlaneProjection();
                     projection.CenterOfRotationY = projection.CenterOfRotationX = 0.5;
-                    projection.RotationX = 90;
+                    projection.RotationX = 0;
                     //projection.RotationY = 25;
                     rect.Projection = projection;
 
@@ -683,7 +680,7 @@ namespace ControlLibrary
                     rect.RenderTransformOrigin = new Windows.Foundation.Point(0.5, 0.5);
                     rect.RenderTransform = rectTransform;
 
-                    _layoutGrid.Children.Add(rect);
+                    _layoutCanvas.Children.Add(rect);
                     
                 }
             GetRHAndRW();
@@ -694,16 +691,17 @@ namespace ControlLibrary
 
                 for (int i = 0; i < Rows * Columns; i++)
                 {
+                    //Canvas.SetLeft(rects[i], ((Point)rects[i].Tag).X * this.RW);
+                    //Canvas.SetTop(rects[i], 0);
                     indices.Add(i);
                     rects[i].Width = this.RW;
                     rects[i].Height = this.RH;
-                    rects[i].HorizontalAlignment = Windows.UI.Xaml.HorizontalAlignment.Left;
-                    rects[i].VerticalAlignment = Windows.UI.Xaml.VerticalAlignment.Top;
-                    rects[i].Margin = new Thickness(((Point)rects[i].Tag).X * this.RW, 0, 0, 0);
+                    rects[i].SetValue(Canvas.LeftProperty, ((Point)rects[i].Tag).X * this.RW);
+                    rects[i].SetValue(Canvas.TopProperty, 0);
 
                     var transform = rects[i].RenderTransform as CompositeTransform;
                     //transform.TranslateX = transform.TranslateX * RW;
-                    transform.TranslateY = transform.TranslateY;//transform.TranslateY * RH;
+                    //transform.TranslateY = transform.TranslateY * RH;
                 }
 
                 if (direction == CascadeDirection.Shuffle)
@@ -749,7 +747,7 @@ namespace ControlLibrary
                         new EasingDoubleKeyFrame
                         {
                             KeyTime = endKeyTime,
-                            //EasingFunction = CascadeInEasingFunction,
+                            EasingFunction = CascadeInEasingFunction,
                             Value = 0
                         });
 
@@ -898,12 +896,12 @@ namespace ControlLibrary
         {
             if (!double.IsNaN(this.Width) && !double.IsNaN(this.Height))
             {
-                var ss = _layoutGrid.Clip;
-                _layoutGrid.Clip = new RectangleGeometry() { Rect = new Rect(new Point(), new Size(this.Width, this.Height)) };
+                var ss = _layoutCanvas.Clip;
+                _layoutCanvas.Clip = new RectangleGeometry() { Rect = new Rect(new Point(), new Size(this.Width, this.Height)) };
             }
             else
             {
-                _layoutGrid.Clip = new RectangleGeometry() { Rect = new Rect(new Point(), size) };
+                _layoutCanvas.Clip = new RectangleGeometry() { Rect = new Rect(new Point(), size) };
             }
         }
 
