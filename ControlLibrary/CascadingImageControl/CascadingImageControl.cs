@@ -732,6 +732,7 @@ namespace ControlLibrary
                                 (double)row * RowDelay.TotalSeconds +
                                 (double)column * ColumnDelay.TotalSeconds +
                                 TileDuration.TotalSeconds);
+                    endKeyTime =  TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 3 * 2);
 
                     rotationAnimation.KeyFrames.Add(
                         new SplineDoubleKeyFrame
