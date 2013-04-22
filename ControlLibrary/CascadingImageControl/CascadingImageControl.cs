@@ -658,7 +658,6 @@ namespace ControlLibrary
                     rect.Tag = new Point(column, row);
                     rectCoords.Add(new Tuple<int, int>(column, row));
 
-                    /*
                     var brush = new ImageBrush();
                     brush.ImageSource = this.ImageSource;
                     brush.Stretch = this.Stretch;
@@ -671,7 +670,6 @@ namespace ControlLibrary
                     transform.TranslateY = -row;
                     transform.ScaleY = Rows;
                     brush.RelativeTransform = transform;
-                    */
 
                     //设置填充图片笔刷矩形的透视投影
                     var projection = new PlaneProjection();
@@ -707,9 +705,11 @@ namespace ControlLibrary
                     rects[i].SetValue(Canvas.LeftProperty, ((Point)rects[i].Tag).X * this.RW);
                     rects[i].SetValue(Canvas.TopProperty, 0);
 
+                    /*
                     var brush = await GetImageBrush((uint)(((Point)rects[i].Tag).X * this.RW), (uint)(((Point)rects[i].Tag).Y * this.RH), (uint)this.RW, (uint)this.RH);
                     brush.Stretch = this.Stretch;
                     rects[i].Fill = brush;
+                    */
 
                     //var transform = rects[i].RenderTransform as CompositeTransform;
                     //transform.TranslateX = transform.TranslateX * RW;
