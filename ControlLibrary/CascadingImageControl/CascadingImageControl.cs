@@ -14,6 +14,12 @@ using ControlLibrary.Extensions;
 using System.Collections.Concurrent;
 using Windows.Foundation;
 using System.Threading.Tasks;
+using Windows.UI.Xaml.Media.Imaging;
+using System.Text.RegularExpressions;
+using Windows.Storage.Streams;
+using Windows.Graphics.Imaging;
+using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 // “用户控件”项模板在 http://go.microsoft.com/fwlink/?LinkId=234235 上有介绍
 
@@ -652,6 +658,7 @@ namespace ControlLibrary
                     rect.Tag = new Point(column, row);
                     rectCoords.Add(new Tuple<int, int>(column, row));
 
+                    /*
                     var brush = new ImageBrush();
                     brush.ImageSource = this.ImageSource;
                     brush.Stretch = this.Stretch;
@@ -664,6 +671,7 @@ namespace ControlLibrary
                     transform.TranslateY = -row;
                     transform.ScaleY = Rows;
                     brush.RelativeTransform = transform;
+                    */
 
                     //设置填充图片笔刷矩形的透视投影
                     var projection = new PlaneProjection();
@@ -698,6 +706,10 @@ namespace ControlLibrary
                     rects[i].Height = this.RH;
                     rects[i].SetValue(Canvas.LeftProperty, ((Point)rects[i].Tag).X * this.RW);
                     rects[i].SetValue(Canvas.TopProperty, 0);
+
+                    var brush = await GetImageBrush((uint)(((Point)rects[i].Tag).X * this.RW), (uint)(((Point)rects[i].Tag).Y * this.RH), (uint)this.RW, (uint)this.RH);
+                    brush.Stretch = this.Stretch;
+                    rects[i].Fill = brush;
 
                     //var transform = rects[i].RenderTransform as CompositeTransform;
                     //transform.TranslateX = transform.TranslateX * RW;
@@ -986,6 +998,63 @@ namespace ControlLibrary
             {
                 AddMask();
             }
+        }
+
+        private async Task<ImageBrush> GetImageBrush(uint x, uint y, uint width, uint heigth)
+        {
+            ImageBrush imageBrush = new ImageBrush();
+            BitmapImage image = this.ImageSource as BitmapImage;
+            Uri uri;
+            if (image != null)
+            {
+                if (image.UriSource != null)
+                {
+                    var reg = @"http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?";
+                    Uri baseUri = new Uri("ms-appx:///");
+                    Regex regex = new Regex(reg, RegexOptions.IgnoreCase);
+                    if (regex.IsMatch(image.UriSource.ToString()))
+                    {
+                        uri = image.UriSource;
+                    }
+                    else
+                    {
+                        uri = new Uri(baseUri, image.UriSource.AbsolutePath);
+                    }
+                    RandomAccessStreamReference fileStream = RandomAccessStreamReference.CreateFromUri(uri);
+                    IRandomAccessStream randomAccessStream = await fileStream.OpenReadAsync();
+
+                    BitmapDecoder bitmapDecoder = await BitmapDecoder.CreateAsync(randomAccessStream);
+                    if (x + width > this.W)
+                    {
+                        width = (uint)(this.W + 0.5) - x;
+                    }
+                    if (y + heigth > this.H)
+                    {
+                        heigth = (uint)(this.H + 0.5) - y;
+                    }
+                    BitmapTransform bitmapTransform = new BitmapTransform()
+                    {
+                        Rotation = BitmapRotation.None,
+                        Flip = BitmapFlip.None,
+                        InterpolationMode = BitmapInterpolationMode.NearestNeighbor,
+                        Bounds = new BitmapBounds { Width = width, Height = heigth, X = x, Y = y }
+                    };
+                    PixelDataProvider pixelDataProvider = await bitmapDecoder.GetPixelDataAsync(
+                                                          BitmapPixelFormat.Bgra8,
+                                                          BitmapAlphaMode.Straight, bitmapTransform,
+                                                          ExifOrientationMode.IgnoreExifOrientation,
+                                                          ColorManagementMode.DoNotColorManage);
+                    byte[] pixelData = pixelDataProvider.DetachPixelData();
+                    BitmapImage bb = new BitmapImage();
+                    WriteableBitmap bitmap = new WriteableBitmap((int)width, (int)heigth);
+                    using (Stream data = bitmap.PixelBuffer.AsStream())
+                    {
+                        await data.WriteAsync(pixelData, 0, pixelData.Length);
+                    }
+                    imageBrush.ImageSource = bitmap;
+                }
+            }
+            return imageBrush;
         }
     }
 }
