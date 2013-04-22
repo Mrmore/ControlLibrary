@@ -709,9 +709,10 @@ namespace ControlLibrary
                     indices = indices.Shuffle();
                 }
 
-                for (int ii = 0; ii < indices.Count; ii++)
+                //for (int ii = 0; ii < indices.Count; ii++)
+                for (int ii = 0; ii < indices.Count;)
                 {
-                    //sb = new Storyboard();
+                    sb = new Storyboard();
                     var i = indices[ii];
                     var projection = rects[i].Projection;
                     var rect = rects[i];
@@ -929,9 +930,12 @@ namespace ControlLibrary
 
                     sb.Children.Add(scaleTransformYAanimation);
                     //await sb.BeginAsync();
+                    sb.Begin();
+                    await Task.Delay(TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 10 * 1));
+                    ii++;
                 }
 
-                sb.Begin();
+                //sb.Begin();
             }   
         }
 
