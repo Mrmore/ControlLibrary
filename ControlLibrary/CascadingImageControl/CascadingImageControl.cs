@@ -692,10 +692,12 @@ namespace ControlLibrary
             GetRHAndRW();
             if (!double.IsNaN(RH) && !double.IsNaN(RW))
             {
-
                 var indices = new List<int>(Rows * Columns);
-
                 for (int i = 0; i < Rows * Columns; i++)
+                /*
+                var indices = new List<int>();
+                for (int i = 0; i < rects.Count;)
+                */
                 {
                     //Canvas.SetLeft(rects[i], ((Point)rects[i].Tag).X * this.RW);
                     //Canvas.SetTop(rects[i], 0);
@@ -704,16 +706,20 @@ namespace ControlLibrary
                     rects[i].Height = this.RH;
                     rects[i].SetValue(Canvas.LeftProperty, ((Point)rects[i].Tag).X * this.RW);
                     rects[i].SetValue(Canvas.TopProperty, 0);
-
+                    
                     /*
                     var brush = await GetImageBrush((uint)(((Point)rects[i].Tag).X * this.RW), (uint)(((Point)rects[i].Tag).Y * this.RH), (uint)this.RW, (uint)this.RH);
                     brush.Stretch = this.Stretch;
                     rects[i].Fill = brush;
-                    */
+                    */ 
 
                     //var transform = rects[i].RenderTransform as CompositeTransform;
                     //transform.TranslateX = transform.TranslateX * RW;
                     //transform.TranslateY = transform.TranslateY * RH;
+
+                    /*
+                    i++;
+                    */
                 }
 
                 if (direction == CascadeDirection.Shuffle)
@@ -1034,6 +1040,8 @@ namespace ControlLibrary
                     }
                     BitmapTransform bitmapTransform = new BitmapTransform()
                     {
+                        ScaledHeight = (uint)this.H,
+                        ScaledWidth = (uint)this.W,
                         Rotation = BitmapRotation.None,
                         Flip = BitmapFlip.None,
                         InterpolationMode = BitmapInterpolationMode.NearestNeighbor,
