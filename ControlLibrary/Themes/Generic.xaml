@@ -2277,4 +2277,19 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <Style TargetType="local:MoveOutControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:MoveOutControl">
+                    <!--<Viewbox x:Name="LayoutViewbox" Stretch="Fill">-->
+                    <Grid x:Name="gridRoot">
+                        <Border x:Name="borderBack" />
+                        <Border x:Name="borderPositive" RenderTransformOrigin="0.5,0.5" />
+                    </Grid>
+                    <!--</Viewbox>-->
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

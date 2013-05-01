@@ -180,6 +180,7 @@
     <Compile Include="ImageGif\ImageGif.cs" />
     <Compile Include="MatButton\MatButton.cs" />
     <Compile Include="Meter\Meter.cs" />
+    <Compile Include="MoveOutControl\MoveOutControl.cs" />
     <Compile Include="MyToolkit\PageUtilities.cs" />
     <Compile Include="MyToolkit\SingleEvent.cs" />
     <Compile Include="PopupBorder\PopupBorderBase.cs" />

@@ -153,5 +153,10 @@ namespace TestDemoApp
         {
             this.Frame.Navigate(typeof(CascadingImageBlankPage));
         }
+
+        private void BtMoveOutControl_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(MoveOutControlBlankPage));
+        }
     }
 }
