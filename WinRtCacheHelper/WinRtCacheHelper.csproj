@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="IsoStorage.cs" />
     <Compile Include="ObjectStorageHelper.cs" />
+    <Compile Include="StorageHelper.cs" />
     <Compile Include="StorageType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
