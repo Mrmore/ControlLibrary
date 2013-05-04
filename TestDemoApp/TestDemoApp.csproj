@@ -113,6 +113,10 @@
       <Project>{5f0af0d0-2007-4499-ba0f-d44e2931cda6}</Project>
       <Name>NotificationsExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WinRtCacheHelper\WinRtCacheHelper.csproj">
+      <Project>{0e893256-daa3-4155-8abb-ed4fae5f045e}</Project>
+      <Name>WinRtCacheHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WinRtHttpHelper\WinRtHttpHelper.csproj">
       <Project>{a78f9341-2735-40f5-934f-2133c5ac29de}</Project>
       <Name>WinRtHttpHelper</Name>
@@ -172,6 +176,7 @@
     <Compile Include="MoveOutControlBlankPage.xaml.cs">
       <DependentUpon>MoveOutControlBlankPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ObjectStorageHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemCursorPage.xaml.cs">
       <DependentUpon>SystemCursorPage.xaml</DependentUpon>
@@ -356,7 +361,14 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="MSTestFramework, Version=11.0">
+      <Name>MSTest for Managed Projects</Name>
+    </SDKReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>
