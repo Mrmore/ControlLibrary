@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace WinRtCacheHelper
 {
@@ -158,6 +160,27 @@ namespace WinRtCacheHelper
             return await FileExistsAsync(key, location);
         }
 
+        private static async Task<IRandomAccessStream> CreateFileIAStreamAsync(string key, StorageStrategies location = StorageStrategies.Local,
+            Windows.Storage.CreationCollisionOption option = Windows.Storage.CreationCollisionOption.OpenIfExists, FileAccessMode fileAccessMode = FileAccessMode.ReadWrite)
+        {
+            var _File = await CreateFileAsync(key, location, Windows.Storage.CreationCollisionOption.ReplaceExisting);
+            if (_File != null)
+            {
+                return (await _File.OpenAsync(fileAccessMode));
+            }
+            else
+            {
+                return null;
+            }
+        }
+            
+        /// <summary>
+        /// 创建文件，返回文件
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="location"></param>
+        /// <param name="option"></param>
+        /// <returns></returns>
         private static async Task<Windows.Storage.StorageFile> CreateFileAsync(string key, StorageStrategies location = StorageStrategies.Local,
             Windows.Storage.CreationCollisionOption option = Windows.Storage.CreationCollisionOption.OpenIfExists)
         {
