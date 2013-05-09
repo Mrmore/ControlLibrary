@@ -61,9 +61,9 @@ namespace WinRtHttpHelper
         /// <summary>
         /// 下载的实时进度事件
         /// </summary>
-        public EventHandler<DownLoadChangingEventArgs> DownLoadChanging;
+        public event EventHandler<DownLoadChangingEventArgs> DownLoadChanging;
 
-        public EventHandler<DownLoadCompleteEventArgs> DownLoadComplete;
+        public event EventHandler<DownLoadCompleteEventArgs> DownLoadComplete;
 
         /// <summary>
         /// 已下载的字节数和总的字节数

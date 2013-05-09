@@ -43,9 +43,9 @@ namespace WinRtHttpHelper
         private HttpHelper httpHelper = null;
         private CancellationTokenSource cts = null;
 
-        public EventHandler<DownLoadChangingEventArgs> DownLoadChanging;
+        public event EventHandler<DownLoadChangingEventArgs> DownLoadChanging;
 
-        public EventHandler<DownLoadCompleteEventArgs> DownLoadComplete;
+        public event EventHandler<DownLoadCompleteEventArgs> DownLoadComplete;
 
         /// <summary>
         /// 已下载的字节数和总的字节数
