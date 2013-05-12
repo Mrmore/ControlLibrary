@@ -1,23 +1,9 @@
-﻿﻿//
-// Copyright (c) 2012 Tim Heuer
-//
-// Licensed under the Microsoft Public License (Ms-PL) (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//    http://opensource.org/licenses/Ms-PL.html
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-
-using ControlLibrary.Common;
+﻿using ControlLibrary.Common;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
+using Windows.UI;
 using Windows.UI.ApplicationSettings;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
@@ -43,7 +29,6 @@ namespace ControlLibrary.SettingsManagement
         
         #region fields
         private readonly Dictionary<object, ISettingsCommandInfo> _commands = new Dictionary<object, ISettingsCommandInfo>();
-        private SolidColorBrush _headerBrush = null;
         private static volatile AppSettings _instance;
         private SettingsFlyout _settingsFlyout;
         private BitmapImage _smallLogoImageSource;
@@ -131,19 +116,17 @@ namespace ControlLibrary.SettingsManagement
 
             if (!_commands.ContainsKey(key))
             {
-                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width));
+                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width, null));
             }
         }
 
         public void AddCommand<T>(string headerText, SolidColorBrush headerBrush, SettingsFlyout.SettingsFlyoutWidth width = SettingsFlyout.SettingsFlyoutWidth.Narrow) where T : UserControl, new()
         {
             string key = headerText.Trim().Replace(" ", "");
-            
-            _headerBrush = headerBrush;
 
             if (!_commands.ContainsKey(key))
             {
-                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width));
+                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width, headerBrush));
             }
         }
         #endregion
@@ -165,10 +148,6 @@ namespace ControlLibrary.SettingsManagement
         private async void Configure()
         {
             _visualElement = await AppManifestHelper.GetManifestVisualElementsAsync();
-            if (_headerBrush == null)
-            {
-                _headerBrush = new SolidColorBrush(_visualElement.BackgroundColor);
-            }
             _smallLogoImageSource = new BitmapImage(_visualElement.SmallLogoUri);
             SettingsPane.GetForCurrentView().CommandsRequested += Current.CommandsRequested;
         }
@@ -180,7 +159,21 @@ namespace ControlLibrary.SettingsManagement
             ISettingsCommandInfo commandInfo = _commands[command.Id];
 
             _settingsFlyout = new SettingsFlyout();
-            _settingsFlyout.HeaderBrush = _headerBrush;
+            if (commandInfo.HeaderTextBrush != null)
+            {
+                _settingsFlyout.HeaderBrush = commandInfo.HeaderTextBrush;
+            }
+            else
+            {
+                if (_visualElement != null)
+                {
+                    _settingsFlyout.HeaderBrush = new SolidColorBrush(_visualElement.BackgroundColor);
+                }
+                else
+                {
+                    _settingsFlyout.HeaderBrush = new SolidColorBrush(Colors.Gray);
+                }
+            }
             _settingsFlyout.SmallLogoImageSource = _smallLogoImageSource;
             _settingsFlyout.HeaderText = command.Label;
 #pragma warning disable 612,618

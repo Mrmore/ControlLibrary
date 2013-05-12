@@ -55,19 +55,27 @@ namespace TestDemoApp
                 settings.FlyoutWidth = (SettingsFlyout.SettingsFlyoutWidth)Enum.Parse(typeof(SettingsFlyout.SettingsFlyoutWidth), settingswidth.SelectionBoxItem.ToString());
                 settings.HeaderBrush = new SolidColorBrush(Colors.Orange);
                 settings.HeaderText = string.Format("{0} 第三项", App.VisualElements.DisplayName);
-
-                // provide some logo (preferrably the smallogo the app uses)
                 BitmapImage bmp = new BitmapImage(App.VisualElements.SmallLogoUri);
                 settings.SmallLogoImageSource = bmp;
-
-                // set the content for the flyout
                 settings.Content = new SettingsContent();
-
-                // open it
                 settings.IsOpen = true;
             });
 
             args.Request.ApplicationCommands.Add(cmd);
+
+            SettingsCommand cmd1 = new SettingsCommand("第四项", "第四项", (x) =>
+            {
+                SettingsFlyout settings = new SettingsFlyout();
+                settings.FlyoutWidth = (SettingsFlyout.SettingsFlyoutWidth)Enum.Parse(typeof(SettingsFlyout.SettingsFlyoutWidth), settingswidth.SelectionBoxItem.ToString());
+                settings.HeaderBrush = new SolidColorBrush(Colors.Blue);
+                settings.HeaderText = string.Format("{0} 第四项", App.VisualElements.DisplayName);
+                BitmapImage bmp = new BitmapImage(App.VisualElements.SmallLogoUri);
+                settings.SmallLogoImageSource = bmp;
+                settings.Content = new SettingsContent();
+                settings.IsOpen = true;
+            });
+
+            args.Request.ApplicationCommands.Add(cmd1);
         }
 
         private void ShowSettings(object sender, RoutedEventArgs e)
