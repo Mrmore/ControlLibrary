@@ -89,7 +89,7 @@ namespace HttpCacheTestDemo
 
         private void btbg_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Frame.Navigate(typeof(BackgroundDownloaderPage));
         }
     }
 }

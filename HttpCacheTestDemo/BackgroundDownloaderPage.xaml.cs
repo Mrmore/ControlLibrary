@@ -46,5 +46,10 @@ namespace HttpCacheTestDemo
                 CreationCollisionOption.ReplaceExisting);
             _viewModel.AddDown(new Uri(this.DownUri.Text, UriKind.RelativeOrAbsolute), file);
         }
+
+        private void btGoback_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.GoBack();
+        }
     }
 }

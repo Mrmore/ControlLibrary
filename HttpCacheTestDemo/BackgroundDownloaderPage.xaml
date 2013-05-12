@@ -23,6 +23,6 @@
         <GridView x:Name="DownList" HorizontalAlignment="Left" Height="441" Margin="69,182,0,0" VerticalAlignment="Top" Width="819"
                   ItemTemplate="{StaticResource DownListItemTemplate}"
                   ItemsSource="{Binding DownLoadList}"/>
-
+        <Button x:Name="btGoback"  Content="返回" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btGoback_Click"/>
     </Grid>
 </Page>
