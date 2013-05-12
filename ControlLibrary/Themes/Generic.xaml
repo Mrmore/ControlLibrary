@@ -2,9 +2,197 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ControlLibrary"
+    xmlns:converters="using:ControlLibrary.Converter"
     >
 
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <SolidColorBrush x:Key="FlyoutBorderBrush">#FF212121</SolidColorBrush>
+            <SolidColorBrush x:Key="FlyoutBackgroundBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuBorderBrush">#FF212121</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuBackgroundBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemBaseTextBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemBaseBackgroundBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemHoverBrush">#FFDEDEDE</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemPressedBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemPressedTextBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemHoverTextBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuSeparatorStrokeBrush">#FF707070</SolidColorBrush>
+            <SolidColorBrush x:Key="SettingsFlyoutHeaderBackgroundBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="SettingsFlyoutContentBackgroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="SettingsFlyoutContentForegroundThemeBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemForegroundThemeBrush">#FF5B2EC5</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemPointerOverThemeBrush">#FF8152EF</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemPointerPressedThemeBrush">#FF8152EF</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemBackgroundThemeBrush">#59FFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemDisabledForegroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemBorderThemeBrush">Transparent</SolidColorBrush>
+            <x:String x:Key="SettingsFlyoutBackButtonGlyph">&#xE0BA;</x:String>
+            <SolidColorBrush x:Key="FlipViewIndicatorUnselectedThemeBrush">Gray</SolidColorBrush>
+            <SolidColorBrush x:Key="FlipViewIndicatorSelectedThemeBrush">#FFFFFFFF</SolidColorBrush>
+            <x:Double x:Key="CustomDialogBorderThemeThickness">0</x:Double>
+            <SolidColorBrush x:Key="CustomDialogBorderThemeBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="CustomDialogBackgroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="FlyoutBorderBrush">#FF212121</SolidColorBrush>
+            <SolidColorBrush x:Key="FlyoutBackgroundBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuBorderBrush">#FF212121</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuBackgroundBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemBaseTextBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemBaseBackgroundBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemHoverBrush">#FFDEDEDE</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemPressedBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemPressedTextBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemHoverTextBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuSeparatorStrokeBrush">#FF707070</SolidColorBrush>
+            <SolidColorBrush x:Key="SettingsFlyoutHeaderBackgroundBrush">LightGray</SolidColorBrush>
+            <SolidColorBrush x:Key="SettingsFlyoutContentBackgroundThemeBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="SettingsFlyoutContentForegroundThemeBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemForegroundThemeBrush">#FF4617B4</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemPointerOverThemeBrush">#FF7241E4</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemPointerPressedThemeBrush">#FF7241E4</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemBackgroundThemeBrush">#59000000</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemDisabledForegroundThemeBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="RatingItemBorderThemeBrush">Transparent</SolidColorBrush>
+            <x:String x:Key="SettingsFlyoutBackButtonGlyph">&#xE0BA;</x:String>
+            <SolidColorBrush x:Key="FlipViewIndicatorUnselectedThemeBrush">Gray</SolidColorBrush>
+            <SolidColorBrush x:Key="FlipViewIndicatorSelectedThemeBrush">#FF000000</SolidColorBrush>
+            <x:Double x:Key="CustomDialogBorderThemeThickness">0</x:Double>
+            <SolidColorBrush x:Key="CustomDialogBorderThemeBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="CustomDialogBackgroundThemeBrush">#FF000000</SolidColorBrush>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="HighContrast">
+            <SolidColorBrush x:Key="FlyoutBorderBrush" Color="{StaticResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="FlyoutBackgroundBrush" Color="{StaticResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="MenuBorderBrush" Color="{StaticResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="MenuBackgroundBrush" Color="{StaticResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="MenuItemBaseTextBrush" Color="{StaticResource SystemColorButtonTextColor}"/>
+            <SolidColorBrush x:Key="MenuItemBaseBackgroundBrush" Color="{StaticResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="MenuItemHoverBrush" Color="{StaticResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="MenuItemPressedBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="MenuItemPressedTextBrush" Color="{StaticResource SystemColorButtonFaceColor}"/>
+            <SolidColorBrush x:Key="MenuItemHoverTextBrush" Color="{StaticResource SystemColorButtonTextColor}"/>
+            <SolidColorBrush x:Key="MenuSeparatorStrokeBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="SettingsFlyoutHeaderBackgroundBrush" Color="{StaticResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="SettingsFlyoutContentBackgroundThemeBrush" Color="{StaticResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="SettingsFlyoutContentForegroundThemeBrush" Color="{StaticResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="RatingItemForegroundThemeBrush" Color="{StaticResource SystemColorHighlightColor}" />
+            <SolidColorBrush x:Key="RatingItemPointerOverThemeBrush" Color="{StaticResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="RatingItemPointerPressedThemeBrush" Color="{StaticResource SystemColorButtonTextColor}" />
+            <SolidColorBrush x:Key="RatingItemBackgroundThemeBrush" Color="{StaticResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="RatingItemDisabledForegroundThemeBrush" Color="{StaticResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="RatingItemBorderThemeBrush" Color="{StaticResource SystemColorButtonTextColor}" />
+            <x:String x:Key="SettingsFlyoutBackButtonGlyph">&#xE0C4;</x:String>
+            <SolidColorBrush x:Key="FlipViewIndicatorUnselectedThemeBrush" Color="{StaticResource SystemColorButtonFaceColor}" />
+            <SolidColorBrush x:Key="FlipViewIndicatorSelectedThemeBrush" Color="{StaticResource SystemColorHighlightColor}" />
+            <x:Double x:Key="CustomDialogBorderThemeThickness">1</x:Double>
+            <SolidColorBrush x:Key="CustomDialogBorderThemeBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="CustomDialogBackgroundThemeBrush" Color="{StaticResource SystemColorButtonFaceColor}" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
+    <converters:ColorBrightnessConverter x:Key="ColorBrightness" />
+    <converters:ColorContrastConverter x:Key="ColorContrast" />
     <SolidColorBrush x:Key="PrefixStatusSolidColorBrush">#B0DBEF</SolidColorBrush>
+    <x:String x:Key="SettingsFlyoutHeaderTextDefault">Application Setting</x:String>
+
+    <Style x:Key="SettingsBackButtonStyle" TargetType="Button">
+        <Setter Property="MinWidth" Value="0"/>
+        <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="26.66667"/>
+        <Setter Property="AutomationProperties.AutomationId" Value="BackButton"/>
+        <Setter Property="AutomationProperties.Name" Value="Back"/>
+        <Setter Property="AutomationProperties.ItemType" Value="Navigation Button"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid x:Name="RootGrid" Width="30" Height="30">
+                        <Grid Margin="-3,-5,0,0">
+                            <TextBlock x:Name="BackgroundGlyph" Text="&#xE0D4;" Foreground="{StaticResource BackButtonBackgroundThemeBrush}"/>
+                            <TextBlock x:Name="NormalGlyph" Text="{StaticResource SettingsFlyoutBackButtonGlyph}" Foreground="{StaticResource BackButtonForegroundThemeBrush}"/>
+                            <TextBlock x:Name="ArrowGlyph" Text="&#xE0C4;" Foreground="{StaticResource BackButtonPressedForegroundThemeBrush}" Opacity="0"/>
+                        </Grid>
+                        <Rectangle
+                            x:Name="FocusVisualWhite"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="1.5"/>
+                        <Rectangle
+                            x:Name="FocusVisualBlack"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="0.5"/>
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="CommonStates">
+                                <VisualState x:Name="Normal" />
+                                <VisualState x:Name="PointerOver">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource BackButtonPointerOverBackgroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="NormalGlyph" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource BackButtonPointerOverForegroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Pressed">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource BackButtonForegroundThemeBrush}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="ArrowGlyph"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0"/>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="NormalGlyph"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Disabled">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Visibility">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+                            <VisualStateGroup x:Name="FocusStates">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="FocusVisualWhite"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0"/>
+                                        <DoubleAnimation
+                                            Storyboard.TargetName="FocusVisualBlack"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0"/>
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Unfocused" />
+                                <VisualState x:Name="PointerFocused" />
+                            </VisualStateGroup>
+                        </VisualStateManager.VisualStateGroups>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style x:Key="NewFeedNameTextStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Microsoft Yahei"/>
@@ -2288,6 +2476,168 @@
                         <Border x:Name="borderPositive" RenderTransformOrigin="0.5,0.5" />
                     </Grid>
                     <!--</Viewbox>-->
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:SettingsFlyout">
+        <Setter Property="Background" Value="{StaticResource ApplicationPageBackgroundThemeBrush}" />
+        <Setter Property="HeaderBrush" Value="{StaticResource SettingsFlyoutHeaderBackgroundBrush}" />
+        <Setter Property="HeaderText" Value="{StaticResource SettingsFlyoutHeaderTextDefault}" />
+        <Setter Property="ContentBackgroundBrush" Value="{StaticResource SettingsFlyoutContentBackgroundThemeBrush}" />
+        <Setter Property="ContentForegroundBrush" Value="{StaticResource SettingsFlyoutContentForegroundThemeBrush}" />
+        <Setter Property="VerticalContentAlignment" Value="Top" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="MaxWidth" Value="646" />
+        <Setter Property="MinWidth" Value="320" />
+        <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled" />
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+        <Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:SettingsFlyout">
+                    <Border x:Name="PART_RootBorder" BorderBrush="{Binding ElementName=PART_HeaderGrid, Path=Background, RelativeSource={RelativeSource Mode=Self}, Converter={StaticResource ColorBrightness}, ConverterParameter=0.8}" BorderThickness="1,0,0,0" VerticalAlignment="Stretch">
+                        <Grid Background="{TemplateBinding Background}" VerticalAlignment="Stretch">
+                            <!-- Root grid definition -->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="80" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+
+                            <!-- Header area for panel -->
+                            <Grid Background="{TemplateBinding HeaderBrush}" Grid.Row="0" x:Name="PART_HeaderGrid">
+
+                                <Grid Margin="40,35,40,13">
+                                    <Grid.Resources>
+                                        <Style x:Key="SettingsBackButtonStyle2" TargetType="Button">
+                                            <Setter Property="MinWidth" Value="0"/>
+                                            <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                                            <Setter Property="FontWeight" Value="Normal"/>
+                                            <Setter Property="FontSize" Value="26.66667"/>
+                                            <Setter Property="AutomationProperties.AutomationId" Value="BackButton"/>
+                                            <Setter Property="AutomationProperties.Name" Value="Back"/>
+                                            <Setter Property="AutomationProperties.ItemType" Value="Navigation Button"/>
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Grid x:Name="RootGrid" Width="30" Height="30">
+                                                            <Grid Margin="-3,-5,0,0">
+                                                                <TextBlock x:Name="BackgroundGlyph" Text="&#xE0D4;" Foreground="{Binding ElementName=PART_HeaderGrid, Path=Background}"/>
+                                                                <TextBlock x:Name="NormalGlyph" Text="{StaticResource SettingsFlyoutBackButtonGlyph}" Foreground="{Binding ElementName=PART_HeaderGrid, Path=Background, Converter={StaticResource ColorContrast}}"/>
+                                                                <TextBlock x:Name="ArrowGlyph" Text="&#xE0C4;" Foreground="{Binding ElementName=PART_HeaderGrid, Path=Background}" Opacity="0"/>
+                                                            </Grid>
+                                                            <Rectangle
+                            x:Name="FocusVisualWhite"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualWhiteStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="1.5"/>
+                                                            <Rectangle
+                            x:Name="FocusVisualBlack"
+                            IsHitTestVisible="False"
+                            Stroke="{StaticResource FocusVisualBlackStrokeThemeBrush}"
+                            StrokeEndLineCap="Square"
+                            StrokeDashArray="1,1"
+                            Opacity="0"
+                            StrokeDashOffset="0.5"/>
+
+                                                            <VisualStateManager.VisualStateGroups>
+                                                                <VisualStateGroup x:Name="CommonStates">
+                                                                    <VisualState x:Name="Normal" />
+                                                                    <VisualState x:Name="PointerOver">
+                                                                        <Storyboard>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
+                                                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource BackButtonPointerOverBackgroundThemeBrush}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </VisualState>
+                                                                    <VisualState x:Name="Pressed">
+                                                                        <Storyboard>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BackgroundGlyph" Storyboard.TargetProperty="Foreground">
+                                                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{Binding ElementName=PART_HeaderGrid, Path=Background, Converter={StaticResource ColorContrast}}"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                            <DoubleAnimation
+                                            Storyboard.TargetName="ArrowGlyph"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0"/>
+                                                                            <DoubleAnimation
+                                            Storyboard.TargetName="NormalGlyph"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="0"
+                                            Duration="0"/>
+                                                                        </Storyboard>
+                                                                    </VisualState>
+                                                                    <VisualState x:Name="Disabled">
+                                                                        <Storyboard>
+                                                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="RootGrid" Storyboard.TargetProperty="Visibility">
+                                                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                                                            </ObjectAnimationUsingKeyFrames>
+                                                                        </Storyboard>
+                                                                    </VisualState>
+                                                                </VisualStateGroup>
+                                                                <VisualStateGroup x:Name="FocusStates">
+                                                                    <VisualState x:Name="Focused">
+                                                                        <Storyboard>
+                                                                            <DoubleAnimation
+                                            Storyboard.TargetName="FocusVisualWhite"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0"/>
+                                                                            <DoubleAnimation
+                                            Storyboard.TargetName="FocusVisualBlack"
+                                            Storyboard.TargetProperty="Opacity"
+                                            To="1"
+                                            Duration="0"/>
+                                                                        </Storyboard>
+                                                                    </VisualState>
+                                                                    <VisualState x:Name="Unfocused" />
+                                                                    <VisualState x:Name="PointerFocused" />
+                                                                </VisualStateGroup>
+                                                            </VisualStateManager.VisualStateGroups>
+                                                        </Grid>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </Grid.Resources>
+
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Button x:Name="SettingsBackButton" Margin="0,0,0,0" Grid.Column="0" Style="{StaticResource SettingsBackButtonStyle2}" HorizontalAlignment="Left" />
+
+                                    <TextBlock Foreground="{Binding ElementName=PART_HeaderGrid, Path=Background, Converter={StaticResource ColorContrast}}" TextTrimming="WordEllipsis" Margin="10,-2,0,0" Grid.Column="1" FontFamily="Segoe UI" FontWeight="SemiLight" FontSize="24.6667" Text="{TemplateBinding HeaderText}" HorizontalAlignment="Left" />
+
+                                    <Image Source="{TemplateBinding SmallLogoImageSource}" HorizontalAlignment="Right" Grid.Column="2" Margin="0,0,0,0" />
+
+                                </Grid>
+
+                            </Grid>
+
+                            <!-- Settings Panel Content -->
+                            <ScrollViewer Background="{TemplateBinding ContentBackgroundBrush}" 
+                                          Foreground="{TemplateBinding ContentForegroundBrush}" 
+                                          Grid.Row="1" 
+                                          VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" 
+                                          VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                                          HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" 
+                                          HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                          ZoomMode="Disabled" x:Name="PART_ContentScrollViewer">
+                                <Grid x:Name="SettingsFlyoutContentGrid" Margin="33,22,40,0" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}">
+                                    <ContentPresenter Content="{TemplateBinding Content}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  />
+                                </Grid>
+                            </ScrollViewer>
+
+                        </Grid>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

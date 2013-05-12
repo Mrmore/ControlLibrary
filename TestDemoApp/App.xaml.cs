@@ -1,4 +1,7 @@
-﻿using System;
+﻿using ControlLibrary;
+using ControlLibrary.Common;
+using ControlLibrary.SettingsManagement;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,6 +10,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,6 +28,7 @@ namespace TestDemoApp
     /// </summary>
     sealed partial class App : Application
     {
+        public static VisualElement VisualElements;
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -42,8 +47,12 @@ namespace TestDemoApp
         /// search results, and so forth.
         /// </summary>
         /// <param name="args">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs args)
+        protected async override void OnLaunched(LaunchActivatedEventArgs args)
         {
+            AppSettings.Current.AddCommand<SettingsContent>("第一项", new SolidColorBrush(Colors.Red), SettingsFlyout.SettingsFlyoutWidth.Wide);
+            AppSettings.Current.AddCommand<SettingsContent>("第二项", SettingsFlyout.SettingsFlyoutWidth.Wide);
+
+            VisualElements = await AppManifestHelper.GetManifestVisualElementsAsync();
             // Do not repeat app initialization when already running, just ensure that
             // the window is active
             if (args.PreviousExecutionState == ApplicationExecutionState.Running)

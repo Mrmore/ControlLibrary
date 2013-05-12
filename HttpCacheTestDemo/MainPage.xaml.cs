@@ -86,5 +86,10 @@ namespace HttpCacheTestDemo
                 await hdlch.ContinueDownload(new Uri("http://ww4.sinaimg.cn/bmiddle/636b6f59jw1e2exg8yk5pj.jpg", UriKind.RelativeOrAbsolute));
             }
         }
+
+        private void btbg_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

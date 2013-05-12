@@ -1,0 +1,48 @@
+﻿<UserControl
+    x:Class="TestDemoApp.SettingsContent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TestDemoApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <UserControl.Resources>
+        <Style x:Key="SettingsHeaderText" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="FontSize" Value="14.6667" />
+            <Setter Property="Margin" Value="0,0,0,2" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <StackPanel HorizontalAlignment="Left" Margin="5">
+            <ToggleSwitch Margin="-5,0,0,0" Header="Download updates automatically" />
+            <Button Content="Close This Settings" Margin="0" Click="Button_Click" />
+            <TextBlock Style="{StaticResource SettingsHeaderText}" Text="Your user name:" />
+            <TextBox Height="35" Width="200" HorizontalAlignment="Left" />
+            <TextBlock TextWrapping="Wrap" FontSize="14.667" xml:space="preserve">
+                <TextBlock.Text>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras pellentesque egestas massa eu interdum. Nunc vel leo felis, non tincidunt dolor. Pellentesque eget neque lectus, nec molestie diam. Nullam lorem ligula, suscipit a lacinia ac, eleifend non neque. Ut est dui, commodo in posuere posuere, vestibulum quis diam. Etiam at auctor ipsum. Praesent eget risus enim, in feugiat nulla. Etiam imperdiet semper odio quis varius. In est elit, faucibus nec scelerisque nec, lobortis et libero. Duis odio leo, ullamcorper et accumsan eget, aliquet a massa. Cras at imperdiet leo. 
+
+Integer a volutpat erat. Ut adipiscing leo in dolor auctor sit amet convallis leo vulputate. Ut ut diam nulla. Morbi mattis nisi at nunc commodo rhoncus. Nullam risus sapien, placerat quis scelerisque id, tempus sit amet velit. Vestibulum facilisis, nisl non lacinia rhoncus, metus metus mollis tortor, eget bibendum enim nulla quis massa. Nam mattis sollicitudin volutpat. Proin at mauris in felis euismod placerat. Etiam tempus euismod nibh, non rutrum sapien sodales cursus. 
+
+Vivamus rhoncus enim sit amet lacus tempus id consequat lorem sodales. Nulla vel ullamcorper mi. Aenean porta eros at lectus gravida iaculis. Nullam lacinia urna adipiscing est volutpat consequat. Etiam id lacus felis, at volutpat lorem. Vestibulum blandit aliquam arcu, aliquet iaculis orci consectetur a. Sed dolor massa, viverra eget malesuada id, fermentum vel ligula. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vestibulum neque est, molestie id tempor ac, molestie a elit. 
+
+Ut eu dui mauris, nec semper urna. Donec tortor enim, blandit id euismod at, porttitor ut justo. Duis euismod magna ac ipsum tristique blandit. Suspendisse at nisi purus. Pellentesque et quam in arcu ultrices placerat. Sed sodales, dui a dapibus malesuada, leo nulla luctus magna, ut vulputate turpis urna in ligula. Nulla gravida enim euismod nulla eleifend cursus. Vestibulum fermentum mi ut erat pulvinar vehicula sagittis libero pulvinar. Suspendisse lacinia risus gravida lectus auctor quis varius purus ultricies. Maecenas vulputate convallis dui ut semper. Morbi diam elit, volutpat vel convallis vel, gravida ut est. 
+
+Nunc bibendum accumsan nisi sed fermentum. Integer nec sem mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur a blandit massa. Sed non ante ut nibh rutrum rutrum. Pellentesque vitae turpis felis. Cras vel sem sit amet sem ullamcorper ullamcorper sit amet nec turpis. Donec viverra ornare purus, eget sagittis erat rhoncus non. Integer dignissim semper nisi, sit amet auctor dui faucibus et.
+                    
+Nunc bibendum accumsan nisi sed fermentum. Integer nec sem mauris. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Curabitur a blandit massa. Sed non ante ut nibh rutrum rutrum. Pellentesque vitae turpis felis. Cras vel sem sit amet sem ullamcorper ullamcorper sit amet nec turpis. Donec viverra ornare purus, eget sagittis erat rhoncus non. Integer dignissim semper nisi, sit amet auctor dui faucibus et.
+                    
+Ut eu dui mauris, nec semper urna. Donec tortor enim, blandit id euismod at, porttitor ut justo. Duis euismod magna ac ipsum tristique blandit. Suspendisse at nisi purus. Pellentesque et quam in arcu ultrices placerat. Sed sodales, dui a dapibus malesuada, leo nulla luctus magna, ut vulputate turpis urna in ligula. Nulla gravida enim euismod nulla eleifend cursus. Vestibulum fermentum mi ut erat pulvinar vehicula sagittis libero pulvinar. Suspendisse lacinia risus gravida lectus auctor quis varius purus ultricies. Maecenas vulputate convallis dui ut semper. Morbi diam elit, volutpat vel convallis vel, gravida ut est.
+                </TextBlock.Text>
+            </TextBlock>
+            <TextBlock Style="{StaticResource SettingsHeaderText}" HorizontalAlignment="Left" Text="Enter name..." />
+            <TextBox Width="300" Height="35" />
+            <Button Content="Sample Button" />
+        </StackPanel>
+    </Grid>
+</UserControl>

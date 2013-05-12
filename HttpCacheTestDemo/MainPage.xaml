@@ -17,6 +17,8 @@
             <Image x:Name="image" Width="200" Height="200"/>
             <ProgressBar x:Name="pBar" Width="200" Height="20" Foreground="Red"/>
             <local:XamlReaderControl x:Name="xamlReaderControl" />
+            <Button x:Name="btbg" Content="后台下载测试页面" Margin="0,30,0,0" Click="btbg_Click"/>
         </StackPanel>
+        
     </Grid>
 </Page>

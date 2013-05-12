@@ -158,5 +158,10 @@ namespace TestDemoApp
         {
             this.Frame.Navigate(typeof(MoveOutControlBlankPage));
         }
+
+        private void BtSettings_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(SettingsPage));
+        }
     }
 }
