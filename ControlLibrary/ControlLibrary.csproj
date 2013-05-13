@@ -106,6 +106,28 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.D3DCompiler.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.D3DCompiler.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Direct2D1.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Direct2D1.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Direct3D11.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Direct3D11.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.DXGI.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.DXGI.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.MediaFoundation.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.MediaFoundation.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Toolkit.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Toolkit.Game.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Toolkit.Game.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Toolkit.Graphics.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Toolkit.Graphics.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.Toolkit.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.XAudio2.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.XAudio2.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.XInput.dll" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.XInput.xml" />
+    <Content Include="Dll\SharpDX2.4.2\SharpDX.xml" />
     <Content Include="Dll\WriteableBitmapEx.WinRT.dll" />
     <Content Include="Icons\Visit.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
