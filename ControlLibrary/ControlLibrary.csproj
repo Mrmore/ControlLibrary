@@ -142,7 +142,15 @@
     <Compile Include="CommonControl\DisposableObject.cs" />
     <Compile Include="CommonControl\SuspendableObject.cs" />
     <Compile Include="Common\AppManifestHelper.cs" />
+    <Compile Include="Common\ExpandDirection.cs" />
+    <Compile Include="Primitives\Clipper\Clipper.cs" />
+    <Compile Include="Common\EnumerableFunctions.cs" />
+    <Compile Include="Common\InteractionHelper.cs" />
+    <Compile Include="Common\ItemsControlHelper.cs" />
+    <Compile Include="Common\IUpdateVisualState.cs" />
+    <Compile Include="Primitives\Clipper\LinearClipper.cs" />
     <Compile Include="Common\NumericExtensions.cs" />
+    <Compile Include="Common\VisualStates.cs" />
     <Compile Include="ControlBase\MatContentControl.cs" />
     <Compile Include="Converter\ColorBrightnessConverter.cs" />
     <Compile Include="Converter\ColorContrastConverter.cs" />
@@ -245,6 +253,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Flickr\Slide.cs" />
     <Compile Include="HubTiles\TitleImageRotatorHubTile.cs" />
+    <Compile Include="Rating\Rating.cs" />
+    <Compile Include="Rating\RatingItem.cs" />
+    <Compile Include="Rating\RatingSelectionMode.cs" />
+    <Compile Include="Rating\ValueChangedEventArgs.cs" />
+    <Compile Include="Rating\ValueChangedEventHandler.cs" />
     <Compile Include="Settings\SettingsControl\SettingsFlyout.cs" />
     <Compile Include="Settings\SettingsManagement\AppSettings.cs" />
     <Compile Include="Settings\SettingsManagement\INotifySettingChanged.cs" />
