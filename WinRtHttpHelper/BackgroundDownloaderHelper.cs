@@ -114,6 +114,26 @@ namespace WinRtHttpHelper
             }
         }
 
+        public async void StopAllDownLoad()
+        {
+            var res = await GetCurrentDownLoader();
+            if (res.Count > 0)
+            {
+                foreach (var item in res)
+                {
+
+                    if (item.Progress.Status == BackgroundTransferStatus.Running)
+                    {
+                        item.Pause();
+                    }
+                    else if (item.Progress.Status == BackgroundTransferStatus.PausedNoNetwork)
+                    {
+                        item.Pause();
+                    }
+                }
+            }
+        }
+
         public async void ResumeDownLoad(Uri SoureUri)
         {
             var res = await GetCurrentDownLoader();
@@ -124,6 +144,28 @@ namespace WinRtHttpHelper
             if (result.Count > 0)
             {
                 foreach (var item in result)
+                {
+
+                    if (item.Progress.Status == BackgroundTransferStatus.PausedByApplication)
+                    {
+                        item.Resume();
+                    }
+                    else if (item.Progress.Status == BackgroundTransferStatus.PausedNoNetwork)
+                    {
+                        item.Pause();
+                        item.Resume();
+                    }
+                }
+            }
+        }
+
+        public async void ResumeAllDownLoad(Uri SoureUri)
+        {
+            var res = await GetCurrentDownLoader();
+
+            if (res.Count > 0)
+            {
+                foreach (var item in res)
                 {
 
                     if (item.Progress.Status == BackgroundTransferStatus.PausedByApplication)
