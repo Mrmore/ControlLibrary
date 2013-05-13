@@ -311,6 +311,7 @@
     <Compile Include="Tools\UIUtil.cs" />
     <Compile Include="Tools\UniqueID\HelperUniqueID.cs" />
     <Compile Include="Tools\UniqueID\Machine.cs" />
+    <Compile Include="Tools\WriteableBitmapImage\ImageHelper.cs" />
     <Compile Include="Tools\Xml\Xml.cs" />
     <Compile Include="Tools\Xml\XmlHelper.cs" />
     <Compile Include="VirtualizingWrapPanel\VirtualizingWrapPanel.cs" />
