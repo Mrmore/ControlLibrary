@@ -168,6 +168,7 @@
     <Compile Include="CommonControl\SuspendableObject.cs" />
     <Compile Include="Common\AppManifestHelper.cs" />
     <Compile Include="Common\ExpandDirection.cs" />
+    <Compile Include="Effects\BlurEffect.cs" />
     <Compile Include="Extensions\VisualTreeHelperExtensions.cs" />
     <Compile Include="Primitives\Clipper\Clipper.cs" />
     <Compile Include="Common\EnumerableFunctions.cs" />
@@ -355,6 +356,7 @@
     <Compile Include="Tools\UIUtil.cs" />
     <Compile Include="Tools\UniqueID\HelperUniqueID.cs" />
     <Compile Include="Tools\UniqueID\Machine.cs" />
+    <Compile Include="Tools\WriteableBitmapExtension\WriteableBitmapConvolutionExtensions.cs" />
     <Compile Include="Tools\WriteableBitmapImage\ImageHelper.cs" />
     <Compile Include="Tools\Xml\Xml.cs" />
     <Compile Include="Tools\Xml\XmlHelper.cs" />
