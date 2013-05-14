@@ -1,4 +1,5 @@
-﻿using ControlLibrary.Tools.WriteableBitmapExtension;
+﻿using ControlLibrary.GifSynthesis;
+using ControlLibrary.Tools.WriteableBitmapExtension;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,34 +13,42 @@ namespace ControlLibrary.Effects
     {
         public static WriteableBitmap WriteableBitmapBlur(this WriteableBitmap writeableBitmapOld, int[,] GaussianBlur)
         {
+            var cloneWriteableBitmap = WriteableBitmapExpansion.CopyWriteableBitmap(writeableBitmapOld);
             WriteableBitmap writeableBitmapBlur = null;
             if (GaussianBlur == null)
             {
-                writeableBitmapBlur = WriteableBitmapExtensions.Convolute(writeableBitmapOld, WriteableBitmapExtensions.KernelGaussianBlur5x5);
+                writeableBitmapBlur = WriteableBitmapExtensions.Convolute(cloneWriteableBitmap, WriteableBitmapExtensions.KernelGaussianBlur5x5);
             }
             else
             {
-                writeableBitmapBlur = WriteableBitmapExtensions.Convolute(writeableBitmapOld, GaussianBlur);
+                writeableBitmapBlur = WriteableBitmapExtensions.Convolute(cloneWriteableBitmap, GaussianBlur);
             }
+            writeableBitmapBlur.Invalidate();
             return writeableBitmapBlur;
         }
 
         public static WriteableBitmap WriteableBitmapBlur(this WriteableBitmap writeableBitmapOld, int kernelWidth, int kernelHeight)
         {
-            WriteableBitmapConvolutionExtensions.GaussianBlur(writeableBitmapOld, kernelWidth, kernelHeight);
-            return writeableBitmapOld;
+            var cloneWriteableBitmap = WriteableBitmapExpansion.CopyWriteableBitmap(writeableBitmapOld);
+            WriteableBitmapConvolutionExtensions.GaussianBlur(cloneWriteableBitmap, kernelWidth, kernelHeight);
+            cloneWriteableBitmap.Invalidate();
+            return cloneWriteableBitmap;
         }
 
         public static WriteableBitmap WriteableBitmapBlur(this WriteableBitmap writeableBitmapOld)
         {
-            WriteableBitmapConvolutionExtensions.GaussianBlur(writeableBitmapOld);
-            return writeableBitmapOld;
+            var cloneWriteableBitmap = WriteableBitmapExpansion.CopyWriteableBitmap(writeableBitmapOld);
+            WriteableBitmapConvolutionExtensions.GaussianBlur(cloneWriteableBitmap);
+            cloneWriteableBitmap.Invalidate();
+            return cloneWriteableBitmap;
         }
 
         public static WriteableBitmap WriteableBitmapBlur(this WriteableBitmap writeableBitmapOld, int range)
         {
-            WriteableBitmapConvolutionExtensions.BoxBlur(writeableBitmapOld, range);
-            return writeableBitmapOld;
+            var cloneWriteableBitmap = WriteableBitmapExpansion.CopyWriteableBitmap(writeableBitmapOld);
+            WriteableBitmapConvolutionExtensions.BoxBlur(cloneWriteableBitmap, range);
+            cloneWriteableBitmap.Invalidate();
+            return cloneWriteableBitmap;
         }
     }
 }

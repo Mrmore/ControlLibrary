@@ -1,4 +1,5 @@
 ﻿using ControlLibrary.Effects;
+using ControlLibrary.GifSynthesis;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +7,7 @@ using System.Linq;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage.Streams;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -35,10 +37,14 @@ namespace TestDemoApp
         {
             RandomAccessStreamReference rass = RandomAccessStreamReference.CreateFromUri(new Uri("http://ww1.sinaimg.cn/bmiddle/643be833jw1e4nzv4dc12j20dc0hsq4g.jpg", UriKind.RelativeOrAbsolute));
             IRandomAccessStreamWithContentType streamRandom = await rass.OpenReadAsync();
-            //wb = new WriteableBitmap(1, 1);
-            wb = await (new WriteableBitmap(1, 1).FromStream(streamRandom));
-            //await wb.SetSourceAsync(streamRandom);
-            this.image.Source = wb;
+            var cloneStream = streamRandom.CloneStream();
+            wb = new WriteableBitmap(1, 1);
+            //wb = await (new WriteableBitmap(1, 1).FromStream(streamRandom));
+            await wb.SetSourceAsync(streamRandom);
+            //this.image.Source = wb;
+            var bi = new BitmapImage();
+            await bi.SetSourceAsync(cloneStream);
+            this.imageOriginal.Source = bi;
         }
 
         /// <summary>
@@ -58,8 +64,11 @@ namespace TestDemoApp
 
         private void bt_Click(object sender, RoutedEventArgs e)
         {
-            //BlurEffect.WriteableBitmapBlur(wb, null);
-            BlurEffect.WriteableBitmapBlur(wb, 55);
+            //this.image.Source = BlurEffect.WriteableBitmapBlur(wb, null);
+            //this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(this.tb.Text));
+            this.image.Source = BlurEffect.WriteableBitmapBlur(wb, 13);
+            wb.Invalidate();
+            //this.image.Source = BlurEffect.WriteableBitmapBlur(wb);
         }
     }
 }

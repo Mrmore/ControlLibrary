@@ -238,7 +238,8 @@ namespace ControlLibrary.Tools.WriteableBitmapExtension
         {
             if ((range & 1) == 0)
             {
-                throw new InvalidOperationException("Range must be odd!");
+                //throw new InvalidOperationException("Range must be odd!");
+                return;
             }
 
             bmp.BoxBlurHorizontal(range);
@@ -378,7 +379,7 @@ namespace ControlLibrary.Tools.WriteableBitmapExtension
 
         public static int[] GetPixels(this WriteableBitmap source)
         {
-            BitmapContext imgContext = new BitmapContext(source , ReadWriteMode.ReadOnly);
+            BitmapContext imgContext = new BitmapContext(source , ReadWriteMode.ReadWrite);
             return imgContext.Pixels;
         }
     }

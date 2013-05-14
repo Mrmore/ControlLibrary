@@ -11,7 +11,8 @@
     <Grid Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
         <Button x:Name="btCursor" HorizontalAlignment="Left" VerticalAlignment="Top" 
                 Content="返回" Margin="10,10,0,0" Click="Button_Click_1" />
-        <ControlLibrary:MoveOutControl Height="300" Width="300" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ControlLibrary:MoveOutControl Height="300" Width="300" >
             <ControlLibrary:MoveOutControl.BackContent>
                 <Image x:Name="image" Stretch="Fill" Height="300" Width="300" />
             </ControlLibrary:MoveOutControl.BackContent>
@@ -19,6 +20,8 @@
                 <Rectangle x:Name="rectangle" Fill="Red" Height="300" Width="300" />
             </ControlLibrary:MoveOutControl.PositiveContent>
         </ControlLibrary:MoveOutControl>
+            <Image x:Name="imageOriginal" Height="300" Width="300" Stretch="Fill"/>
+        </StackPanel>
         <TextBox x:Name="tb" HorizontalAlignment="Left" Margin="67,171,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="66" Width="200"/>
         <Button x:Name="bt" Content="确定" HorizontalAlignment="Left" Margin="334,171,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="bt_Click"/>
     </Grid>
