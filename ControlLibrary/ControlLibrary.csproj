@@ -142,6 +142,9 @@
     <Compile Include="AwesomeMenu\AwesomeMenuRadianType.cs" />
     <Compile Include="AwesomeMenu\AwesomeMenuType.cs" />
     <Compile Include="AwesomeMenu\AwesomMenuItem.cs" />
+    <Compile Include="Behaviors\FlickBehavior.cs" />
+    <Compile Include="Behaviors\HighlightBehavior.cs" />
+    <Compile Include="Behaviors\ParallaxBackgroundBehavior.cs" />
     <Compile Include="CacheImage\CacheImage.cs" />
     <Compile Include="CacheManagement\CacheBitmapImage.cs" />
     <Compile Include="CacheManagement\CacheManagement.cs" />
@@ -165,6 +168,7 @@
     <Compile Include="CommonControl\SuspendableObject.cs" />
     <Compile Include="Common\AppManifestHelper.cs" />
     <Compile Include="Common\ExpandDirection.cs" />
+    <Compile Include="Extensions\VisualTreeHelperExtensions.cs" />
     <Compile Include="Primitives\Clipper\Clipper.cs" />
     <Compile Include="Common\EnumerableFunctions.cs" />
     <Compile Include="Common\InteractionHelper.cs" />
@@ -319,6 +323,10 @@
     <Compile Include="Tools\ImageType\ImageType.cs" />
     <Compile Include="Tools\ImageType\ImageTypeCheck.cs" />
     <Compile Include="Tools\ImageType\ImageUriType.cs" />
+    <Compile Include="Tools\Interactivity\Behavior.cs" />
+    <Compile Include="Tools\Interactivity\BehaviorCollection.cs" />
+    <Compile Include="Tools\Interactivity\BehaviorOfT.cs" />
+    <Compile Include="Tools\Interactivity\Interaction.cs" />
     <Compile Include="Tools\InternetTime\InternetTimeHelper.cs" />
     <Compile Include="Tools\JudgmentCharacter\JudgmentCharacter.cs" />
     <Compile Include="Tools\LocationLanguageHelper.cs" />
@@ -339,6 +347,7 @@
     <Compile Include="Tools\Networking\WakeOnLan.cs" />
     <Compile Include="Tools\NewGuide.cs" />
     <Compile Include="Tools\NotificationHelper.cs" />
+    <Compile Include="Tools\PropertyChangeEventSource.cs" />
     <Compile Include="Tools\SettingsHelper.cs" />
     <Compile Include="Tools\SizeLongToString.cs" />
     <Compile Include="Tools\StreamExtensions.cs" />
