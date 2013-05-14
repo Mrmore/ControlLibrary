@@ -35,8 +35,9 @@ namespace TestDemoApp
         {
             RandomAccessStreamReference rass = RandomAccessStreamReference.CreateFromUri(new Uri("http://ww1.sinaimg.cn/bmiddle/643be833jw1e4nzv4dc12j20dc0hsq4g.jpg", UriKind.RelativeOrAbsolute));
             IRandomAccessStreamWithContentType streamRandom = await rass.OpenReadAsync();
-            wb = new WriteableBitmap(1, 1);
-            await wb.SetSourceAsync(streamRandom);
+            //wb = new WriteableBitmap(1, 1);
+            wb = await (new WriteableBitmap(1, 1).FromStream(streamRandom));
+            //await wb.SetSourceAsync(streamRandom);
             this.image.Source = wb;
         }
 
@@ -57,11 +58,8 @@ namespace TestDemoApp
 
         private void bt_Click(object sender, RoutedEventArgs e)
         {
-            this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-                {
-                    //BlurEffect.WriteableBitmapBlur(wb, null);
-                    BlurEffect.WriteableBitmapBlur(wb, 5);
-                });
+            //BlurEffect.WriteableBitmapBlur(wb, null);
+            BlurEffect.WriteableBitmapBlur(wb, 55);
         }
     }
 }
