@@ -558,5 +558,50 @@ namespace ControlLibrary.GifSynthesis
         {
             return WindowsRuntimeBufferExtensions.ToArray(ibuffer, 0, Convert.ToInt32(ibuffer.Length));
         }
+
+        //convert the bytes to WriteableBitmap
+        private static WriteableBitmap BytesToImage(this byte[] src, int lw, int lh)
+        {
+            WriteableBitmap wbbitmap = new WriteableBitmap(lw, lh);
+            Stream s = wbbitmap.PixelBuffer.AsStream();
+            s.Seek(0, SeekOrigin.Begin);
+            s.Write(src, 0, lw * lh * 3);
+            return wbbitmap;
+        }
+
+        //convert the WriteableBitmap to bytes 24位RGB格式
+        private byte[] WriteableBitmapToBytes24(this WriteableBitmap src)
+        {
+            Stream temp = src.PixelBuffer.AsStream();
+            byte[] tempBytes = new byte[src.PixelWidth * src.PixelHeight * 3];
+            for (int i = 0; i < tempBytes.Length; i++)
+            {
+                temp.Seek(i, SeekOrigin.Begin);
+                temp.Write(tempBytes, 0, tempBytes.Length);
+            }
+            temp.Dispose();
+            return tempBytes;
+        }
+
+        private int GetImageStride(int lWidth, int num)
+        {
+
+            int tlWidth = 0;
+            int tnum = 0;
+            int res = 0;
+            if (lWidth > 0 && num > 0)
+            {
+                tlWidth = lWidth;
+                tnum = num;
+                res = tlWidth % tnum;
+                while (res != 0)
+                {
+                    tlWidth = tnum;
+                    tnum = res;
+                    res = tlWidth % tnum;
+                }
+            }
+            return (int)(3 * lWidth * num / tnum);
+        }
     }
 }
