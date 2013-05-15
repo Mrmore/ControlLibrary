@@ -22,7 +22,11 @@
         </ControlLibrary:MoveOutControl>
             <Image x:Name="imageOriginal" Height="300" Width="300" Stretch="Fill"/>
         </StackPanel>
-        <TextBox x:Name="tb" HorizontalAlignment="Left" Margin="67,171,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Height="66" Width="200"/>
-        <Button x:Name="bt" Content="确定" HorizontalAlignment="Left" Margin="334,171,0,0" VerticalAlignment="Top" Height="66" Width="128" Click="bt_Click"/>
+        <TextBox x:Name="tb" HorizontalAlignment="Left" Margin="10,163,0,0" TextWrapping="Wrap" Text="33" VerticalAlignment="Top" Height="50" Width="200"/>
+        <Button x:Name="bt" Content="确定" HorizontalAlignment="Left" Margin="234,163,0,0" VerticalAlignment="Top" Height="50" Width="128" Click="bt_Click"/>
+        <StackPanel Orientation="Vertical" Width="300" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,300,0,0">
+            <Slider x:Name="sliderRadius" Value="20" Minimum="0" Maximum="100" Foreground="Red" Width="300" Height="50" ValueChanged="sliderRadius_ValueChanged"/>
+            <Slider x:Name="sliderSigma" Value="7" Minimum="0" Maximum="30" Foreground="Red" Width="300" Height="50"  ValueChanged="sliderSigma_ValueChanged"/>
+        </StackPanel>
     </Grid>
 </Page>

@@ -168,7 +168,15 @@
     <Compile Include="CommonControl\SuspendableObject.cs" />
     <Compile Include="Common\AppManifestHelper.cs" />
     <Compile Include="Common\ExpandDirection.cs" />
+    <Compile Include="Effects\AtomizationEffects.cs" />
     <Compile Include="Effects\BlurEffect.cs" />
+    <Compile Include="Effects\MosaicEffects.cs" />
+    <Compile Include="Effects\MotionblurEffect.cs" />
+    <Compile Include="Effects\NoctilucentEffect.cs" />
+    <Compile Include="Effects\RedeyeRemoveEffect.cs" />
+    <Compile Include="Effects\SegmentEffect.cs" />
+    <Compile Include="Effects\SharpenEffect.cs" />
+    <Compile Include="Effects\SunlightEffect.cs" />
     <Compile Include="Extensions\VisualTreeHelperExtensions.cs" />
     <Compile Include="Primitives\Clipper\Clipper.cs" />
     <Compile Include="Common\EnumerableFunctions.cs" />

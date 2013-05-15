@@ -27,12 +27,29 @@ namespace ControlLibrary.Effects
             return writeableBitmapBlur;
         }
 
+        /*
         public static WriteableBitmap WriteableBitmapBlur(this WriteableBitmap writeableBitmapOld, int kernelWidth, int kernelHeight)
         {
             var cloneWriteableBitmap = WriteableBitmapExpansion.CopyWriteableBitmap(writeableBitmapOld);
             WriteableBitmapConvolutionExtensions.GaussianBlur(cloneWriteableBitmap, kernelWidth, kernelHeight);
             cloneWriteableBitmap.Invalidate();
             return cloneWriteableBitmap;
+        }
+        */
+
+        /// <summary>
+        /// 高斯滤波
+        /// </summary>
+        /// <param name="writeableBitmapOld"></param>
+        /// <param name="radius">0 to 100</param>
+        /// <param name="sigma">0 to 30</param>
+        /// <returns></returns>
+        public static WriteableBitmap WriteableBitmapBlur(this WriteableBitmap writeableBitmapOld, int radius, double sigma)
+        {
+            var cloneWriteableBitmap = WriteableBitmapExpansion.CopyWriteableBitmap(writeableBitmapOld);
+            var writeableBitmap = WriteableBitmapConvolutionExtensions.GaussFilter(cloneWriteableBitmap, radius, sigma);
+            writeableBitmap.Invalidate();
+            return writeableBitmap;
         }
 
         public static WriteableBitmap WriteableBitmapBlur(this WriteableBitmap writeableBitmapOld)

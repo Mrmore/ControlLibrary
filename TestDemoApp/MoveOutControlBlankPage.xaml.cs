@@ -45,6 +45,8 @@ namespace TestDemoApp
             var bi = new BitmapImage();
             await bi.SetSourceAsync(cloneStream);
             this.imageOriginal.Source = bi;
+
+            this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(sliderRadius.Value), sliderSigma.Value);
         }
 
         /// <summary>
@@ -64,11 +66,27 @@ namespace TestDemoApp
 
         private void bt_Click(object sender, RoutedEventArgs e)
         {
-            //this.image.Source = BlurEffect.WriteableBitmapBlur(wb, null);
-            //this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(this.tb.Text));
-            this.image.Source = BlurEffect.WriteableBitmapBlur(wb, 13);
-            wb.Invalidate();
+            this.image.Source = BlurEffect.WriteableBitmapBlur(wb, null);
+            //this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(this.tb.Text));       
             //this.image.Source = BlurEffect.WriteableBitmapBlur(wb);
+        }
+
+        private void sliderRadius_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            if (sliderRadius != null && sliderSigma != null)
+            {
+                this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(e.NewValue), sliderSigma.Value);
+                wb.Invalidate();
+            }
+        }
+
+        private void sliderSigma_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            if (sliderRadius != null && sliderSigma != null)
+            {
+                this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(sliderSigma.Value), e.NewValue);
+                wb.Invalidate();
+            }
         }
     }
 }
