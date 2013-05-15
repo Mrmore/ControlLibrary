@@ -170,6 +170,7 @@
     <Compile Include="Common\ExpandDirection.cs" />
     <Compile Include="Effects\AtomizationEffects.cs" />
     <Compile Include="Effects\BlurEffect.cs" />
+    <Compile Include="Effects\GrayEffect.cs" />
     <Compile Include="Effects\MosaicEffects.cs" />
     <Compile Include="Effects\MotionblurEffect.cs" />
     <Compile Include="Effects\NoctilucentEffect.cs" />
