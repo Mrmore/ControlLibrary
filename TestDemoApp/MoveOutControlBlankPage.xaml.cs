@@ -27,6 +27,7 @@ namespace TestDemoApp
     public sealed partial class MoveOutControlBlankPage : Page
     {
         private WriteableBitmap wb = null;
+        private WriteableBitmap wbOriginal = null;
         public MoveOutControlBlankPage()
         {
             this.InitializeComponent();
@@ -42,6 +43,7 @@ namespace TestDemoApp
             //wb = await (new WriteableBitmap(1, 1).FromStream(streamRandom));
             await wb.SetSourceAsync(streamRandom);
             //this.image.Source = wb;
+            wbOriginal = WriteableBitmapExpansion.CopyWriteableBitmap(wb);
             var bi = new BitmapImage();
             await bi.SetSourceAsync(cloneStream);
             this.imageOriginal.Source = bi;
@@ -86,6 +88,43 @@ namespace TestDemoApp
             {
                 this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(sliderSigma.Value), e.NewValue);
                 wb.Invalidate();
+            }
+        }
+
+        private void btOriginal_Click(object sender, RoutedEventArgs e)
+        {
+            this.image.Source = this.wbOriginal;
+        }
+
+        private void btGray_Click(object sender, RoutedEventArgs e)
+        {
+            this.image.Source = GrayEffect.GrayProcess(this.wb);
+        }
+
+        private void sliderMosaic_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            if (sliderMosaic != null)
+            {
+                this.image.Source = MosaicEffects.MosaicProcess(this.wb, System.Convert.ToInt32(e.NewValue));
+            }
+        }
+
+        private void btNoctilucent_Click(object sender, RoutedEventArgs e)
+        {
+            this.image.Source = NoctilucentEffect.NoctilucentProcess(this.wb);
+        }
+
+        private void sliderMotionblurOffset_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            this.image.Source = MotionblurEffect.MotionblurProcess(this.wb, System.Convert.ToInt32(e.NewValue), 1);
+        }
+
+        private void comboBoxMotionblurDirection_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboBoxMotionblurDirection != null)
+            {
+                int direction = comboBoxMotionblurDirection.SelectedIndex + 1;
+                this.image.Source = MotionblurEffect.MotionblurProcess(this.wb, System.Convert.ToInt32(sliderMotionblurOffset.Value), direction);
             }
         }
     }
