@@ -570,7 +570,7 @@ namespace ControlLibrary.GifSynthesis
         }
 
         //convert the WriteableBitmap to bytes 24位RGB格式
-        private byte[] WriteableBitmapToBytes24(this WriteableBitmap src)
+        private static byte[] WriteableBitmapToBytes24(this WriteableBitmap src)
         {
             Stream temp = src.PixelBuffer.AsStream();
             byte[] tempBytes = new byte[src.PixelWidth * src.PixelHeight * 3];
@@ -583,9 +583,8 @@ namespace ControlLibrary.GifSynthesis
             return tempBytes;
         }
 
-        private int GetImageStride(int lWidth, int num)
+        private static int GetImageStride(int lWidth, int num)
         {
-
             int tlWidth = 0;
             int tnum = 0;
             int res = 0;

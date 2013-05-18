@@ -2,7 +2,7 @@
     x:Class="TestDemoApp.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:TestDemoApp" RequestedTheme="Light">
+    xmlns:local="using:TestDemoApp" RequestedTheme="Dark">
 
     <Application.Resources>
         <ResourceDictionary>

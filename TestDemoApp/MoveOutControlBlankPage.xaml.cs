@@ -114,16 +114,17 @@ namespace TestDemoApp
             this.image.Source = NoctilucentEffect.NoctilucentProcess(this.wb);
         }
 
+        int direction = 1;
         private void sliderMotionblurOffset_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            this.image.Source = MotionblurEffect.MotionblurProcess(this.wb, System.Convert.ToInt32(e.NewValue), 1);
+            this.image.Source = MotionblurEffect.MotionblurProcess(this.wb, System.Convert.ToInt32(e.NewValue), direction);
         }
 
         private void comboBoxMotionblurDirection_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (comboBoxMotionblurDirection != null)
             {
-                int direction = comboBoxMotionblurDirection.SelectedIndex + 1;
+                direction = comboBoxMotionblurDirection.SelectedIndex + 1;
                 this.image.Source = MotionblurEffect.MotionblurProcess(this.wb, System.Convert.ToInt32(sliderMotionblurOffset.Value), direction);
             }
         }
