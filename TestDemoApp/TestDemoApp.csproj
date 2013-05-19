@@ -168,11 +168,13 @@
     <Compile Include="CeShiGifPage.xaml.cs">
       <DependentUpon>CeShiGifPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="Converter\DoubleToIntConverter.cs" />
     <Compile Include="Helper\CacheManageHelper\CacheImageManageHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Model\Person.cs" />
     <Compile Include="MoveOutControlBlankPage.xaml.cs">
       <DependentUpon>MoveOutControlBlankPage.xaml</DependentUpon>
     </Compile>
@@ -195,6 +197,11 @@
     </Compile>
     <Compile Include="UC\PhotoLiveTile.xaml.cs">
       <DependentUpon>PhotoLiveTile.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\ActionCommand.cs" />
+    <Compile Include="ViewModel\PersonViewModel.cs" />
+    <Compile Include="View\TriggersPage.xaml.cs">
+      <DependentUpon>TriggersPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -380,6 +387,10 @@
     <Page Include="UC\PhotoLiveTile.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\TriggersPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

@@ -168,5 +168,10 @@ namespace TestDemoApp
         {
             this.Frame.Navigate(typeof(RatingPage));
         }
+
+        private void BtTriggers_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(TriggersPage));
+        }
     }
 }

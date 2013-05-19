@@ -66,6 +66,8 @@
 
         <Button x:Name="BtRating" Content="评星控件" HorizontalAlignment="Left" VerticalContentAlignment="Top" Margin="0,600,0,0" Click="BtRating_Click"/>
 
+        <Button x:Name="BtTriggers" Content="触发器" HorizontalAlignment="Left" VerticalContentAlignment="Top" Margin="0,700,0,0" Click="BtTriggers_Click"/>
+
         <Button Content="测试微软的原生动画" HorizontalAlignment="Left" Margin="1124,207,0,0" VerticalAlignment="Top" Width="92" Height="93" Click="Button_Click_9"/>
         <Button Content="FilpView" HorizontalAlignment="Left" Margin="1224,207,0,0" VerticalAlignment="Top" Width="92" Height="93" Click="Button_Click_10"/>
     </Grid>
