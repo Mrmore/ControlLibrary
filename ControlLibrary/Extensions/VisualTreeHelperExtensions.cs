@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -230,5 +231,190 @@ namespace ControlLibrary.Extensions
 
             return new Rect(pos, pos2);
         }
+
+        /// <summary>
+        /// Returns a render transform of the specified type from the element, creating it if necessary
+        /// </summary>
+        /// <typeparam name="TRequestedTransform">The type of transform (Rotate, Translate, etc)</typeparam>
+        /// <param name="element">The element to check</param>
+        /// <param name="mode">The mode to use for creating transforms, if not found</param>
+        /// <returns>The specified transform, or null if not found and not created</returns>
+        public static TRequestedTransform GetTransform<TRequestedTransform>(this UIElement element, TransformCreationMode mode) where TRequestedTransform : Transform, new()
+        {
+            Transform originalTransform = element.RenderTransform;
+            TRequestedTransform requestedTransform = null;
+            MatrixTransform matrixTransform = null;
+            TransformGroup transformGroup = null;
+
+            // Current transform is null -- create if necessary and return
+            if (originalTransform == null)
+            {
+                if ((mode & TransformCreationMode.Create) == TransformCreationMode.Create)
+                {
+                    requestedTransform = new TRequestedTransform();
+                    element.RenderTransform = requestedTransform;
+                    return requestedTransform;
+                }
+
+                return null;
+            }
+
+            // Transform is exactly what we want -- return it
+            requestedTransform = originalTransform as TRequestedTransform;
+            if (requestedTransform != null)
+                return requestedTransform;
+
+
+            // The existing transform is matrix transform - overwrite if necessary and return
+            matrixTransform = originalTransform as MatrixTransform;
+            if (matrixTransform != null)
+            {
+                if (matrixTransform.Matrix.IsIdentity
+                  && (mode & TransformCreationMode.Create) == TransformCreationMode.Create
+                  && (mode & TransformCreationMode.IgnoreIdentityMatrix) == TransformCreationMode.IgnoreIdentityMatrix)
+                {
+                    requestedTransform = new TRequestedTransform();
+                    element.RenderTransform = requestedTransform;
+                    return requestedTransform;
+                }
+
+                return null;
+            }
+
+            // Transform is actually a group -- check for the requested type
+            transformGroup = originalTransform as TransformGroup;
+            if (transformGroup != null)
+            {
+                foreach (Transform child in transformGroup.Children)
+                {
+                    // Child is the right type -- return it
+                    if (child is TRequestedTransform)
+                        return child as TRequestedTransform;
+                }
+
+                // Right type was not found, but we are OK to add it
+                if ((mode & TransformCreationMode.AddToGroup) == TransformCreationMode.AddToGroup)
+                {
+                    requestedTransform = new TRequestedTransform();
+                    transformGroup.Children.Add(requestedTransform);
+                    return requestedTransform;
+                }
+
+                return null;
+            }
+
+            // Current ransform is not a group and is not what we want;
+            // create a new group containing the existing transform and the new one
+            if ((mode & TransformCreationMode.CombineIntoGroup) == TransformCreationMode.CombineIntoGroup)
+            {
+                transformGroup = new TransformGroup();
+                transformGroup.Children.Add(originalTransform);
+                transformGroup.Children.Add(requestedTransform);
+                element.RenderTransform = transformGroup;
+                return requestedTransform;
+            }
+
+            Debug.Assert(false, "Shouldn't get here");
+            return null;
+        }
+
+        /// <summary>
+        /// Returns a string representation of a property path needed to update a Storyboard
+        /// </summary>
+        /// <param name="element">The element to get the path for</param>
+        /// <param name="subProperty">The property of the transform</param>
+        /// <typeparam name="TRequestedType">The type of transform to look fo</typeparam>
+        /// <returns>A property path</returns>
+        public static string GetTransformPropertyPath<TRequestedType>(this FrameworkElement element, string subProperty) where TRequestedType : Transform
+        {
+            Transform t = element.RenderTransform;
+            if (t is TRequestedType)
+                return String.Format("(RenderTransform).({0}.{1})", typeof(TRequestedType).Name, subProperty);
+
+            else if (t is TransformGroup)
+            {
+                TransformGroup g = t as TransformGroup;
+                for (int i = 0; i < g.Children.Count; i++)
+                {
+                    if (g.Children[i] is TRequestedType)
+                        return String.Format("(RenderTransform).(TransformGroup.Children)[" + i + "].({0}.{1})",
+                          typeof(TRequestedType).Name, subProperty);
+                }
+            }
+
+            return "";
+        }
+
+        /// <summary>
+        /// Returns a plane projection, creating it if necessary
+        /// </summary>
+        /// <param name="element">The element</param>
+        /// <param name="create">Whether or not to create the projection if it doesn't already exist</param>
+        /// <returns>The plane project, or null if not found / created</returns>
+        public static PlaneProjection GetPlaneProjection(this UIElement element, bool create)
+        {
+            Projection originalProjection = element.Projection;
+            PlaneProjection projection = null;
+
+            // Projection is already a plane projection; return it
+            if (originalProjection is PlaneProjection)
+                return originalProjection as PlaneProjection;
+
+            // Projection is null; create it if necessary
+            if (originalProjection == null)
+            {
+                if (create)
+                {
+                    projection = new PlaneProjection();
+                    element.Projection = projection;
+                }
+            }
+
+            // Note that if the project is a Matrix projection, it will not be
+            // changed and null will be returned.
+            return projection;
+        }
+    }
+
+    /// <summary>
+    /// Possible modes for creating a transform
+    /// </summary>
+    [Flags]
+    public enum TransformCreationMode
+    {
+        /// <summary>
+        /// Don't try and create a transform if it doesn't already exist
+        /// </summary>
+        None = 0,
+
+        /// <summary>
+        /// Create a transform if none exists
+        /// </summary>
+        Create = 1,
+
+        /// <summary>
+        /// Create and add to an existing group
+        /// </summary>
+        AddToGroup = 2,
+
+        /// <summary>
+        /// Create a group and combine with existing transform; may break existing animations
+        /// </summary>
+        CombineIntoGroup = 4,
+
+        /// <summary>
+        /// Treat identity matrix as if it wasn't there; may break existing animations
+        /// </summary>
+        IgnoreIdentityMatrix = 8,
+
+        /// <summary>
+        /// Create a new transform or add to group
+        /// </summary>
+        CreateOrAddAndIgnoreMatrix = Create | AddToGroup | IgnoreIdentityMatrix,
+
+        /// <summary>
+        /// Default behaviour, equivalent to CreateOrAddAndIgnoreMatrix
+        /// </summary>
+        Default = CreateOrAddAndIgnoreMatrix,
     }
 }

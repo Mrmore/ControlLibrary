@@ -106,6 +106,14 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Dll\Rx-2.1.30214.0\System.Reactive.Core.dll" />
+    <Content Include="Dll\Rx-2.1.30214.0\System.Reactive.Core.XML" />
+    <Content Include="Dll\Rx-2.1.30214.0\System.Reactive.Interfaces.dll" />
+    <Content Include="Dll\Rx-2.1.30214.0\System.Reactive.Interfaces.XML" />
+    <Content Include="Dll\Rx-2.1.30214.0\System.Reactive.Linq.dll" />
+    <Content Include="Dll\Rx-2.1.30214.0\System.Reactive.Linq.XML" />
+    <Content Include="Dll\Rx-2.1.30214.0\System.Reactive.PlatformServices.dll" />
+    <Content Include="Dll\Rx-2.1.30214.0\System.Reactive.PlatformServices.XML" />
     <Content Include="Dll\SharpDX2.4.2\SharpDX.D3DCompiler.dll" />
     <Content Include="Dll\SharpDX2.4.2\SharpDX.D3DCompiler.xml" />
     <Content Include="Dll\SharpDX2.4.2\SharpDX.Direct2D1.dll" />
@@ -142,9 +150,18 @@
     <Compile Include="AwesomeMenu\AwesomeMenuRadianType.cs" />
     <Compile Include="AwesomeMenu\AwesomeMenuType.cs" />
     <Compile Include="AwesomeMenu\AwesomMenuItem.cs" />
+    <Compile Include="Behaviors\ClipToBoundsBehavior.cs" />
+    <Compile Include="Behaviors\DragFlickBehavior.cs" />
+    <Compile Include="Behaviors\EventToBoundCommandBehavior.cs" />
+    <Compile Include="Behaviors\EventToCommandBehavior.cs" />
     <Compile Include="Behaviors\FlickBehavior.cs" />
+    <Compile Include="Behaviors\FlipViewPanoramaBehavior.cs" />
     <Compile Include="Behaviors\HighlightBehavior.cs" />
     <Compile Include="Behaviors\ParallaxBackgroundBehavior.cs" />
+    <Compile Include="Behaviors\SafeBehavior.cs" />
+    <Compile Include="Behaviors\SetInitialOpacityBehavior.cs" />
+    <Compile Include="Behaviors\StartStoryboardBehavior.cs" />
+    <Compile Include="Behaviors\WidthPercentageBehavior.cs" />
     <Compile Include="CacheImage\CacheImage.cs" />
     <Compile Include="CacheManagement\CacheBitmapImage.cs" />
     <Compile Include="CacheManagement\CacheManagement.cs" />
@@ -178,6 +195,8 @@
     <Compile Include="Effects\SegmentEffect.cs" />
     <Compile Include="Effects\SharpenEffect.cs" />
     <Compile Include="Effects\SunlightEffect.cs" />
+    <Compile Include="Extensions\PointExtensions.cs" />
+    <Compile Include="Extensions\StoryboardExtensions.cs" />
     <Compile Include="Extensions\VisualTreeHelperExtensions.cs" />
     <Compile Include="Primitives\Clipper\Clipper.cs" />
     <Compile Include="Common\EnumerableFunctions.cs" />
@@ -427,6 +446,22 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="System.Reactive.Core, Version=2.1.30214.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\Rx-2.1.30214.0\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=2.1.30214.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\Rx-2.1.30214.0\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=2.1.30214.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\Rx-2.1.30214.0\System.Reactive.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.1.30214.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dll\Rx-2.1.30214.0\System.Reactive.PlatformServices.dll</HintPath>
+    </Reference>
     <Reference Include="WriteableBitmapEx.WinRT, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Dll\WriteableBitmapEx.WinRT.dll</HintPath>

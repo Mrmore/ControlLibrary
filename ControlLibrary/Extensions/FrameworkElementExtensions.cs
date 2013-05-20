@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
 namespace ControlLibrary.Extensions
@@ -274,6 +275,84 @@ namespace ControlLibrary.Extensions
         public static void SetCursorDisplayHandler(DependencyObject d, CursorDisplayHandler value)
         {
             d.SetValue(CursorDisplayHandlerProperty, value);
+        }
+        #endregion
+
+
+        #region Class to help animations from code using the CompositeTransform
+        /// <summary>
+        /// Finds the composite transform either direct
+        /// or as part of a TransformGroup
+        /// </summary>
+        /// <param name="fe">FrameworkElement</param>
+        /// <returns></returns>
+        public static CompositeTransform GetCompositeTransform(this FrameworkElement fe)
+        {
+            if (fe.RenderTransform != null)
+            {
+                var tt = fe.RenderTransform as CompositeTransform;
+                if (tt != null) return tt;
+
+                var tg = fe.RenderTransform as TransformGroup;
+                if (tg != null)
+                {
+                    return tg.Children.OfType<CompositeTransform>().FirstOrDefault();
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the point to where FrameworkElement is translated
+        /// </summary>
+        /// <param name="fe">FrameworkElement</param>
+        /// <returns>Translation point</returns>
+        public static Point GetTranslatePoint(this FrameworkElement fe)
+        {
+            var translate = fe.GetCompositeTransform();
+
+            if (translate == null) throw new ArgumentNullException("CompositeTransform");
+
+            return new Point(
+                (double)translate.GetValue(CompositeTransform.TranslateXProperty),
+                (double)translate.GetValue(CompositeTransform.TranslateYProperty));
+
+        }
+
+        /// <summary>
+        /// Translates a FrameworkElement to a new location
+        /// </summary>
+        /// <param name="fe">FrameworkElement</param>
+        /// <param name="p">the new location</param>
+        public static void SetTranslatePoint(this FrameworkElement fe, Point p)
+        {
+            var translate = fe.GetCompositeTransform();
+            if (translate == null) throw new ArgumentNullException("CompositeTransform");
+
+            translate.SetValue(CompositeTransform.TranslateXProperty, p.X);
+            translate.SetValue(CompositeTransform.TranslateYProperty, p.Y);
+        }
+
+        /// <summary>
+        /// Translates a FrameworkElement to a new location
+        /// </summary>
+        /// <param name="fe">FrameworkElement</param>
+        /// <param name="x">X coordinate of the new location</param>
+        /// <param name="y">Ycoordinate of the new location</param>
+        public static void SetTranslatePoint(this FrameworkElement fe, double x, double y)
+        {
+            fe.SetTranslatePoint(new Point(x, y));
+        }
+
+        public static FrameworkElement GetElementToAnimate(this FrameworkElement fe)
+        {
+            var parent = fe.GetVisualParent();
+            return parent is ContentPresenter ? parent : fe;
+        }
+
+        public static bool IsPortrait(this FrameworkElement elem)
+        {
+            return elem.ActualHeight > elem.ActualWidth;
         }
         #endregion
     }

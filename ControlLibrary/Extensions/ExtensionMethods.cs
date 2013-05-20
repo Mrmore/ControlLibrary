@@ -33,6 +33,16 @@ namespace ControlLibrary.Extensions
             }
         }
 
+        /// <summary>
+        /// Gets the visual parent of the element
+        /// </summary>
+        /// <param name="node">The element to check</param>
+        /// <returns>The visual parent</returns>
+        public static FrameworkElement GetVisualParent(this FrameworkElement node)
+        {
+            return VisualTreeHelper.GetParent(node) as FrameworkElement;
+        }
+
         public static IEnumerable<FrameworkElement> GetVisualDescendents(this FrameworkElement root)
         {
             Queue<IEnumerable<FrameworkElement>> toDo = new Queue<IEnumerable<FrameworkElement>>();
@@ -53,6 +63,76 @@ namespace ControlLibrary.Extensions
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
                 yield return VisualTreeHelper.GetChild(root, i) as FrameworkElement;
+        }
+
+        /// <summary>
+        /// Gets a visual child of the element
+        /// </summary>
+        /// <param name="node">The element to check</param>
+        /// <param name="index">The index of the child</param>
+        /// <returns>The found child</returns>
+        public static FrameworkElement GetVisualChild(this FrameworkElement node, int index)
+        {
+            return VisualTreeHelper.GetChild(node, index) as FrameworkElement;
+        }
+
+        /// <summary>
+        /// Gets the ancestors of the element, up to the root
+        /// </summary>
+        /// <param name="node">The element to start from</param>
+        /// <returns>An enumerator of the ancestors</returns>
+        public static IEnumerable<FrameworkElement> GetVisualAncestors(this FrameworkElement node)
+        {
+            FrameworkElement parent = node.GetVisualParent();
+            while (parent != null)
+            {
+                yield return parent;
+                parent = parent.GetVisualParent();
+            }
+        }
+
+        /// <summary>
+        /// Gets the VisualStateGroup with the given name, looking up the visual tree
+        /// </summary>
+        /// <param name="root">Element to start from</param>
+        /// <param name="groupName">Name of the group to look for</param>
+        /// <param name="searchAncestors">Whether or not to look up the tree</param>
+        /// <returns>The group, if found</returns>
+        public static VisualStateGroup GetVisualStateGroup(this FrameworkElement root, string groupName, bool searchAncestors)
+        {
+            // Changed from IList to var - LocalJoost
+            var groups = VisualStateManager.GetVisualStateGroups(root);
+            foreach (object o in groups)
+            {
+                VisualStateGroup group = o as VisualStateGroup;
+                if (group != null && group.Name == groupName)
+                    return group;
+            }
+
+            if (searchAncestors)
+            {
+                FrameworkElement parent = root.GetVisualParent();
+                if (parent != null)
+                    return parent.GetVisualStateGroup(groupName, true);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Finds the VisualStateGroup with the given name
+        /// </summary>
+        /// <param name="root">The root.</param>
+        /// <param name="name">The name.</param>
+        /// <returns></returns>
+        public static VisualStateGroup FindVisualState(this FrameworkElement root, string name)
+        {
+            if (root == null)
+                return null;
+
+            // Changed from IList to var - LocalJoost
+            var groups = VisualStateManager.GetVisualStateGroups(root);
+            return groups.Cast<VisualStateGroup>().FirstOrDefault(group => group.Name == name);
         }
 
         /// <summary>
