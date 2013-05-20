@@ -197,6 +197,7 @@
     <Compile Include="Effects\SunlightEffect.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
     <Compile Include="Extensions\StoryboardExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\VisualTreeHelperExtensions.cs" />
     <Compile Include="Primitives\Clipper\Clipper.cs" />
     <Compile Include="Common\EnumerableFunctions.cs" />
