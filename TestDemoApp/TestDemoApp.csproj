@@ -126,46 +126,46 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage.xaml.cs">
+    <Compile Include="View\BlankPage.xaml.cs">
       <DependentUpon>BlankPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage1.xaml.cs">
+    <Compile Include="View\BlankPage1.xaml.cs">
       <DependentUpon>BlankPage1.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage2.xaml.cs">
+    <Compile Include="View\BlankPage2.xaml.cs">
       <DependentUpon>BlankPage2.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage3.xaml.cs">
+    <Compile Include="View\BlankPage3.xaml.cs">
       <DependentUpon>BlankPage3.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage4.xaml.cs">
+    <Compile Include="View\BlankPage4.xaml.cs">
       <DependentUpon>BlankPage4.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage5.xaml.cs">
+    <Compile Include="View\BlankPage5.xaml.cs">
       <DependentUpon>BlankPage5.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage6.xaml.cs">
+    <Compile Include="View\BlankPage6.xaml.cs">
       <DependentUpon>BlankPage6.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage7.xaml.cs">
+    <Compile Include="View\BlankPage7.xaml.cs">
       <DependentUpon>BlankPage7.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage8.xaml.cs">
+    <Compile Include="View\BlankPage8.xaml.cs">
       <DependentUpon>BlankPage8.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPage9.xaml.cs">
+    <Compile Include="View\BlankPage9.xaml.cs">
       <DependentUpon>BlankPage9.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BlankPageGifSynthesis.xaml.cs">
+    <Compile Include="View\BlankPageGifSynthesis.xaml.cs">
       <DependentUpon>BlankPageGifSynthesis.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BP5CeShi.xaml.cs">
+    <Compile Include="View\BP5CeShi.xaml.cs">
       <DependentUpon>BP5CeShi.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CascadingImageBlankPage.xaml.cs">
+    <Compile Include="View\CascadingImageBlankPage.xaml.cs">
       <DependentUpon>CascadingImageBlankPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CeShiGifPage.xaml.cs">
+    <Compile Include="View\CeShiGifPage.xaml.cs">
       <DependentUpon>CeShiGifPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />
@@ -175,12 +175,15 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Model\Person.cs" />
-    <Compile Include="MoveOutControlBlankPage.xaml.cs">
+    <Compile Include="View\CropImageControlPage.xaml.cs">
+      <DependentUpon>CropImageControlPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MoveOutControlBlankPage.xaml.cs">
       <DependentUpon>MoveOutControlBlankPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectStorageHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RatingPage.xaml.cs">
+    <Compile Include="View\RatingPage.xaml.cs">
       <DependentUpon>RatingPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="SettingsPage\SettingsContent.xaml.cs">
@@ -189,10 +192,10 @@
     <Compile Include="SettingsPage\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SystemCursorPage.xaml.cs">
+    <Compile Include="View\SystemCursorPage.xaml.cs">
       <DependentUpon>SystemCursorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ThemeAnimationPage.xaml.cs">
+    <Compile Include="View\ThemeAnimationPage.xaml.cs">
       <DependentUpon>ThemeAnimationPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="UC\PhotoLiveTile.xaml.cs">
@@ -296,59 +299,59 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="BlankPage.xaml">
+    <Page Include="View\BlankPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BlankPage1.xaml">
+    <Page Include="View\BlankPage1.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BlankPage2.xaml">
+    <Page Include="View\BlankPage2.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BlankPage3.xaml">
+    <Page Include="View\BlankPage3.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BlankPage4.xaml">
+    <Page Include="View\BlankPage4.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BlankPage5.xaml">
+    <Page Include="View\BlankPage5.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BlankPage6.xaml">
+    <Page Include="View\BlankPage6.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BlankPage7.xaml">
+    <Page Include="View\BlankPage7.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="BlankPage8.xaml">
+    <Page Include="View\BlankPage8.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BlankPage9.xaml">
+    <Page Include="View\BlankPage9.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BlankPageGifSynthesis.xaml">
+    <Page Include="View\BlankPageGifSynthesis.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="BP5CeShi.xaml">
+    <Page Include="View\BP5CeShi.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="CascadingImageBlankPage.xaml">
+    <Page Include="View\CascadingImageBlankPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="CeShiGifPage.xaml">
+    <Page Include="View\CeShiGifPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -360,11 +363,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MoveOutControlBlankPage.xaml">
+    <Page Include="View\CropImageControlPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="RatingPage.xaml">
+    <Page Include="View\MoveOutControlBlankPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\RatingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -376,11 +383,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SystemCursorPage.xaml">
+    <Page Include="View\SystemCursorPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ThemeAnimationPage.xaml">
+    <Page Include="View\ThemeAnimationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

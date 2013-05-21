@@ -1,0 +1,25 @@
+﻿<Page
+    x:Class="TestDemoApp.BlankPage4"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TestDemoApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ControlLibrary="using:ControlLibrary"
+    xmlns:System="clr-namespace:System;assembly=mscorlib"
+    mc:Ignorable="d" IsTabStop="false">
+
+    <Grid x:Name="grid" Background="{StaticResource ApplicationPageBackgroundThemeBrush}">
+        <!--Transparent  UpdateInterval="0:0:3"-->
+        <ControlLibrary:MosaicHubTile Background="Transparent" Width="232" Height="232" Margin="0" x:Name="mosaicTile"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Title="最近来访" TitleVerticalAlignment="Center" TitleHorizontalAlignment="Center"
+                                      FontSize="15" Foreground="GreenYellow">
+            <ControlLibrary:MosaicHubTile.MosaicTileBrush>
+                <!--<ImageBrush ImageSource="http://ww1.sinaimg.cn/thumbnail/722a8aa6jw1dry229vhl5j.jpg" Stretch="UniformToFill"/>-->
+                <SolidColorBrush Color="Red"></SolidColorBrush>
+            </ControlLibrary:MosaicHubTile.MosaicTileBrush>
+        </ControlLibrary:MosaicHubTile>
+        <Button x:Name="bt" Content="返回" HorizontalAlignment="Left" VerticalAlignment="Top" Click="bt_Click_1"/>
+    </Grid>
+</Page>

@@ -2766,4 +2766,16 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style TargetType="local:CropImageControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:CropImageControl">
+                    <Canvas x:Name="PART_Canvas" Background="#00000000">
+                        <Image x:Name="PART_Image" Stretch="Fill" />
+                    </Canvas>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

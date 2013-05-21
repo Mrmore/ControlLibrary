@@ -118,16 +118,16 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="BackgroundDownloaderPage.xaml.cs">
+    <Compile Include="View\BackgroundDownloaderPage.xaml.cs">
       <DependentUpon>BackgroundDownloaderPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DownLoadEntity.cs" />
-    <Compile Include="DownLoadViewModel.cs" />
-    <Compile Include="MainPage.xaml.cs">
+    <Compile Include="Model\DownLoadEntity.cs" />
+    <Compile Include="ViewModel\DownLoadViewModel.cs" />
+    <Compile Include="View\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyChangedBase.cs" />
+    <Compile Include="Model\PropertyChangedBase.cs" />
     <Compile Include="XamlReaderControl.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +147,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="BackgroundDownloaderPage.xaml">
+    <Page Include="View\BackgroundDownloaderPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -155,7 +155,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MainPage.xaml">
+    <Page Include="View\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
