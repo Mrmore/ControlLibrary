@@ -3,7 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.Foundation;
+using Windows.Graphics.Imaging;
+using Windows.Storage.Streams;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Input;
@@ -15,6 +19,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
+using ControlLibrary.GifSynthesis;
 
 // “用户控件”项模板在 http://go.microsoft.com/fwlink/?LinkId=234235 上有介绍
 
@@ -68,6 +73,10 @@ namespace ControlLibrary
         private double _cropTop;
         private double _cropRight;
         private double _cropBottom;
+
+        //
+        private double H, W = double.NaN;
+        private IRandomAccessStream ias = null;
 
         #region DragMode
         private enum DragMode
@@ -882,6 +891,13 @@ namespace ControlLibrary
             Setup();
         }
 
+        protected override Size ArrangeOverride(Size finalSize)
+        {
+            this.H = finalSize.Height;
+            this.W = finalSize.Width;
+            return base.ArrangeOverride(finalSize);
+        }
+
         private void OnPointerWheelChanged(CoreWindow sender, PointerEventArgs e)
         {
             Debug.WriteLine("!!!! wheel delta: " + e.CurrentPoint.Properties.MouseWheelDelta);
@@ -1091,8 +1107,8 @@ namespace ControlLibrary
 
         private void SetWidthHeight(FrameworkElement element, double width, double height)
         {
-            element.Width = width;
-            element.Height = height;
+            element.Width = Math.Abs(width);
+            element.Height = Math.Abs(height);
         }
 
         private void SetCanvasXYWithOffset(UIElement element, double x, double y)
@@ -1124,7 +1140,6 @@ namespace ControlLibrary
                 line.Y2 = Math.Max(line.Y1, y2 + _topImageOffset);
             }
         }
-
 
         private void AdjustLayout()
         {
@@ -1187,7 +1202,9 @@ namespace ControlLibrary
             SetWidthHeight(_bottomMaskingRectangle, _cropRight - _cropLeft, _image.Height - _cropBottom);
         }
 
-        public void Setup()
+        private RoutedEventHandler bitmapImageOpened = null;
+        private RoutedEventHandler imageOpened = null;
+        public async void Setup()
         {
             // Check for loaded and template succesfully applied
             if (!_isLoaded ||
@@ -1196,19 +1213,46 @@ namespace ControlLibrary
                 return;
             }
 
-            _image.Source = ImageSource;
-            var bi = _image.Source as BitmapImage;
-            if (bi != null)
+            var iRandomAccessStream = await GetImageStream(this.ImageSource);
+            if (iRandomAccessStream != null)
             {
-                bi.ImageOpened += (sender, e) =>
-                {
-                    DoFullLayout();
-                    if (this.ImageOpened != null)
+                this.ias = iRandomAccessStream.CloneStream();
+                var bi = new BitmapImage();
+                bi.ImageOpened -= bitmapImageOpened;
+                bi.ImageOpened += bitmapImageOpened = (ss, ee) =>
                     {
-                        this.ImageOpened(this, e);
-                    }
-                };
+                        //this.W = (ss as BitmapImage).PixelWidth;
+                        //this.H = (ss as BitmapImage).PixelHeight;
+
+                        DoFullLayout();
+                        if (this.ImageOpened != null)
+                        {
+                            this.ImageOpened(this, ee);
+                        }
+                    };
+                await bi.SetSourceAsync(iRandomAccessStream);
+                _image.ImageOpened -= imageOpened;
+                _image.ImageOpened += imageOpened = (ss, ee) =>
+                    {
+                        //this.W = (ss as Image).RenderSize.Width;
+                        //this.H = (ss as Image).RenderSize.Height;
+                    };
+                _image.Source = bi;
             }
+
+            //_image.Source = ImageSource;
+            //var bi = _image.Source as BitmapImage;
+            //if (bi != null)
+            //{
+            //    bi.ImageOpened += (sender, e) =>
+            //    {
+            //        DoFullLayout();
+            //        if (this.ImageOpened != null)
+            //        {
+            //            this.ImageOpened(this, e);
+            //        }
+            //    };
+            //}
         }
 
         private void DoFullLayout()
@@ -1367,6 +1411,77 @@ namespace ControlLibrary
             line.StrokeThickness = thickness;
 
             return line;
+        }
+
+        private async Task<IRandomAccessStream> GetImageStream(ImageSource imageSource)
+        {
+            IRandomAccessStream iRandomAccessStream = null;
+            if (imageSource != null)
+            {
+                BitmapImage bitmapImage = imageSource as BitmapImage;
+                Uri uri = null;
+                if (bitmapImage != null)
+                {
+                    if (bitmapImage.UriSource != null)
+                    {
+                        var reg = @"http(s)?://([\w-]+\.)+[\w-]+(/[\w-./?%&=]*)?";
+                        Uri baseUri = new Uri("ms-appx:///");
+                        Regex regex = new Regex(reg, RegexOptions.IgnoreCase);
+                        if (regex.IsMatch(bitmapImage.UriSource.ToString()))
+                        {
+                            uri = bitmapImage.UriSource;
+                        }
+                        else
+                        {
+                            uri = new Uri(baseUri, bitmapImage.UriSource.AbsolutePath);
+                        }
+                        RandomAccessStreamReference fileStream = RandomAccessStreamReference.CreateFromUri(uri);
+                        iRandomAccessStream = await fileStream.OpenReadAsync();
+                    }
+                }
+            }
+            return iRandomAccessStream;
+        }
+
+        public async Task<IRandomAccessStream> SaveImage(IRandomAccessStream iRandomAccessStream, double w, double h, double cropW, double cropH, double cropX, double cropY)
+        {
+            IRandomAccessStream randomAccessStream = null;
+            if (iRandomAccessStream != null && !double.IsNaN(w) && !double.IsNaN(h) && !double.IsNaN(cropW)
+                && !double.IsNaN(cropH) && !double.IsNaN(cropX) && !double.IsNaN(cropY))
+            {
+                BitmapDecoder bitmapDecoder = await BitmapDecoder.CreateAsync(iRandomAccessStream);
+                BitmapTransform bitmapTransform = new BitmapTransform()
+                {
+                    ScaledHeight = System.Convert.ToUInt32(h),
+                    ScaledWidth = System.Convert.ToUInt32(w),
+                    Rotation = BitmapRotation.None,
+                    Flip = BitmapFlip.None,
+                    InterpolationMode = BitmapInterpolationMode.NearestNeighbor,
+                    Bounds = new BitmapBounds
+                    {
+                        Width = System.Convert.ToUInt32(cropW),
+                        Height = System.Convert.ToUInt32(cropH),
+                        X = System.Convert.ToUInt32(cropX),
+                        Y = System.Convert.ToUInt32(cropY)
+                    }
+                };
+                PixelDataProvider pixelDataProvider = await bitmapDecoder.GetPixelDataAsync(
+                                                      BitmapPixelFormat.Bgra8,
+                                                      BitmapAlphaMode.Straight,
+                                                      bitmapTransform,
+                                                      ExifOrientationMode.IgnoreExifOrientation,
+                                                      ColorManagementMode.DoNotColorManage);
+                byte[] pixelData = pixelDataProvider.DetachPixelData();
+                var decoderIRandomAccessStream = await pixelData.ConvertBytesToIRandomAccessStream();
+                randomAccessStream = decoderIRandomAccessStream;
+            }
+            return randomAccessStream;
+        }
+
+        public async Task<IRandomAccessStream> SaveImage()
+        {
+            var randomAccessStream = await this.SaveImage(this.ias, this.OriginalWidth, this.OriginalHeight, this.CropWidth, this.CropHeight, this.CropLeft, this.CropTop);
+            return randomAccessStream;
         }
     }
 }
