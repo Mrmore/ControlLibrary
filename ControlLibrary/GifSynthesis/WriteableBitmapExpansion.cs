@@ -271,7 +271,7 @@ namespace ControlLibrary.GifSynthesis
             }
         }
 
-        public async static Task<IRandomAccessStream> ConvertBytesToIRandomAccessStream(byte[] bytes)
+        public async static Task<IRandomAccessStream> ConvertBytesToIRandomAccessStream(this byte[] bytes)
         {
             InMemoryRandomAccessStream memoryRandomAccessStream = new InMemoryRandomAccessStream();
             DataWriter datawriter = new DataWriter(memoryRandomAccessStream.GetOutputStreamAt(0));
@@ -280,7 +280,7 @@ namespace ControlLibrary.GifSynthesis
             return memoryRandomAccessStream;
         }
 
-        public async static Task<IRandomAccessStream> ConvertStreamIRandomAccessStream(Stream stream)
+        public async static Task<IRandomAccessStream> ConvertStreamIRandomAccessStream(this Stream stream)
         {
             var randomAccessStream = new InMemoryRandomAccessStream();
             var outputStream = randomAccessStream.GetOutputStreamAt(0);

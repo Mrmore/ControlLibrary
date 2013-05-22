@@ -11,6 +11,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Media.Imaging;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上有介绍
 
@@ -38,6 +39,14 @@ namespace TestDemoApp
         private void btBack_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.GoBack();
+        }
+
+        private async void btCropImage_Click(object sender, RoutedEventArgs e)
+        {
+            var bi = new BitmapImage();
+            var ias = await this.Crop.SaveImage();
+            await bi.SetSourceAsync(ias);
+            this.image.Source = bi;
         }
     }
 }

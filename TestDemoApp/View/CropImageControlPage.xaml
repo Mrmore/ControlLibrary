@@ -16,14 +16,20 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical">
-            <Button x:Name="btBack" Content="返回" Margin="0,20,0,0" Click="btBack_Click"/>
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                <Button x:Name="btBack" Content="返回" Click="btBack_Click"/>
+                <Button x:Name="btCropImage" Content="截图" Margin="30,0,0,0" Click="btCropImage_Click"/>
+            </StackPanel>           
             <TextBlock Margin="0,30,0,0"
             Text="CropControl Test"
             Style="{StaticResource PageHeaderTextStyle}" />
         </StackPanel>
 
         <Border Grid.Row="1" BorderBrush="Red" BorderThickness="1">
-            <Control:CropImageControl x:Name="Crop" ImageSource="http://ww2.sinaimg.cn/bmiddle/810bc3ffjw1e4w16o9d6xj20dc0hsac5.jpg" DesiredAspectRatio="1.0" />
+            <Grid>
+                <Control:CropImageControl x:Name="Crop" ImageSource="http://ww2.sinaimg.cn/bmiddle/810bc3ffjw1e4w16o9d6xj20dc0hsac5.jpg" DesiredAspectRatio="1.0" />
+                <Image x:Name="image" Stretch="Fill" Height="200" Width="200" HorizontalAlignment="Left" VerticalAlignment="Top" />
+            </Grid>
         </Border>
 
         <Grid Grid.Row="2" HorizontalAlignment="Right">
