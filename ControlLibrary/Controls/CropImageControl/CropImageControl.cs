@@ -20,6 +20,8 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Shapes;
 using ControlLibrary.GifSynthesis;
+using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 // “用户控件”项模板在 http://go.microsoft.com/fwlink/?LinkId=234235 上有介绍
 
@@ -1443,9 +1445,10 @@ namespace ControlLibrary
             return iRandomAccessStream;
         }
 
-        public async Task<IRandomAccessStream> SaveImage(IRandomAccessStream iRandomAccessStream, double w, double h, double cropW, double cropH, double cropX, double cropY)
+        public async Task<byte[]> SaveImage(IRandomAccessStream iRandomAccessStream, double w, double h, double cropW, double cropH, double cropX, double cropY)
         {
-            IRandomAccessStream randomAccessStream = null;
+            byte[] pixelData = null;
+            iRandomAccessStream.Seek(0);
             if (iRandomAccessStream != null && !double.IsNaN(w) && !double.IsNaN(h) && !double.IsNaN(cropW)
                 && !double.IsNaN(cropH) && !double.IsNaN(cropX) && !double.IsNaN(cropY))
             {
@@ -1471,16 +1474,33 @@ namespace ControlLibrary
                                                       bitmapTransform,
                                                       ExifOrientationMode.IgnoreExifOrientation,
                                                       ColorManagementMode.DoNotColorManage);
-                byte[] pixelData = pixelDataProvider.DetachPixelData();
-                var decoderIRandomAccessStream = await pixelData.ConvertBytesToIRandomAccessStream();
-                randomAccessStream = decoderIRandomAccessStream;
+               pixelData = pixelDataProvider.DetachPixelData();
             }
-            return randomAccessStream;
+            return pixelData;
         }
 
-        public async Task<IRandomAccessStream> SaveImage()
+        public async Task<WriteableBitmap> SaveImageWriteableBitmap()
         {
-            var randomAccessStream = await this.SaveImage(this.ias, this.OriginalWidth, this.OriginalHeight, this.CropWidth, this.CropHeight, this.CropLeft, this.CropTop);
+            WriteableBitmap wb = null;
+            var bytes = await this.SaveImage(this.ias, this.OriginalWidth, this.OriginalHeight, this.CropWidth, this.CropHeight, this.CropLeft, this.CropTop);
+            wb = new WriteableBitmap(System.Convert.ToInt32(this.CropWidth), System.Convert.ToInt32(this.CropHeight));
+            using (Stream stream = wb.PixelBuffer.AsStream())
+            {
+                await stream.WriteAsync(bytes, 0, bytes.Length);
+            }
+            return wb;
+        }
+
+        public async Task<IRandomAccessStream> SaveImageIRandomAccessStream()
+        {
+            IRandomAccessStream randomAccessStream = null;
+            var bytes = await this.SaveImage(this.ias, this.OriginalWidth, this.OriginalHeight, this.CropWidth, this.CropHeight, this.CropLeft, this.CropTop);
+            var decoderIRandomAccessStream = await bytes.ConvertBytesToIRandomAccessStream();
+            await decoderIRandomAccessStream.FlushAsync();
+            decoderIRandomAccessStream.Seek(0);
+            //await decoderIRandomAccessStream.FlushAsync();
+            randomAccessStream = decoderIRandomAccessStream;
+            //randomAccessStream = this.ias;
             return randomAccessStream;
         }
     }

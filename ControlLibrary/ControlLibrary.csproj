@@ -360,6 +360,7 @@
     <Compile Include="Tools\Interactivity\BehaviorOfT.cs" />
     <Compile Include="Tools\Interactivity\Interaction.cs" />
     <Compile Include="Tools\InternetTime\InternetTimeHelper.cs" />
+    <Compile Include="Tools\IO\MemoryRandomAccessStream.cs" />
     <Compile Include="Tools\JudgmentCharacter\JudgmentCharacter.cs" />
     <Compile Include="Tools\LocationLanguageHelper.cs" />
     <Compile Include="Tools\Mathematics\GeometryMath.cs" />

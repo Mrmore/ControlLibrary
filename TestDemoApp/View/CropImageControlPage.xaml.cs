@@ -43,10 +43,16 @@ namespace TestDemoApp
 
         private async void btCropImage_Click(object sender, RoutedEventArgs e)
         {
-            var bi = new BitmapImage();
-            var ias = await this.Crop.SaveImage();
-            await bi.SetSourceAsync(ias);
-            this.image.Source = bi;
+            var ias = await this.Crop.SaveImageWriteableBitmap();
+            this.image.Source = ias;
+
+            //this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+            //{
+            //    var bi = new BitmapImage();
+            //    var ias = await this.Crop.SaveImageIRandomAccessStream();
+            //    await bi.SetSourceAsync(ias);
+            //    this.image.Source = bi;
+            //});
         }
     }
 }

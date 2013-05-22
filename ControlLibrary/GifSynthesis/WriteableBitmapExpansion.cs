@@ -271,6 +271,11 @@ namespace ControlLibrary.GifSynthesis
             }
         }
 
+        /// <summary>
+        /// 返回的是IRandomAccessStream 其实是 InMemoryRandomAccessStream
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
         public async static Task<IRandomAccessStream> ConvertBytesToIRandomAccessStream(this byte[] bytes)
         {
             InMemoryRandomAccessStream memoryRandomAccessStream = new InMemoryRandomAccessStream();
@@ -280,6 +285,11 @@ namespace ControlLibrary.GifSynthesis
             return memoryRandomAccessStream;
         }
 
+        /// <summary>
+        /// 返回的是IRandomAccessStream 其实是 InMemoryRandomAccessStream
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <returns></returns>
         public async static Task<IRandomAccessStream> ConvertStreamIRandomAccessStream(this Stream stream)
         {
             var randomAccessStream = new InMemoryRandomAccessStream();
