@@ -227,6 +227,7 @@
     <Content Include="Gif\3.png" />
     <Content Include="Gif\5.jpg" />
     <Content Include="Gif\6.jpg" />
+    <Content Include="Gif\test.gif" />
     <Content Include="Images\6dc470d7jw1dse92lrac2g.gif" />
     <Content Include="Images\amy.jpg" />
     <Content Include="Images\AwesomMenu\bg-addbutton-highlighted.png" />
@@ -237,6 +238,7 @@
     <Content Include="Images\AwesomMenu\icon-plus.png" />
     <Content Include="Images\AwesomMenu\icon-star.png" />
     <Content Include="Images\CascadingImage.jpg" />
+    <Content Include="Images\ceshi123.gif" />
     <Content Include="Images\HubTile\comment1.png" />
     <Content Include="Images\HubTile\comment2.png" />
     <Content Include="Images\HubTile\comment3.png" />

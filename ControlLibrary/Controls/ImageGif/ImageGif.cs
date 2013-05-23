@@ -353,7 +353,7 @@ namespace ControlLibrary
                         return;
                     }
                     Stream tempStream = streamRandom.GetInputStreamAt(0).AsStreamForRead();
-                    //
+                    //为了能判断文件头做了一个流拷贝，保存了一份字节数组
                     MemoryStream ms = new MemoryStream();
                     await tempStream.CopyToAsync(ms);
                     //byte[] bytes = ms.ToArray();
@@ -819,6 +819,7 @@ namespace ControlLibrary
                         //{
                         //    this.Stop = false;
                         //}
+                        this.Stop = false;
                         return;
                     }
                 }
