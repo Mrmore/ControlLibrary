@@ -79,6 +79,7 @@ namespace ControlLibrary
         //
         private double H, W = double.NaN;
         private IRandomAccessStream ias = null;
+        private byte[] bytes = null;
 
         #region DragMode
         private enum DragMode
@@ -875,6 +876,7 @@ namespace ControlLibrary
             _canvas.ManipulationDelta += OnManipulationDelta;
             _canvas.ManipulationCompleted += OnManipulationCompleted;
             _canvas.ManipulationInertiaStarting += OnManipulationInertiaStarting;
+            //_canvas.PointerWheelChanged += _canvas_PointerWheelChanged;
 
             // CAUTION: this needs to not happen in design mode, as it causes a problem there
             // Window.Current.CoreWindow.PointerWheelChanged += OnPointerWheelChanged;
@@ -902,8 +904,35 @@ namespace ControlLibrary
 
         private void OnPointerWheelChanged(CoreWindow sender, PointerEventArgs e)
         {
-            Debug.WriteLine("!!!! wheel delta: " + e.CurrentPoint.Properties.MouseWheelDelta);
+            Debug.WriteLine("!!!! wheel delta: " + e.CurrentPoint.Properties.MouseWheelDelta);         
             e.Handled = true;
+        }
+
+        private void _canvas_PointerWheelChanged(object sender, PointerRoutedEventArgs e)
+        {
+            var wheelPoint = e.GetCurrentPoint(this._image).Position;
+            var pointerProp = e.GetCurrentPoint(this._image).Properties;
+            if (pointerProp != null)
+            {
+                int wheelDelta = pointerProp.MouseWheelDelta;
+                double delta = 0.0;
+                if (wheelDelta > 0)
+                {
+                    delta = 1.25;
+                }
+                else
+                {
+                    delta = 0.75;
+                }
+                if (this.CropWidth < this.OriginalWidth)
+                {
+                    this.CropWidth = Convert.ToInt32(this.CropWidth * delta + 0.5);
+                }
+                if (this.CropHeight < this.OriginalHeight)
+                {
+                    this.CropHeight = Convert.ToInt32(this.CropHeight * delta + 0.5);
+                }
+            }
         }
 
         private void OnPointerMoved(object sender, PointerRoutedEventArgs e)
@@ -1219,6 +1248,7 @@ namespace ControlLibrary
             if (iRandomAccessStream != null)
             {
                 this.ias = iRandomAccessStream.CloneStream();
+                bytes = ias.ConvertIRandomAccessStreamToByte();
                 var bi = new BitmapImage();
                 bi.ImageOpened -= bitmapImageOpened;
                 bi.ImageOpened += bitmapImageOpened = (ss, ee) =>
@@ -1445,36 +1475,106 @@ namespace ControlLibrary
             return iRandomAccessStream;
         }
 
+        /// <summary>
+        /// 如果用全局的流作为传入对象的话，BitmapDecoder 数次以后，流会报一个严重的错误
+        /// </summary>
+        /// <param name="iRandomAccessStream"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="cropW"></param>
+        /// <param name="cropH"></param>
+        /// <param name="cropX"></param>
+        /// <param name="cropY"></param>
+        /// <returns></returns>
         public async Task<byte[]> SaveImage(IRandomAccessStream iRandomAccessStream, double w, double h, double cropW, double cropH, double cropX, double cropY)
+        {          
+            byte[] pixelData = null;
+            try
+            {
+                iRandomAccessStream.Seek(0);
+                if (iRandomAccessStream != null && !double.IsNaN(w) && !double.IsNaN(h) && !double.IsNaN(cropW)
+                    && !double.IsNaN(cropH) && !double.IsNaN(cropX) && !double.IsNaN(cropY))
+                {
+                    BitmapDecoder bitmapDecoder = await BitmapDecoder.CreateAsync(iRandomAccessStream);
+                    BitmapTransform bitmapTransform = new BitmapTransform()
+                    {
+                        ScaledHeight = System.Convert.ToUInt32(h),
+                        ScaledWidth = System.Convert.ToUInt32(w),
+                        Rotation = BitmapRotation.None,
+                        Flip = BitmapFlip.None,
+                        InterpolationMode = BitmapInterpolationMode.NearestNeighbor,
+                        Bounds = new BitmapBounds
+                        {
+                            Width = System.Convert.ToUInt32(cropW),
+                            Height = System.Convert.ToUInt32(cropH),
+                            X = System.Convert.ToUInt32(cropX),
+                            Y = System.Convert.ToUInt32(cropY)
+                        }
+                    };
+                    PixelDataProvider pixelDataProvider = await bitmapDecoder.GetPixelDataAsync(
+                                                          BitmapPixelFormat.Bgra8,
+                                                          BitmapAlphaMode.Straight,
+                                                          bitmapTransform,
+                                                          ExifOrientationMode.IgnoreExifOrientation,
+                                                          ColorManagementMode.DoNotColorManage);
+                    pixelData = pixelDataProvider.DetachPixelData();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+            return pixelData;
+        }
+
+        /// <summary>
+        /// 用全局的字节数组作为填充对象，防止BitmapDecoder 数次以后，被BitmapDecoder的数据流损坏
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="w"></param>
+        /// <param name="h"></param>
+        /// <param name="cropW"></param>
+        /// <param name="cropH"></param>
+        /// <param name="cropX"></param>
+        /// <param name="cropY"></param>
+        /// <returns></returns>
+        public async Task<byte[]> SaveImage(byte[] bytes, double w, double h, double cropW, double cropH, double cropX, double cropY)
         {
             byte[] pixelData = null;
-            iRandomAccessStream.Seek(0);
-            if (iRandomAccessStream != null && !double.IsNaN(w) && !double.IsNaN(h) && !double.IsNaN(cropW)
-                && !double.IsNaN(cropH) && !double.IsNaN(cropX) && !double.IsNaN(cropY))
+            try
             {
-                BitmapDecoder bitmapDecoder = await BitmapDecoder.CreateAsync(iRandomAccessStream);
-                BitmapTransform bitmapTransform = new BitmapTransform()
+                var iras = await bytes.ConvertBytesToIRandomAccessStream();
+                if (iras != null && !double.IsNaN(w) && !double.IsNaN(h) && !double.IsNaN(cropW)
+                    && !double.IsNaN(cropH) && !double.IsNaN(cropX) && !double.IsNaN(cropY))
                 {
-                    ScaledHeight = System.Convert.ToUInt32(h),
-                    ScaledWidth = System.Convert.ToUInt32(w),
-                    Rotation = BitmapRotation.None,
-                    Flip = BitmapFlip.None,
-                    InterpolationMode = BitmapInterpolationMode.NearestNeighbor,
-                    Bounds = new BitmapBounds
+                    BitmapDecoder bitmapDecoder = await BitmapDecoder.CreateAsync(iras);
+                    BitmapTransform bitmapTransform = new BitmapTransform()
                     {
-                        Width = System.Convert.ToUInt32(cropW),
-                        Height = System.Convert.ToUInt32(cropH),
-                        X = System.Convert.ToUInt32(cropX),
-                        Y = System.Convert.ToUInt32(cropY)
-                    }
-                };
-                PixelDataProvider pixelDataProvider = await bitmapDecoder.GetPixelDataAsync(
-                                                      BitmapPixelFormat.Bgra8,
-                                                      BitmapAlphaMode.Straight,
-                                                      bitmapTransform,
-                                                      ExifOrientationMode.IgnoreExifOrientation,
-                                                      ColorManagementMode.DoNotColorManage);
-               pixelData = pixelDataProvider.DetachPixelData();
+                        ScaledHeight = System.Convert.ToUInt32(h),
+                        ScaledWidth = System.Convert.ToUInt32(w),
+                        Rotation = BitmapRotation.None,
+                        Flip = BitmapFlip.None,
+                        InterpolationMode = BitmapInterpolationMode.NearestNeighbor,
+                        Bounds = new BitmapBounds
+                        {
+                            Width = System.Convert.ToUInt32(cropW),
+                            Height = System.Convert.ToUInt32(cropH),
+                            X = System.Convert.ToUInt32(cropX),
+                            Y = System.Convert.ToUInt32(cropY)
+                        }
+                    };
+                    PixelDataProvider pixelDataProvider = await bitmapDecoder.GetPixelDataAsync(
+                                                          BitmapPixelFormat.Bgra8,
+                                                          BitmapAlphaMode.Straight,
+                                                          bitmapTransform,
+                                                          ExifOrientationMode.IgnoreExifOrientation,
+                                                          ColorManagementMode.DoNotColorManage);
+                    pixelData = pixelDataProvider.DetachPixelData();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
             }
             return pixelData;
         }
@@ -1482,11 +1582,14 @@ namespace ControlLibrary
         public async Task<WriteableBitmap> SaveImageWriteableBitmap()
         {
             WriteableBitmap wb = null;
-            var bytes = await this.SaveImage(this.ias, this.OriginalWidth, this.OriginalHeight, this.CropWidth, this.CropHeight, this.CropLeft, this.CropTop);
-            wb = new WriteableBitmap(System.Convert.ToInt32(this.CropWidth), System.Convert.ToInt32(this.CropHeight));
-            using (Stream stream = wb.PixelBuffer.AsStream())
+            var bytes = await this.SaveImage(this.bytes, this.OriginalWidth, this.OriginalHeight, this.CropWidth, this.CropHeight, this.CropLeft, this.CropTop);
+            if (bytes != null)
             {
-                await stream.WriteAsync(bytes, 0, bytes.Length);
+                wb = new WriteableBitmap(System.Convert.ToInt32(this.CropWidth), System.Convert.ToInt32(this.CropHeight));
+                using (Stream stream = wb.PixelBuffer.AsStream())
+                {
+                    await stream.WriteAsync(bytes, 0, bytes.Length);
+                }
             }
             return wb;
         }
@@ -1494,13 +1597,16 @@ namespace ControlLibrary
         public async Task<IRandomAccessStream> SaveImageIRandomAccessStream()
         {
             IRandomAccessStream randomAccessStream = null;
-            var bytes = await this.SaveImage(this.ias, this.OriginalWidth, this.OriginalHeight, this.CropWidth, this.CropHeight, this.CropLeft, this.CropTop);
-            var decoderIRandomAccessStream = await bytes.ConvertBytesToIRandomAccessStream();
-            await decoderIRandomAccessStream.FlushAsync();
-            decoderIRandomAccessStream.Seek(0);
-            //await decoderIRandomAccessStream.FlushAsync();
-            randomAccessStream = decoderIRandomAccessStream;
-            //randomAccessStream = this.ias;
+            var bytes = await this.SaveImage(this.bytes, this.OriginalWidth, this.OriginalHeight, this.CropWidth, this.CropHeight, this.CropLeft, this.CropTop);
+            if (bytes != null)
+            {
+                var decoderIRandomAccessStream = await bytes.ConvertBytesToIRandomAccessStream();
+                await decoderIRandomAccessStream.FlushAsync();
+                decoderIRandomAccessStream.Seek(0);
+                //await decoderIRandomAccessStream.FlushAsync();
+                randomAccessStream = decoderIRandomAccessStream;
+                //randomAccessStream = this.ias;
+            }
             return randomAccessStream;
         }
     }
