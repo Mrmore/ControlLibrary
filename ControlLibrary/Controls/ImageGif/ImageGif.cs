@@ -855,7 +855,7 @@ namespace ControlLibrary
                 double left = System.Convert.ToDouble(imageDescriptionProperties["/Left"].Value.ToString());
                 double width = System.Convert.ToDouble(imageDescriptionProperties["/Width"].Value.ToString());
                 double height = System.Convert.ToDouble(imageDescriptionProperties["/Height"].Value.ToString());
-                var gifControlExtensionProperties = await (frameProperties["/grctlext"].Value as BitmapPropertiesView).GetPropertiesAsync(new List<string>() { "/Delay", "/UserInputFlag" });
+                var gifControlExtensionProperties = await (frameProperties["/grctlext"].Value as BitmapPropertiesView).GetPropertiesAsync(new List<string>() { "/Delay", "/UserInputFlag", "/Disposal" });
                 var delayTemp = gifControlExtensionProperties["/Delay"].Value.ToString();
                 if (string.IsNullOrEmpty(delayTemp) || delayTemp == "0")
                 {
