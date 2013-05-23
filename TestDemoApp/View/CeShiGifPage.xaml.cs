@@ -115,7 +115,8 @@ namespace TestDemoApp
 
         private void Button_Click_9(object sender, RoutedEventArgs e)
         {
-            this.tb.Text = "/Images/6dc470d7jw1dse92lrac2g.gif";
+            //this.tb.Text = "/Images/6dc470d7jw1dse92lrac2g.gif";
+            this.tb.Text = "/Gif/test.gif";
             imageGif.Source = this.tb.Text;
         }
 
@@ -188,13 +189,17 @@ namespace TestDemoApp
         //压缩Gif
         private async void btyasuo_Click(object sender, RoutedEventArgs e)
         {
+            /*
+            //LINQ 的查询
             List<int> listA = new List<int> { 1, 2, 3, 5, 7, 9 };
             List<int> listB = new List<int> { 13, 4, 17, 29, 2 };
             List<int> ResultA = listA.Union(listB).ToList<int>(); //剔除重复项
             List<int> ResultB = listA.Concat(listB).ToList<int>();//保留重复项
             List<int> ResultC = listA.Union(listB).Except(listB).ToList<int>();
             List<int> ResultD = listA.Union(listB).Except(listA).ToList<int>();
+            */ 
 
+            //压缩
             await Task.Run(async () =>
             {
                 //var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.baseUri, "/Gif/123.gif"));
@@ -209,6 +214,7 @@ namespace TestDemoApp
                 });
             });
             Windows.Networking.BackgroundTransfer.BackgroundDownloader bgd = new Windows.Networking.BackgroundTransfer.BackgroundDownloader();
+            //测试返回String
             var sss = await GetAsyncTaskSample();
 
             //BitmapImage bi = new BitmapImage();
