@@ -77,6 +77,7 @@ namespace ControlLibrary.Tools.Multimedia
         {
             switch (quality)
             {
+                case YouTubeQuality.Quality240P: return 36;
                 case YouTubeQuality.Quality360P: return 18;
                 case YouTubeQuality.Quality720P: return 22;
                 case YouTubeQuality.Quality1080P: return 37;
