@@ -8,7 +8,8 @@ namespace ControlLibrary.Tools.Multimedia
 {
     public enum YouTubeQuality
     {
-        Quality480P,
+        Quality240P,
+        Quality360P,
         Quality720P,
         Quality1080P
     }

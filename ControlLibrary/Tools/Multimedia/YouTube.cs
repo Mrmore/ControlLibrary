@@ -19,7 +19,7 @@ namespace ControlLibrary.Tools.Multimedia
     {
 
 #if WINRT || WPF || WP8 || WP7 || SL5
-		public static Task<YouTubeUri> GetVideoUriAsync(string youTubeId, YouTubeQuality maxQuality = YouTubeQuality.Quality480P)
+		public static Task<YouTubeUri> GetVideoUriAsync(string youTubeId, YouTubeQuality maxQuality = YouTubeQuality.Quality360P)
 		{
 			var task = new TaskCompletionSource<YouTubeUri>();
 			GetVideoUri(youTubeId, maxQuality, (u, e) =>
@@ -77,7 +77,7 @@ namespace ControlLibrary.Tools.Multimedia
         {
             switch (quality)
             {
-                case YouTubeQuality.Quality480P: return 18;
+                case YouTubeQuality.Quality360P: return 18;
                 case YouTubeQuality.Quality720P: return 22;
                 case YouTubeQuality.Quality1080P: return 37;
             }
@@ -86,7 +86,7 @@ namespace ControlLibrary.Tools.Multimedia
 
         public static HttpResponse GetVideoUri(string youTubeId, YouTubeQuality maxQuality, Action<YouTubeUri, Exception> completed)
         {
-            return GetVideoUri(youTubeId, YouTubeQuality.Quality480P, maxQuality, completed);
+            return GetVideoUri(youTubeId, YouTubeQuality.Quality360P, maxQuality, completed);
         }
 
         public static HttpResponse GetVideoUri(string youTubeId, YouTubeQuality minQuality, YouTubeQuality maxQuality,
