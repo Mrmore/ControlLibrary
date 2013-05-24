@@ -98,6 +98,12 @@
     <SolidColorBrush x:Key="PrefixStatusSolidColorBrush">#B0DBEF</SolidColorBrush>
     <x:String x:Key="SettingsFlyoutHeaderTextDefault">Application Setting</x:String>
 
+    <!--DatePicker-->
+    <SolidColorBrush x:Key="TransparentColor" Color="Transparent"></SolidColorBrush>
+    <SolidColorBrush x:Key="WhiteColor" Color="#FFFFFF"></SolidColorBrush>
+    <SolidColorBrush x:Key="PurpleColor" Color="#FF5F37BE"></SolidColorBrush>
+    <SolidColorBrush x:Key="DarkGrayColor" Color="DarkGray"></SolidColorBrush>
+
     <Style x:Key="SettingsBackButtonStyle" TargetType="Button">
         <Setter Property="MinWidth" Value="0"/>
         <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
@@ -2778,4 +2784,162 @@
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!--DatePicker-->
+    <Style TargetType="local:PickerSelectorItem">
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="VerticalContentAlignment" Value="Bottom" />
+        <Setter Property="MinHeight" Value="10" />
+        <Setter Property="Height" Value="100" />
+        <Setter Property="MinWidth" Value="90" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="Template" >
+            <Setter.Value>
+                <ControlTemplate TargetType="local:PickerSelectorItem">
+
+                    <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" >
+
+                        <VisualStateManager.VisualStateGroups>
+                            <VisualStateGroup x:Name="Picker">
+                                <VisualState x:Name="Focused">
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="InnerGrid">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource DarkGrayColor}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource WhiteColor}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <DoubleAnimation Duration="0:0:0.200" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="InnerGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="UnFocused">
+                                    <Storyboard>
+                                        <DoubleAnimation Duration="0:0:0.200" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="InnerGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                                <VisualState x:Name="Selected" >
+                                    <Storyboard>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Background" Storyboard.TargetName="InnerGrid">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource PurpleColor}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Foreground" Storyboard.TargetName="ContentPresenter">
+                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{StaticResource WhiteColor}"/>
+                                        </ObjectAnimationUsingKeyFrames>
+                                        <DoubleAnimation Duration="0:0:0.0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="InnerGrid" />
+                                    </Storyboard>
+                                </VisualState>
+                            </VisualStateGroup>
+
+                        </VisualStateManager.VisualStateGroups>
+
+                        <Grid x:Name="InnerGrid" 
+                              Opacity="1"
+                              Margin="0,5,0,5" 
+                              Background="{StaticResource TransparentColor}">
+                            <ContentPresenter x:Name="ContentPresenter"  
+                                              Foreground="{StaticResource TransparentColor}"
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:PickerSelector">
+        <Setter Property="MinWidth" Value="91" />
+        <Setter Property="Width" Value="91" />
+        <Setter Property="MinHeight" Value="11" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="BorderThickness" Value="1,1,1,1" />
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <local:LoopItemsPickerPanel />
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:PickerSelector">
+                    <ItemsPresenter MinWidth="91" MinHeight="101" Margin="0,0,0,0" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="local:DatePicker">
+        <Setter Property="FontSize" Value="24"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:DatePicker">
+                    <Grid HorizontalAlignment="Stretch" Background="Transparent"
+                              VerticalAlignment="Stretch"  Margin="5,0,5,0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto"  />
+                            <ColumnDefinition Width="Auto"  />
+                        </Grid.ColumnDefinitions>
+
+                        <local:PickerSelector x:Name="PART_SecondarySelector" BorderThickness="1" 
+                                                Margin="5,0,5,0"
+                                                Grid.Column="0" 
+                                                VerticalAlignment="Bottom"
+                                                FontSize="{TemplateBinding FontSize}"
+                                                FontFamily="{TemplateBinding FontFamily}"
+                                                HorizontalContentAlignment="Left"
+                                                HorizontalAlignment="Left"
+                                                VerticalContentAlignment="Bottom">
+                            <local:PickerSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5,0,0,5">
+                                        <TextBlock Text="{Binding MonthNumber, Mode=TwoWay}" />
+                                        <TextBlock FontSize="10"
+                                                   Text="{Binding MonthName, Mode=TwoWay}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </local:PickerSelector.ItemTemplate>
+                        </local:PickerSelector>
+                        <local:PickerSelector x:Name="PART_TertiarySelector" BorderThickness="1" Grid.Column="1"
+                                                Margin="5,0,5,0"
+                                                FontSize="{TemplateBinding FontSize}"
+                                                FontFamily="{TemplateBinding FontFamily}">
+                            <local:PickerSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5,0,0,5">
+                                        <TextBlock Text="{Binding DayNumber, Mode=TwoWay}" />
+                                        <TextBlock FontSize="10"
+                                                       Text="{Binding DayName, Mode=TwoWay}" />
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </local:PickerSelector.ItemTemplate>
+                        </local:PickerSelector>
+                        <local:PickerSelector x:Name="PART_PrimarySelector" BorderThickness="1" Grid.Column="2"
+                                                Margin="5,0,5,0"
+                                                FontSize="{TemplateBinding FontSize}"
+                                                FontFamily="{TemplateBinding FontFamily}">
+                            <local:PickerSelector.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="5,0,0,5">
+                                        <TextBlock Text="{Binding YearNumber, Mode=TwoWay}" />
+                                        <TextBlock FontSize="10" Text=" " />
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </local:PickerSelector.ItemTemplate>
+                        </local:PickerSelector>
+                    </Grid>
+
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!---->
+    
 </ResourceDictionary>

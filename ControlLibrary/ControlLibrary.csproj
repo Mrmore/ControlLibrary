@@ -186,8 +186,16 @@
     <Compile Include="Common\AppManifestHelper.cs" />
     <Compile Include="Common\ExpandDirection.cs" />
     <Compile Include="Controls\CropImageControl\CropImageControl.cs" />
+    <Compile Include="Controls\DatePicker\DataSource.cs" />
+    <Compile Include="Controls\DatePicker\DatePicker.cs" />
+    <Compile Include="Controls\DatePicker\DateTimeWrapper.cs" />
+    <Compile Include="Controls\DatePicker\LoopItemsPickerPanel.cs" />
+    <Compile Include="Controls\DatePicker\PickerSelector.cs" />
+    <Compile Include="Controls\DatePicker\PickerSelectorItem.cs" />
     <Compile Include="Controls\Panel\CircleItemsPanel\CircleItemsPanel.cs" />
-    <Compile Include="Controls\Panel\LoopItemsPanel\LoopItemsPanel.cs" />
+    <Compile Include="Controls\Panel\LoopItemsPanel\LoopItemsPanel.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Effects\AtomizationEffects.cs" />
     <Compile Include="Effects\BlurEffect.cs" />
     <Compile Include="Effects\GrayEffect.cs" />
