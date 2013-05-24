@@ -196,6 +196,9 @@
     <Compile Include="Controls\Panel\LoopItemsPanel\LoopItemsPanel.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Controls\Shape\ArcSlice.cs" />
+    <Compile Include="Controls\Shape\PieSlice.cs" />
+    <Compile Include="Controls\Shape\RingSlice.cs" />
     <Compile Include="Effects\AtomizationEffects.cs" />
     <Compile Include="Effects\BlurEffect.cs" />
     <Compile Include="Effects\GrayEffect.cs" />
