@@ -186,6 +186,8 @@
     <Compile Include="Common\AppManifestHelper.cs" />
     <Compile Include="Common\ExpandDirection.cs" />
     <Compile Include="Controls\CropImageControl\CropImageControl.cs" />
+    <Compile Include="Controls\Panel\CircleItemsPanel\CircleItemsPanel.cs" />
+    <Compile Include="Controls\Panel\LoopItemsPanel\LoopItemsPanel.cs" />
     <Compile Include="Effects\AtomizationEffects.cs" />
     <Compile Include="Effects\BlurEffect.cs" />
     <Compile Include="Effects\GrayEffect.cs" />
@@ -413,10 +415,10 @@
     <Compile Include="Triggers\TriggerAction.cs" />
     <Compile Include="Triggers\TriggerCollection.cs" />
     <Compile Include="Triggers\ValueComparer.cs" />
-    <Compile Include="Controls\VirtualizingWrapPanel\VirtualizingWrapPanel.cs" />
-    <Compile Include="Controls\WrapPanelSil\WrapPanelSil.cs" />
-    <Compile Include="Controls\WrapPanel\OrientedSize.cs" />
-    <Compile Include="Controls\WrapPanel\WrapPanel.cs" />
+    <Compile Include="Controls\Panel\VirtualizingWrapPanel\VirtualizingWrapPanel.cs" />
+    <Compile Include="Controls\Panel\WrapPanelSil\WrapPanelSil.cs" />
+    <Compile Include="Controls\Panel\WrapPanel\OrientedSize.cs" />
+    <Compile Include="Controls\Panel\WrapPanel\WrapPanel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Themes\Generic.xaml">
