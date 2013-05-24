@@ -53,6 +53,7 @@
         <Button Content="Win8HubImage" HorizontalAlignment="Left" Margin="710,206,0,0" VerticalAlignment="Top" Width="192" Height="93" Click="Button_Click_7" />
         <Button Content="Win8HubTitleImage" HorizontalAlignment="Left" Margin="915,207,0,0" VerticalAlignment="Top" Width="192" Height="93" Click="Button_Click_8" />
 
+        <Button x:Name="BtDatePicker" Content="日期控件" HorizontalAlignment="Left" VerticalContentAlignment="Top" Margin="0,-200,0,0" Click="BtDatePicker_Click"/>
         <Button x:Name="BtCropImageControl" Content="截屏控件" HorizontalAlignment="Left" VerticalContentAlignment="Top" Margin="0,-100,0,0" Click="BtCropImageControl_Click"/>
         <Button x:Name="Btclose" Content="关闭" HorizontalAlignment="Left" VerticalContentAlignment="Top" Margin="0,0,0,0" Click="Btclose_Click_1"/>
 

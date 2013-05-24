@@ -178,5 +178,10 @@ namespace TestDemoApp
         {
             this.Frame.Navigate(typeof(CropImageControlPage));
         }
+
+        private void BtDatePicker_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(DatePickerMenuPage));
+        }
     }
 }

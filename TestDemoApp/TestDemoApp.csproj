@@ -126,6 +126,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converter\DebugConverter.cs" />
     <Compile Include="View\BlankPage.xaml.cs">
       <DependentUpon>BlankPage.xaml</DependentUpon>
     </Compile>
@@ -177,6 +178,21 @@
     <Compile Include="Model\Person.cs" />
     <Compile Include="View\CropImageControlPage.xaml.cs">
       <DependentUpon>CropImageControlPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DatePicker\DatePickerMenuPage.xaml.cs">
+      <DependentUpon>DatePickerMenuPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DatePicker\IPhoneDatePickerSample.xaml.cs">
+      <DependentUpon>IPhoneDatePickerSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DatePicker\PopupDatePickerSample.xaml.cs">
+      <DependentUpon>PopupDatePickerSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DatePicker\SimpleDatePicker.xaml.cs">
+      <DependentUpon>SimpleDatePicker.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DatePicker\WindowsPhoneDatePickerPage.xaml.cs">
+      <DependentUpon>WindowsPhoneDatePickerPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MoveOutControlBlankPage.xaml.cs">
       <DependentUpon>MoveOutControlBlankPage.xaml</DependentUpon>
@@ -239,6 +255,9 @@
     <Content Include="Images\AwesomMenu\icon-star.png" />
     <Content Include="Images\CascadingImage.jpg" />
     <Content Include="Images\ceshi123.gif" />
+    <Content Include="Images\DatePicker\DateTimePickerBackground.png" />
+    <Content Include="Images\DatePicker\DateTimePickerSelectedBar.png" />
+    <Content Include="Images\DatePicker\DateTimePickerSpecular.png" />
     <Content Include="Images\HubTile\comment1.png" />
     <Content Include="Images\HubTile\comment2.png" />
     <Content Include="Images\HubTile\comment3.png" />
@@ -370,6 +389,26 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\DatePicker\DatePickerMenuPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DatePicker\IPhoneDatePickerSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DatePicker\PopupDatePickerSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DatePicker\SimpleDatePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DatePicker\WindowsPhoneDatePickerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\MoveOutControlBlankPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -414,6 +453,7 @@
       <HintPath>..\ControlLibrary\Dll\WriteableBitmapEx.WinRT.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
     <VisualStudioVersion>11.0</VisualStudioVersion>
   </PropertyGroup>
