@@ -19,7 +19,7 @@ namespace ControlLibrary.Tools.Multimedia
     {
 
 #if WINRT || WPF || WP8 || WP7 || SL5
-		public static Task<YouTubeUri> GetVideoUriAsync(string youTubeId, YouTubeQuality maxQuality = YouTubeQuality.Quality360P)
+		public static Task<YouTubeUri> GetVideoUriAsync(string youTubeId, YouTubeQuality maxQuality = YouTubeQuality.Quality360P_MP4)
 		{
 			var task = new TaskCompletionSource<YouTubeUri>();
 			GetVideoUri(youTubeId, maxQuality, (u, e) =>
@@ -77,17 +77,26 @@ namespace ControlLibrary.Tools.Multimedia
         {
             switch (quality)
             {
-                case YouTubeQuality.Quality240P: return 36;
-                case YouTubeQuality.Quality360P: return 18;
-                case YouTubeQuality.Quality720P: return 22;
-                case YouTubeQuality.Quality1080P: return 37;
+                //mp4
+                case YouTubeQuality.Quality240P_3GP: return 36;
+                case YouTubeQuality.Quality360P_MP4: return 18;
+                case YouTubeQuality.Quality720P_MP4: return 22;
+                case YouTubeQuality.Quality1080P_MP4: return 37;
+                
+                //flv
+                case YouTubeQuality.Quality480P_FLV_44KHZ: return 35;
+                case YouTubeQuality.Quality360P_FLV_22KHZ: return 34;
+
+                //flv 格式为mp3
+                case YouTubeQuality.QualityMP3_FLV_44KHZ: return 6;
+                case YouTubeQuality.QualityMP3_FLV_22KHZ: return 5;
             }
             throw new ArgumentException("maxQuality");
         }
 
         public static HttpResponse GetVideoUri(string youTubeId, YouTubeQuality maxQuality, Action<YouTubeUri, Exception> completed)
         {
-            return GetVideoUri(youTubeId, YouTubeQuality.Quality360P, maxQuality, completed);
+            return GetVideoUri(youTubeId, YouTubeQuality.Quality360P_MP4, maxQuality, completed);
         }
 
         public static HttpResponse GetVideoUri(string youTubeId, YouTubeQuality minQuality, YouTubeQuality maxQuality,
