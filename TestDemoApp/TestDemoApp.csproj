@@ -230,6 +230,8 @@
     <None Include="CursorResource.res" />
     <None Include="Images\SlideView\Images\OnDemand\Thumbs.db" />
     <None Include="TestDemoApp_TemporaryKey.pfx" />
+    <Content Include="Video\aac.flv" />
+    <Content Include="Video\mp322.flv" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.png" />

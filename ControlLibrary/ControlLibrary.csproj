@@ -382,6 +382,8 @@
     <Compile Include="Tools\Mathematics\TrigonometryMath.cs" />
     <Compile Include="Tools\Mathematics\VectorMath.cs" />
     <Compile Include="Tools\MicrosoftStreamExtensions.cs" />
+    <Compile Include="Tools\Multimedia\AudioWriter.cs" />
+    <Compile Include="Tools\Multimedia\YouTubeFlvToMp3OrAac.cs" />
     <Compile Include="Tools\Multimedia\YouTube.cs" />
     <Compile Include="Tools\Multimedia\YouTubeQuality.cs" />
     <Compile Include="Tools\Multimedia\YouTubeThumbnailSize.cs" />

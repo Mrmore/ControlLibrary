@@ -25,6 +25,9 @@
     </Application>
   </Applications>
   <Capabilities>
+    <Capability Name="removableStorage" />
+    <Capability Name="musicLibrary" />
+    <Capability Name="privateNetworkClientServer" />
     <Capability Name="picturesLibrary" />
     <Capability Name="internetClient" />
   </Capabilities>

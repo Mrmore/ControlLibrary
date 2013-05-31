@@ -257,6 +257,34 @@ namespace ControlLibrary.GifSynthesis
             return target;
         }
 
+        public static MemoryStream ConvertIRandomAccessStreamToMemoryStream(this IRandomAccessStream randomStream)
+        {
+            Stream stream = ConvertIRandomAccessStreamToStream(randomStream);
+            MemoryStream ms = ConvertStreamToMemoryStream(stream);
+            return ms;
+        }
+
+        public static Stream ConvertIRandomAccessStreamToStream(this IRandomAccessStream randomStream)
+        {
+            Stream stream = WindowsRuntimeStreamExtensions.AsStreamForRead(randomStream.GetInputStreamAt(0));
+            return stream;
+        }
+
+        public static MemoryStream ConvertStreamToMemoryStream(this Stream stream)
+        {
+            MemoryStream memoryStream = new MemoryStream();
+            if (stream != null)
+            {
+                byte[] buffer = ConvertStreamTobyte(stream);
+                if (buffer != null)
+                {
+                    var binaryWriter = new BinaryWriter(memoryStream);
+                    binaryWriter.Write(buffer);
+                }
+            }
+            return memoryStream;
+        }
+
         public static byte[] ConvertStreamTobyte(this Stream input)
         {
             byte[] buffer = new byte[16 * 1024];

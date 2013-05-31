@@ -15,6 +15,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using NotificationsExtensions.ToastContent;
+using Windows.Storage.Streams;
+using ControlLibrary.Tools.Multimedia;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -25,6 +27,8 @@ namespace TestDemoApp
     /// </summary>
     public sealed partial class BlankPage : Page
     {
+        private Uri baseUri = new Uri("ms-appx:///");
+
         public BlankPage()
         {
             this.InitializeComponent();
@@ -182,6 +186,19 @@ namespace TestDemoApp
         private void BtDatePicker_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(DatePickerMenuPage));
+        }
+
+        private async void BtFlvToMp3OrAac_Click(object sender, RoutedEventArgs e)
+        {
+            //var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.baseUri, "Video/mp322.flv"));
+            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.baseUri, "Video/aac.flv"));
+            var streamRandom = await rass.OpenReadAsync();
+
+            using (YouTubeFlvToMp3OrAac youTubeFlvToMp3OrAac = new YouTubeFlvToMp3OrAac("aac", streamRandom))
+            {
+                youTubeFlvToMp3OrAac.ExtractStreams();
+                youTubeFlvToMp3OrAac.Dispose();
+            }
         }
     }
 }
