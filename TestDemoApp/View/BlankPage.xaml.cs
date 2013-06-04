@@ -200,5 +200,11 @@ namespace TestDemoApp
                 youTubeFlvToMp3OrAac.Dispose();
             }
         }
+
+        private async void BtYouTube_Click(object sender, RoutedEventArgs e)
+        {
+            var youtubeurl = YouTube.GetYouTubeId("http://www.youtube.com/watch?v=eAX85PXl408");
+            var url = await YouTube.GetVideoUriAsync(youtubeurl, YouTubeQuality.QualityMP3_FLV_22KHZ);
+        }
     }
 }

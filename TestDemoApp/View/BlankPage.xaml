@@ -75,6 +75,8 @@
 
         <Button x:Name="BtTriggers" Content="触发器" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,620,0,0" Click="BtTriggers_Click"/>
 
+        <Button x:Name="BtYouTube" Content="YouTube解析" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,660,0,0" Click="BtYouTube_Click"/>
+
         <Button Content="测试微软的原生动画" HorizontalAlignment="Left" Margin="1124,207,0,0" VerticalAlignment="Top" Width="92" Height="93" Click="Button_Click_9"/>
         <Button Content="FilpView" HorizontalAlignment="Left" Margin="1224,207,0,0" VerticalAlignment="Top" Width="92" Height="93" Click="Button_Click_10"/>
     </Grid>

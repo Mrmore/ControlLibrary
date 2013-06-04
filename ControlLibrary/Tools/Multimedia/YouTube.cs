@@ -27,13 +27,147 @@ namespace ControlLibrary.Tools.Multimedia
 				if (u != null)
 					task.SetResult(u);
 				else if (e == null)
-					task.SetCanceled();
+                    task.SetResult(u);
+					//task.SetCanceled();
 				else
 					task.SetException(e);
 			});
 			return task.Task;
 		}
 #endif
+
+#if WINRT    
+        public static string GetYouTubeUrl(string txtUrl)
+        {     
+            string url = txtUrl.Trim();
+
+            if (url.StartsWith("https://")) url = "http://" + url.Substring(8);
+            else if (!url.StartsWith("http://")) url = "http://" + url;
+
+            url = url.Replace("youtu.be/", "youtube.com/watch?v=");
+            url = url.Replace("www.youtube.com", "youtube.com");
+
+            if (url.StartsWith("http://youtube.com/v/"))
+                url = url.Replace("youtube.com/v/", "youtube.com/watch?v=");
+            else if (url.StartsWith("http://youtube.com/watch#"))
+                url = url.Replace("youtube.com/watch#", "youtube.com/watch?");
+
+            if (!url.StartsWith("http://youtube.com/watch"))
+            {
+                return string.Empty;
+            }
+            return url;
+        }
+
+        public static string GetYouTubeId(string txtUrl)
+        {
+            string url = txtUrl.Trim();
+
+            if (url.StartsWith("https://")) url = "http://" + url.Substring(8);
+            else if (!url.StartsWith("http://")) url = "http://" + url;
+
+            url = url.Replace("youtu.be/", "youtube.com/watch?v=");
+            url = url.Replace("www.youtube.com", "youtube.com");
+
+            if (url.StartsWith("http://youtube.com/watch#"))
+            {
+                url = url.Replace("youtube.com/watch#", "youtube.com/watch?");
+            }
+
+            if (url.StartsWith("http://youtube.com/watch?"))
+            {
+                url = url.Replace("http://youtube.com/watch?v=", "").TrimStart();
+            }
+            return url;
+        }
+
+        public static Task<List<YouTubeUri>> GetVideoAllUrisAsync(string youTubeId)
+        {
+            var task = new TaskCompletionSource<List<YouTubeUri>>();
+			GetVideoAllUris(youTubeId, (u, e) =>
+			{
+				if (u != null)
+					task.SetResult(u);
+				else if (e == null)
+					task.SetCanceled();
+				else
+					task.SetException(e);
+			});
+			return task.Task;
+        }
+
+        private static HttpResponse GetVideoAllUris(string youTubeId, Action<List<YouTubeUri>, Exception> completed)
+        {
+            return Http.Get("https://www.youtube.com/watch?v=" + youTubeId + "&nomobile=1",
+                r => OnHtmlParse(r, completed));
+        }
+
+        private static void OnHtmlParse(HttpResponse response, Action<List<YouTubeUri>, Exception> completed)
+        {
+            if (response.Successful)
+            {
+                var urls = new List<YouTubeUri>();
+                try
+                {
+                    var match = Regex.Match(response.Response, "url_encoded_fmt_stream_map\": \"(.*?)\"");
+                    var data = Uri.UnescapeDataString(match.Groups[1].Value);
+
+                    var arr = Regex.Split(data, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // split by comma but outside quotes
+                    foreach (var d in arr)
+                    {
+                        var url = "";
+                        var signature = "";
+                        var tuple = new YouTubeUri();
+                        foreach (var p in d.Replace("\\u0026", "\t").Split('\t'))
+                        {
+                            var index = p.IndexOf('=');
+                            if (index != -1 && index < p.Length)
+                            {
+                                try
+                                {
+                                    var key = p.Substring(0, index);
+                                    var value = Uri.UnescapeDataString(p.Substring(index + 1));
+                                    if (key == "url")
+                                        url = value;
+                                    else if (key == "itag")
+                                        tuple.Itag = int.Parse(value);
+                                    //else if (key == "type" && value.Contains("video/mp4"))
+                                    else if (key == "type")
+                                        tuple.Type = value;
+                                    else if (key == "sig")
+                                        signature = value;
+                                }
+                                catch { }
+                            }
+                        }
+
+                        tuple.url = url + "&signature=" + signature;
+                        if (tuple.IsValid)
+                            urls.Add(tuple);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (completed != null)
+                        completed(null, ex);
+                    return;
+                }
+
+                //降序排列
+                var entry = urls.OrderByDescending(u => u.Itag).ToList();
+                if (entry != null)
+                {
+                    if (completed != null)
+                        completed(entry, null);
+                }
+                else if (completed != null)
+                    completed(null, new Exception("no_video_urls_found"));
+            }
+            else if (completed != null)
+                completed(null, response.Exception);
+        }
+#endif
+
 #if WINRT || WP8 || WP7 || SL5
 		public static async Task<string> GetVideoTitleAsync(string youTubeId) // should be improved
 		{
@@ -73,7 +207,7 @@ namespace ControlLibrary.Tools.Multimedia
             throw new Exception();
         }
 
-        private static int GetQualityIdentifier(YouTubeQuality quality)
+        public static int GetQualityIdentifier(YouTubeQuality quality)
         {
             switch (quality)
             {
@@ -135,7 +269,8 @@ namespace ControlLibrary.Tools.Multimedia
                                         url = value;
                                     else if (key == "itag")
                                         tuple.Itag = int.Parse(value);
-                                    else if (key == "type" && value.Contains("video/mp4"))
+                                    //else if (key == "type" && value.Contains("video/mp4"))
+                                    else if (key == "type")
                                         tuple.Type = value;
                                     else if (key == "sig")
                                         signature = value;
@@ -168,7 +303,8 @@ namespace ControlLibrary.Tools.Multimedia
                         completed(entry, null);
                 }
                 else if (completed != null)
-                    completed(null, new Exception("no_video_urls_found"));
+                    //completed(null, new Exception("no_video_urls_found"));
+                    completed(entry, null);
             }
             else if (completed != null)
                 completed(null, response.Exception);
