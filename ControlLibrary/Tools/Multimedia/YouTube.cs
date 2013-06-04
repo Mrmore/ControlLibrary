@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ControlLibrary.Extensions;
 
 #if WP7 || WP8
 using Microsoft.Phone.Shell;
@@ -81,17 +82,147 @@ namespace ControlLibrary.Tools.Multimedia
             return url;
         }
 
-        public static Task<List<YouTubeUri>> GetVideoAllUrisAsync(string youTubeId)
+        public string FormatCodeToQuality(int formatCode, bool audio = false)
         {
+            string formatDescription = "";
+
+            switch (formatCode)
+            {
+                #region Webm
+                case 43:
+                    formatDescription = (audio) ? "" : "WebM Video 360p (*.webm)|*.webm|";
+                    break;
+
+                case 44:
+                    formatDescription = (audio) ? "" : "WebM Video 480p (*.webm)|*.webm|";
+                    break;
+
+                case 45:
+                    formatDescription = (audio) ? "" : "WebM HD Video 720p (*.webm)|*.webm|";
+                    break;
+
+                case 46:
+                    formatDescription = (audio) ? "" : "WebM Full HD Video 1080p (*.webm)|*.webm|";
+                    break;
+                #endregion
+
+                #region Mp4
+                case 37:
+                    formatDescription = (audio) ? "" : "Full HD 1080p (*.mp4)|*.mp4|";
+                    break;
+
+                case 22:
+                    formatDescription = (audio) ? "" : "HD 720p (*.mp4)|*.mp4|";
+                    break;
+
+                case 18:
+                    formatDescription = (audio) ? "" : "Standard Youtube Qualty 360p (*.mp4)|*.mp4|";
+                    break;
+
+                case 38:
+                    formatDescription = (audio) ? "" : "4K Resolution (*.mp4)|*.mp4|";
+                    break;
+
+                case 82:
+                    formatDescription = (audio) ? "" : "3D Standard Youtube Qualty 360p (*.mp4)|*.mp4|";
+                    break;
+
+                case 84:
+                    formatDescription = (audio) ? "" : "3D HD 720p (*.mp4)|*.mp4|";
+                    break;
+                #endregion
+
+                #region Flv
+                case 35:
+                    formatDescription = (audio) ? "[HQ] Advanced Audio Coding [44KHz] (*.aac)|*.aac|" : "HQ Flash Video 480p (*.flv)|*.flv|";
+                    break;
+
+                case 34:
+                    formatDescription = (audio) ? "[HQ] Advanced Audio Coding [22KHz] (*.aac)|*.aac|" : "LQ Flash Video 360p [AAC] (*.flv)|*.flv|";
+                    break;
+
+                case 6:
+                    formatDescription = (audio) ? "MP3 Audio [44KHz] (*.mp3)|*.mp3|" : "LQ Flash Video [MP3.44KHz] (*.flv)|*.flv|";
+                    break;
+
+                case 5:
+                    formatDescription = (audio) ? "MP3 Audio [22KHz] (*.mp3)|*.mp3|" : "LQ Flash Video [MP3.22KHz] (*.flv)|*.flv|";
+                    break;
+                #endregion
+
+                #region 3gp
+                case 13:
+                    formatDescription = (audio) ? "" : "Mobile Video XX-Small (*.3gp)|*.3gp|";
+                    break;
+
+                case 17:
+                    formatDescription = (audio) ? "" : "Mobile Video X-Small (*.3gp)|*.3gp|";
+                    break;
+
+                case 36:
+                    formatDescription = (audio) ? "" : "Mobile Video Small (*.3gp)|*.3gp|";
+                    break;
+                #endregion
+
+                default:
+                    // New Format?
+                    formatDescription = "";
+                    break;
+            }
+
+            return formatDescription;
+        }
+
+        private static List<int> FormatCodeFlvOrMp3 = new List<int>() { 35, 34, 5, 6 };
+        private static List<int> FormatCodeMp4 = new List<int>() { 18, 22, 37 };
+        private static List<int> FormatCodeQuality = new List<int>() { 36, 35, 34, 5, 6, 18, 22, 37 };
+
+        
+        public static Task<List<YouTubeUri>> GetVideoAllUrisAsync(string youTubeId, YouTubeFormat youTubeFormat = YouTubeFormat.All)
+        {   
             var task = new TaskCompletionSource<List<YouTubeUri>>();
 			GetVideoAllUris(youTubeId, (u, e) =>
 			{
 				if (u != null)
-					task.SetResult(u);
-				else if (e == null)
-					task.SetCanceled();
-				else
-					task.SetException(e);
+                {
+                    List<YouTubeUri> result = null;
+                    if (youTubeFormat == YouTubeFormat.All)
+                    {
+                        result = u;
+                    }
+                    else if (youTubeFormat == YouTubeFormat.Flv || youTubeFormat == YouTubeFormat.Mp3)
+                    {
+                        //List<int> result = u.Select(uAll => uAll.Itag).Concat(FormatCodeFlvOrMp3).ToList();
+
+                        result = (from uAll in u
+                                  from flvOrMp3 in FormatCodeFlvOrMp3
+                                  where uAll.Itag == flvOrMp3
+                                  select uAll).ToList();
+                    }
+                    else if (youTubeFormat == YouTubeFormat.Mp4)
+                    {
+                        result = (from uAll in u
+                                  from mp4 in FormatCodeMp4
+                                  where uAll.Itag == mp4
+                                  select uAll).ToList();
+                    }
+                    else
+                    {
+                        result = (from uAll in u
+                                  from quality in FormatCodeQuality
+                                  where uAll.Itag == quality
+                                  select uAll).ToList();
+                    }
+                    task.SetResult(result);
+                }
+                else if (e == null)
+                {
+                    //task.SetCanceled();
+
+                    task.SetResult(u);
+                }
+                else
+                    task.SetException(e);
 			});
 			return task.Task;
         }
@@ -131,8 +262,8 @@ namespace ControlLibrary.Tools.Multimedia
                                         url = value;
                                     else if (key == "itag")
                                         tuple.Itag = int.Parse(value);
-                                    //else if (key == "type" && value.Contains("video/mp4"))
-                                    else if (key == "type")
+                                    //else if (key == "type" && value.Contains("video/mp4")) //只获取Mp4
+                                    else if (key == "type") //获取全部
                                         tuple.Type = value;
                                     else if (key == "sig")
                                         signature = value;
@@ -269,8 +400,8 @@ namespace ControlLibrary.Tools.Multimedia
                                         url = value;
                                     else if (key == "itag")
                                         tuple.Itag = int.Parse(value);
-                                    //else if (key == "type" && value.Contains("video/mp4"))
-                                    else if (key == "type")
+                                    //else if (key == "type" && value.Contains("video/mp4")) //只获取Mp4
+                                    else if (key == "type") //获取全部
                                         tuple.Type = value;
                                     else if (key == "sig")
                                         signature = value;
