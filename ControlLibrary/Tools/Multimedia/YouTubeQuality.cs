@@ -12,35 +12,35 @@ namespace ControlLibrary.Tools.Multimedia
     public enum YouTubeQuality
     {
         /// <summary>
-        /// .3gp MS
+        /// .3gp MS code 36
         /// </summary>
         Quality240P_3GP = 36,
         /// <summary>
-        /// .mp4 SQ
+        /// .mp4 SQ code 18
         /// </summary>
         Quality360P_MP4 = 18,//常用
         /// <summary>
-        /// .mp4 HD
+        /// .mp4 HD code 22
         /// </summary>
         Quality720P_MP4 = 22,//常用
         /// <summary>
-        /// .mp4 Full HD
+        /// .mp4 Full HD code 37
         /// </summary>
         Quality1080P_MP4 = 37,//常用
         /// <summary>
-        /// .flv HQ 44khz
+        /// .flv HQ 44khz code 35
         /// </summary>
         Quality480P_FLV_44KHZ = 35,//转码用
         /// <summary>
-        /// .flv HQ 22khz
+        /// .flv HQ 22khz code 34
         /// </summary>
         Quality360P_FLV_22KHZ = 34,//转码用
         /// <summary>
-        /// .flv LQ mp3.44khz
+        /// .flv LQ mp3.44khz code 6
         /// </summary>
         QualityMP3_FLV_44KHZ = 6,//转码用(一般没有这种)
         /// <summary>
-        /// .flv LQ mp3.22khz
+        /// .flv LQ mp3.22khz code 5
         /// </summary>
         QualityMP3_FLV_22KHZ = 5,//转码用
     }

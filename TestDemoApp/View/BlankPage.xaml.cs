@@ -204,7 +204,15 @@ namespace TestDemoApp
         private async void BtYouTube_Click(object sender, RoutedEventArgs e)
         {
             var youtubeurl = YouTube.GetYouTubeId("http://www.youtube.com/watch?v=eAX85PXl408");
-            var url = await YouTube.GetVideoUriAsync(youtubeurl, YouTubeQuality.QualityMP3_FLV_22KHZ);
+            //获取相对应源的Uri地址
+            var url = await YouTube.GetVideoUriAsync(youtubeurl, YouTubeQuality.QualityMP3_FLV_44KHZ);
+
+            //获取所有源的Uri地址列表
+            var uriAllList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.All);
+            var uriFlvOrMp3List = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Flv);
+            var uriMp3OrFlvList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Mp3);
+            var uriMp4List = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Mp4);
+            var uriQualityList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.YouTubeQuality);
         }
     }
 }

@@ -82,7 +82,7 @@ namespace ControlLibrary.Tools.Multimedia
             return url;
         }
 
-        public string FormatCodeToQuality(int formatCode, bool audio = false)
+        public static string FormatCodeToQuality(int formatCode, bool audio = false)
         {
             string formatDescription = "";
 
@@ -361,7 +361,7 @@ namespace ControlLibrary.Tools.Multimedia
 
         public static HttpResponse GetVideoUri(string youTubeId, YouTubeQuality maxQuality, Action<YouTubeUri, Exception> completed)
         {
-            return GetVideoUri(youTubeId, YouTubeQuality.Quality360P_MP4, maxQuality, completed);
+            return GetVideoUri(youTubeId, YouTubeQuality.QualityMP3_FLV_22KHZ, maxQuality, completed);
         }
 
         public static HttpResponse GetVideoUri(string youTubeId, YouTubeQuality minQuality, YouTubeQuality maxQuality,
@@ -417,7 +417,8 @@ namespace ControlLibrary.Tools.Multimedia
 
                     var minTag = GetQualityIdentifier(minQuality);
                     var maxTag = GetQualityIdentifier(maxQuality);
-                    foreach (var u in urls.Where(u => u.Itag < minTag || u.Itag > maxTag).ToArray())
+                    //foreach (var u in urls.Where(u => u.Itag < minTag || u.Itag > maxTag).ToArray()) //得到相对命中的,如果没用命中绝对项,会找到目标项[上一级或下一级(相邻)]的项
+                    foreach (var u in urls.Where(u => u.Itag <= minTag || u.Itag >= maxTag).ToArray()) //得到绝对命中的
                         urls.Remove(u);
                 }
                 catch (Exception ex)
