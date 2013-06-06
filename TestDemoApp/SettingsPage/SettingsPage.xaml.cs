@@ -25,6 +25,10 @@ namespace TestDemoApp
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        private SettingsPaneCommandsRequestedEventArgs settingsPaneCommands = null;
+        private SettingsCommand cmd = null;
+        SettingsCommand cmd1 = null;
+
         public SettingsPage()
         {
             this.InitializeComponent();
@@ -49,7 +53,10 @@ namespace TestDemoApp
 
         private void BlankPage_CommandsRequested(SettingsPane sender, SettingsPaneCommandsRequestedEventArgs args)
         {
-            SettingsCommand cmd = new SettingsCommand("第三项", "第三项", (x) =>
+            //设置面板打开就会进,所以外面做按钮调用删除,也不起作用,
+            //除非在App设置跳转内部写(CommandsRequested)里实现.
+            settingsPaneCommands = args;
+            cmd = new SettingsCommand("第三项", "第三项", (x) =>
             {
                 SettingsFlyout settings = new SettingsFlyout();
                 settings.FlyoutWidth = (SettingsFlyout.SettingsFlyoutWidth)Enum.Parse(typeof(SettingsFlyout.SettingsFlyoutWidth), settingswidth.SelectionBoxItem.ToString());
@@ -61,9 +68,9 @@ namespace TestDemoApp
                 settings.IsOpen = true;
             });
 
-            args.Request.ApplicationCommands.Add(cmd);
+            settingsPaneCommands.Request.ApplicationCommands.Add(cmd);
 
-            SettingsCommand cmd1 = new SettingsCommand("第四项", "第四项", (x) =>
+            cmd1 = new SettingsCommand("第四项", "第四项", (x) =>
             {
                 SettingsFlyout settings = new SettingsFlyout();
                 settings.FlyoutWidth = (SettingsFlyout.SettingsFlyoutWidth)Enum.Parse(typeof(SettingsFlyout.SettingsFlyoutWidth), settingswidth.SelectionBoxItem.ToString());
@@ -75,7 +82,7 @@ namespace TestDemoApp
                 settings.IsOpen = true;
             });
 
-            args.Request.ApplicationCommands.Add(cmd1);
+            settingsPaneCommands.Request.ApplicationCommands.Add(cmd1);
         }
 
         private void ShowSettings(object sender, RoutedEventArgs e)
@@ -86,6 +93,11 @@ namespace TestDemoApp
         private void bt_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.GoBack();
+        }
+
+        private void btRemoveSetting_Click(object sender, RoutedEventArgs e)
+        {
+            settingsPaneCommands.Request.ApplicationCommands.Remove(cmd);
         }
     }
 }

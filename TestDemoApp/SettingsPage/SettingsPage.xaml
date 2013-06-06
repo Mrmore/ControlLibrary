@@ -17,5 +17,6 @@
             </ComboBox>
             <Button Content="Show Settings" Click="ShowSettings" />
         </StackPanel>
+        <Button x:Name="btRemoveSetting" Content="删除一个Setting" HorizontalAlignment="Left" VerticalAlignment="Top" Click="btRemoveSetting_Click" Margin="107,0,0,0"/>
     </Grid>
 </Page>

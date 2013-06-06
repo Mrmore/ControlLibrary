@@ -33,7 +33,8 @@ namespace ControlLibrary.SettingsManagement
         private SettingsFlyout _settingsFlyout;
         private BitmapImage _smallLogoImageSource;
         private static readonly object SyncRoot = new object();
-        private VisualElement _visualElement;     
+        private VisualElement _visualElement;
+        private SettingsPane appSettings = null;
         #endregion
         
         #region constructors
@@ -147,9 +148,12 @@ namespace ControlLibrary.SettingsManagement
         #region Configure
         private async void Configure()
         {
+            appSettings = SettingsPane.GetForCurrentView();
             _visualElement = await AppManifestHelper.GetManifestVisualElementsAsync();
             _smallLogoImageSource = new BitmapImage(_visualElement.SmallLogoUri);
-            SettingsPane.GetForCurrentView().CommandsRequested += Current.CommandsRequested;
+            appSettings.CommandsRequested -= Current.CommandsRequested;
+            appSettings.CommandsRequested += Current.CommandsRequested;
+            //SettingsPane.GetForCurrentView().CommandsRequested += Current.CommandsRequested;
         }
         #endregion
 
@@ -204,6 +208,14 @@ namespace ControlLibrary.SettingsManagement
                 var e = new SettingChangedEventArgs(settingName);
                 handler(this, e);
             }
+        }
+        #endregion
+
+        #region RemoveConfigureSettings
+        public void ResetConfigureSettings()
+        {
+            //SettingsPane.GetForCurrentView().CommandsRequested -= Current.CommandsRequested;
+            appSettings.CommandsRequested -= Current.CommandsRequested;
         }
         #endregion
 

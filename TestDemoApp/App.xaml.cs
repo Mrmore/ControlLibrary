@@ -52,6 +52,7 @@ namespace TestDemoApp
             AppSettings.Current.AddCommand<SettingsContent>("第一项", new SolidColorBrush(Colors.Red), SettingsFlyout.SettingsFlyoutWidth.Wide);
             AppSettings.Current.AddCommand<SettingsContent>("第二项", SettingsFlyout.SettingsFlyoutWidth.Wide);
             AppSettings.Current.AddCommand<SettingsContent>("第五项", new SolidColorBrush(Colors.Green), SettingsFlyout.SettingsFlyoutWidth.Wide);
+            //AppSettings.Current.ResetConfigureSettings();
 
             VisualElements = await AppManifestHelper.GetManifestVisualElementsAsync();
             // Do not repeat app initialization when already running, just ensure that
