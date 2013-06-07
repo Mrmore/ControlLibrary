@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using TestDemoApp.Helper;
+using TestDemoApp.Helper.System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -54,7 +56,11 @@ namespace TestDemoApp
             AppSettings.Current.AddCommand<SettingsContent>("第五项", new SolidColorBrush(Colors.Green), SettingsFlyout.SettingsFlyoutWidth.Wide);
             //AppSettings.Current.ResetConfigureSettings();
 
+            //测试放在一起一个时机
+            SystemSettingHelper.Instance.Init();
+
             VisualElements = await AppManifestHelper.GetManifestVisualElementsAsync();
+
             // Do not repeat app initialization when already running, just ensure that
             // the window is active
             if (args.PreviousExecutionState == ApplicationExecutionState.Running)

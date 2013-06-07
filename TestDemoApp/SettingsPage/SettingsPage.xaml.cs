@@ -27,7 +27,7 @@ namespace TestDemoApp
     {
         private SettingsPaneCommandsRequestedEventArgs settingsPaneCommands = null;
         private SettingsCommand cmd = null;
-        SettingsCommand cmd1 = null;
+        private SettingsCommand cmd1 = null;
 
         public SettingsPage()
         {
