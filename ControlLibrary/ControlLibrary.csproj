@@ -209,9 +209,16 @@
     <Compile Include="Effects\SegmentEffect.cs" />
     <Compile Include="Effects\SharpenEffect.cs" />
     <Compile Include="Effects\SunlightEffect.cs" />
+    <Compile Include="Extensions\AsyncAwaitExtensions\BitmapImageAsyncAwaitExtensions.cs" />
+    <Compile Include="Extensions\AsyncAwaitExtensions\ControlAsyncAwaitExtensions.cs" />
+    <Compile Include="Extensions\AsyncAwaitExtensions\FrameworkElementAsyncAwaitExtensions.cs" />
+    <Compile Include="Extensions\AsyncAwaitExtensions\ScrollViewerAsyncAwaitExtensions.cs" />
+    <Compile Include="Extensions\AsyncAwaitExtensions\SelectorAsyncAwaitExtensions.cs" />
+    <Compile Include="Extensions\AsyncAwaitExtensions\WriteableBitmapAsyncAwaitExtensions.cs" />
     <Compile Include="Extensions\DoubleExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
+    <Compile Include="Extensions\ScrollViewerExtensions.cs" />
     <Compile Include="Extensions\StoryboardExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\VisualTreeHelperExtensions.cs" />
@@ -250,7 +257,7 @@
     <Compile Include="Extensions\Extensions.cs" />
     <Compile Include="Extensions\FrameworkElementExtensions.cs" />
     <Compile Include="Extensions\IEnumerableToObservableCollection.cs" />
-    <Compile Include="Extensions\StoryboardAsyncAwaitExtensions.cs" />
+    <Compile Include="Extensions\AsyncAwaitExtensions\StoryboardAsyncAwaitExtensions.cs" />
     <Compile Include="Extensions\VisualTreeAdapter.cs" />
     <Compile Include="GifSynthesis\AnimatedGifEncoder.cs" />
     <Compile Include="GifSynthesis\GifInformation.cs" />
