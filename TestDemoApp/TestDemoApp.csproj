@@ -109,6 +109,10 @@
       <Project>{44cf0b68-7375-4ffa-9a42-350f45533281}</Project>
       <Name>ControlLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\LauncherTaskHelper\LauncherTaskHelper.csproj">
+      <Project>{a703dd2c-1eb8-4ede-9001-55a73dc63d96}</Project>
+      <Name>LauncherTaskHelper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NotificationsExtensions\NotificationsExtensions.csproj">
       <Project>{5f0af0d0-2007-4499-ba0f-d44e2931cda6}</Project>
       <Name>NotificationsExtensions</Name>
