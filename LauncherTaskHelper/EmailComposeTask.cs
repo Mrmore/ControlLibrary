@@ -10,6 +10,11 @@ namespace LauncherTaskHelper
 {
     public sealed class EmailComposeTask : IEmailComposeTask
     {
+        //ep:
+        //"mailto:test@somedomain.com"
+        //"mailto:?to=test@somedomain.com&subject=Some subject&body=Some other content."
+
+        //private const string URLMASK = "mailto:?to={0}&subject={1}&body={2}";
         private const string URLMASK = "mailto:{0}?subject={1}&body={2}";
 
         public string To
@@ -32,7 +37,7 @@ namespace LauncherTaskHelper
 
         public IAsyncOperation<bool> Show()
 		{
-			string uriString = string.Format("mailto:{0}?subject={1}&body={2}", new object[]
+            string uriString = string.Format(URLMASK, new object[]
 			{
 				this.To,
 				EmailComposeTask.Encode(this.Subject),
