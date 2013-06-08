@@ -17,6 +17,7 @@ using Windows.UI.Xaml.Navigation;
 using NotificationsExtensions.ToastContent;
 using Windows.Storage.Streams;
 using ControlLibrary.Tools.Multimedia;
+using TestDemoApp.Helper.System;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -213,6 +214,13 @@ namespace TestDemoApp
             var uriMp3OrFlvList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Mp3);
             var uriMp4List = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Mp4);
             var uriQualityList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.YouTubeQuality);
+        }
+
+        private void BtShare_Click(object sender, RoutedEventArgs e)
+        {
+            SystemShareHelper.Instance.Init();
+            //http://www.youtube.com/channel/HCp-Rdqh3z4Uc  http://blogs.msdn.com/b/b8/
+            SystemShareHelper.Instance.ShowShare("你好啊小陈er", "http://www.youtube.com/channel/HCp-Rdqh3z4Uc", "http://ww3.sinaimg.cn/bmiddle/67c1cd54jw1e5gz0kz5hij20zz14r0xi.jpg", "测试测试测试");
         }
     }
 }

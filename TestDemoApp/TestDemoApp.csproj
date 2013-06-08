@@ -132,6 +132,7 @@
     </Compile>
     <Compile Include="Converter\DebugConverter.cs" />
     <Compile Include="Helper\System\SystemSettingHelper.cs" />
+    <Compile Include="Helper\System\SystemShareHelper.cs" />
     <Compile Include="View\BlankPage.xaml.cs">
       <DependentUpon>BlankPage.xaml</DependentUpon>
     </Compile>
