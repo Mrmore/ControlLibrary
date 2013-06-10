@@ -18,6 +18,7 @@ using NotificationsExtensions.ToastContent;
 using Windows.Storage.Streams;
 using ControlLibrary.Tools.Multimedia;
 using TestDemoApp.Helper.System;
+using NotificationsExtensions.TileContent;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -221,6 +222,32 @@ namespace TestDemoApp
             SystemShareHelper.Instance.Init();
             //http://www.youtube.com/channel/HCp-Rdqh3z4Uc  http://blogs.msdn.com/b/b8/
             SystemShareHelper.Instance.ShowShare("你好啊小陈er", "http://www.youtube.com/channel/HCp-Rdqh3z4Uc", "http://ww3.sinaimg.cn/bmiddle/67c1cd54jw1e5gz0kz5hij20zz14r0xi.jpg", "测试测试测试");
+        }
+
+        private void UpdateTile()
+        {
+            ITileWidePeekImage05 tileContent = TileContentFactory.CreateTileWidePeekImage05();
+
+            tileContent.ImageMain.Src = "http://ww3.sinaimg.cn/bmiddle/643be833jw1e5jg5horgij20dc0hsabq.jpg";
+            tileContent.ImageSecondary.Src = "http://ww1.sinaimg.cn/bmiddle/643be833jw1e5jg5ioqhpj20dc0hsmyk.jpg";
+            tileContent.TextHeading.Text = "可可曾";
+            tileContent.TextBodyWrap.Text = "Mat"+ ":" + "马童";
+
+            ITileSquareImage squareContent = TileContentFactory.CreateTileSquareImage();
+
+            squareContent.Image.Src = "http://ww4.sinaimg.cn/bmiddle/643be833jw1e5jg5l8dapj20hs0dcwga.jpg";
+            squareContent.Image.Alt = "Web image";
+
+            // include the square template.
+            tileContent.SquareContent = squareContent;
+
+            // send the notification to the app's application tile
+            TileUpdateManager.CreateTileUpdaterForApplication().Update(tileContent.CreateNotification());
+        }
+
+        private void BtTile_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateTile();
         }
     }
 }
