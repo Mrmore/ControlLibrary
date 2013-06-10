@@ -233,13 +233,23 @@ namespace TestDemoApp
             tileContent.TextHeading.Text = "可可曾";
             tileContent.TextBodyWrap.Text = "Mat"+ ":" + "马童";
 
+            /*
             ITileSquareImage squareContent = TileContentFactory.CreateTileSquareImage();
 
             squareContent.Image.Src = "http://ww4.sinaimg.cn/bmiddle/643be833jw1e5jg5l8dapj20hs0dcwga.jpg";
             squareContent.Image.Alt = "Web image";
+            */ 
+
+            ITileSquarePeekImageAndText02 squareImageAndTextContent = TileContentFactory.CreateTileSquarePeekImageAndText02();
+
+            squareImageAndTextContent.Image.Src = "http://ww4.sinaimg.cn/bmiddle/643be833jw1e5jg5l8dapj20hs0dcwga.jpg";
+            squareImageAndTextContent.Image.Alt = "Web image";
+            squareImageAndTextContent.TextHeading.Text = string.Format("{0:t}", DateTime.Now);
+            squareImageAndTextContent.TextBodyWrap.Text = "Here is some text that is displayed on the peek";
 
             // include the square template.
-            tileContent.SquareContent = squareContent;
+            //tileContent.SquareContent = squareContent;
+            tileContent.SquareContent = squareImageAndTextContent;
 
             // send the notification to the app's application tile
             TileUpdateManager.CreateTileUpdaterForApplication().Update(tileContent.CreateNotification());
