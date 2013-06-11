@@ -16,12 +16,21 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="TestDemoApp.App">
       <VisualElements DisplayName="TestDemoApp" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="TestDemoApp" ForegroundText="light" BackgroundColor="#464646" ToastCapable="true">
+        <LockScreen Notification="badge" BadgeLogo="Assets\BadgeLogo.png" />
         <DefaultTile ShowName="allLogos" WideLogo="Assets\WideLogo.png" />
         <SplashScreen Image="Assets\SplashScreen.png" />
         <InitialRotationPreference>
           <Rotation Preference="landscape" />
         </InitialRotationPreference>
       </VisualElements>
+      <Extensions>
+        <Extension Category="windows.backgroundTasks" EntryPoint="Tasks.Library.NotificationTileUpdateTask">
+          <BackgroundTasks>
+            <Task Type="systemEvent" />
+            <Task Type="timer" />
+          </BackgroundTasks>
+        </Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>

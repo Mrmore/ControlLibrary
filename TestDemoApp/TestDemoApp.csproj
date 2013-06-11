@@ -117,6 +117,10 @@
       <Project>{5f0af0d0-2007-4499-ba0f-d44e2931cda6}</Project>
       <Name>NotificationsExtensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Tasks.Library\Tasks.Library.csproj">
+      <Project>{0cca2d6d-6bf1-4f1c-a2e5-892ccba6db7b}</Project>
+      <Name>Tasks.Library</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WinRtCacheHelper\WinRtCacheHelper.csproj">
       <Project>{0e893256-daa3-4155-8abb-ed4fae5f045e}</Project>
       <Name>WinRtCacheHelper</Name>

@@ -1,6 +1,7 @@
 ﻿using ControlLibrary;
 using ControlLibrary.Common;
 using ControlLibrary.SettingsManagement;
+using ControlLibrary.Tools;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -73,6 +75,11 @@ namespace TestDemoApp
             {
                 //TODO: Load state from previously suspended application
             }
+
+            var localsettings = ApplicationData.Current.LocalSettings;
+            var tile = new NotificationTileUpdateTaskRegistration();
+            tile.CreateTileUpdateTasks(localsettings.CreateContainer(NotificationTileConstants.TaskSettingsContainer,
+                                                                     ApplicationDataCreateDisposition.Always));
 
             // Create a Frame to act navigation context and navigate to the first page
             var rootFrame = new Frame();

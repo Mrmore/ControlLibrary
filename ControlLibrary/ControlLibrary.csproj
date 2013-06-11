@@ -369,7 +369,12 @@
     <Compile Include="Tools\CompressionGif\OpenFrame.cs" />
     <Compile Include="Tools\CompressionGif\SynthesisGifEncoder.cs" />
     <Compile Include="Tools\Constants.cs" />
+    <Compile Include="Tools\Notification\NotificationTile\NotificationTileConstants.cs" />
+    <Compile Include="Tools\Notification\NotificationTile\NotificationTile.cs" />
     <Compile Include="Tools\Notification\NotificationTile\NotificationTileHelper.cs" />
+    <Compile Include="Tools\Notification\NotificationTile\NotificationTileCreationExtensions.cs" />
+    <Compile Include="Tools\Notification\NotificationTile\NotificationTileXmlHelper.cs" />
+    <Compile Include="Tools\Notification\NotificationTile\NotificationTileUpdateTaskRegistration.cs" />
     <Compile Include="Tools\Thread\CustomQueue.cs" />
     <Compile Include="Tools\Encryption\Sha256.cs" />
     <Compile Include="Tools\FlickrHelp.cs" />
