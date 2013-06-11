@@ -79,7 +79,7 @@ namespace TestDemoApp
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
             //NotificationHelper.DisplayTextTost("测试", "测试测试", ToastAudioContent.Reminder);
-            NotificationHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Reminder); 
+            NotificationToastHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Reminder); 
         }
 
         private void Button_Click_5(object sender, RoutedEventArgs e)
@@ -124,22 +124,22 @@ namespace TestDemoApp
                 switch (this.comboBox.SelectedIndex)
                 {
                     case 0:
-                        NotificationHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Default);
+                        NotificationToastHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Default);
                         break;
                     case 1:
-                        NotificationHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Mail);
+                        NotificationToastHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Mail);
                         break;
                     case 2:
-                        NotificationHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.SMS);
+                        NotificationToastHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.SMS);
                         break;
                     case 3:
-                        NotificationHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.IM);
+                        NotificationToastHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.IM);
                         break;
                     case 4:
-                        NotificationHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Reminder);
+                        NotificationToastHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Reminder);
                         break;
                     default:
-                        NotificationHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Reminder);
+                        NotificationToastHelper.DisplayWebImageToast("http://ww1.sinaimg.cn/bmiddle/74dcdb86jw1dr58k5x0n6j.jpg", "测试", "测试测试", ToastAudioContent.Reminder);
                         break;
                 }
             }

@@ -369,7 +369,8 @@
     <Compile Include="Tools\CompressionGif\OpenFrame.cs" />
     <Compile Include="Tools\CompressionGif\SynthesisGifEncoder.cs" />
     <Compile Include="Tools\Constants.cs" />
-    <Compile Include="Tools\CustomQueue.cs" />
+    <Compile Include="Tools\Notification\NotificationTile\NotificationTileHelper.cs" />
+    <Compile Include="Tools\Thread\CustomQueue.cs" />
     <Compile Include="Tools\Encryption\Sha256.cs" />
     <Compile Include="Tools\FlickrHelp.cs" />
     <Compile Include="Tools\HttpUtilityExtensions.cs" />
@@ -389,7 +390,7 @@
     <Compile Include="Tools\Mathematics\MatrixMath.cs" />
     <Compile Include="Tools\Mathematics\TrigonometryMath.cs" />
     <Compile Include="Tools\Mathematics\VectorMath.cs" />
-    <Compile Include="Tools\MicrosoftStreamExtensions.cs" />
+    <Compile Include="Tools\StreamExtensions\MicrosoftStreamExtensions.cs" />
     <Compile Include="Tools\Multimedia\AudioWriter.cs" />
     <Compile Include="Tools\Multimedia\YouTubeFlvToMp3OrAac.cs" />
     <Compile Include="Tools\Multimedia\YouTube.cs" />
@@ -402,12 +403,13 @@
     <Compile Include="Tools\Networking\HttpResponse.cs" />
     <Compile Include="Tools\Networking\WakeOnLan.cs" />
     <Compile Include="Tools\NewGuide.cs" />
-    <Compile Include="Tools\NotificationHelper.cs" />
+    <Compile Include="Tools\Notification\NotificationToast\NotificationToastHelper.cs" />
+    <Compile Include="Tools\Notification\NotificationToast\NotificationToastSound.cs" />
     <Compile Include="Tools\PropertyChangeEventSource.cs" />
     <Compile Include="Tools\SettingsHelper.cs" />
     <Compile Include="Tools\SizeLongToString.cs" />
-    <Compile Include="Tools\StreamExtensions.cs" />
-    <Compile Include="Tools\Thread.cs" />
+    <Compile Include="Tools\StreamExtensions\StreamExtensions.cs" />
+    <Compile Include="Tools\Thread\Thread.cs" />
     <Compile Include="Tools\UIUtil.cs" />
     <Compile Include="Tools\UniqueID\HelperUniqueID.cs" />
     <Compile Include="Tools\UniqueID\Machine.cs" />

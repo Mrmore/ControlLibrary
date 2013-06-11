@@ -9,7 +9,7 @@ using Windows.UI.Notifications;
 
 namespace ControlLibrary.Tools
 {
-    public class NotificationHelper
+    public class NotificationToastHelper
     {
         /// <summary>
         /// Post弹出消息对话框系统APP图片
@@ -85,6 +85,85 @@ namespace ControlLibrary.Tools
         {
             var errorCode = args.ErrorCode;
             return;
+        }
+
+        /// <summary>
+        /// Post弹出消息对话框系统APP图片
+        /// </summary>
+        /// <param name="title">主题</param>
+        /// <param name="description">内容</param>
+        /// <param name="notificationSound">声音(默认是成功的声音)</param>
+        public static void DisplayTextTost(string title, string description, NotificationToastSound notificationSound = NotificationToastSound.Success)
+        {
+            IToastText02 toastContent = ToastContentFactory.CreateToastText02();
+            toastContent.TextHeading.Text = title;
+            toastContent.TextBodyWrap.Text = description;
+            switch (notificationSound)
+            {
+                case NotificationToastSound.Success:
+                    {
+                        toastContent.Audio.Content = ToastAudioContent.Reminder;
+                        break;
+                    }
+                case NotificationToastSound.Failure:
+                    {
+                        toastContent.Audio.Content = ToastAudioContent.Mail;
+                        break;
+                    }
+                case NotificationToastSound.News:
+                    {
+                        toastContent.Audio.Content = ToastAudioContent.Default;
+                        break;
+                    }
+                default:
+                    {
+                        toastContent.Audio.Content = ToastAudioContent.Default;
+                        break;
+                    }
+            }
+            ToastNotification toast = toastContent.CreateNotification();
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
+        }
+
+        /// <summary>
+        /// Post弹出消息对话框可设置WEB的图片
+        /// </summary>
+        /// <param name="toastImageSrc">Web Uri</param>
+        /// <param name="title">主题</param>
+        /// <param name="description">内容</param>
+        /// <param name="notificationSound">声音(默认是成功的声音)</param>
+        public static void DisplayWebImageToast(string toastImageSrc, string title, string description, NotificationToastSound notificationSound = NotificationToastSound.Success)
+        {
+            IToastImageAndText02 toastContent = ToastContentFactory.CreateToastImageAndText02();
+            toastContent.TextHeading.Text = title;
+            toastContent.TextBodyWrap.Text = description;
+            toastContent.Image.Src = toastImageSrc;
+            toastContent.Image.Alt = toastImageSrc;
+            switch (notificationSound)
+            {
+                case NotificationToastSound.Success:
+                    {
+                        toastContent.Audio.Content = ToastAudioContent.Default;
+                        break;
+                    }
+                case NotificationToastSound.Failure:
+                    {
+                        toastContent.Audio.Content = ToastAudioContent.Mail;
+                        break;
+                    }
+                case NotificationToastSound.News:
+                    {
+                        toastContent.Audio.Content = ToastAudioContent.Reminder;
+                        break;
+                    }
+                default:
+                    {
+                        toastContent.Audio.Content = ToastAudioContent.Default;
+                        break;
+                    }
+            }
+            ToastNotification toast = toastContent.CreateNotification();
+            ToastNotificationManager.CreateToastNotifier().Show(toast);
         }
     }
 }
