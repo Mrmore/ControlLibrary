@@ -257,6 +257,7 @@ namespace TestDemoApp
 
         private void BtTile_Click(object sender, RoutedEventArgs e)
         {
+            TileUpdateManager.CreateTileUpdaterForApplication().Clear();
             //UpdateTile();
             List<NotificationTile> ntList = new List<NotificationTile>();
             NotificationTile nt = new NotificationTile();

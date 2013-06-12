@@ -32,8 +32,18 @@ namespace Tasks.Library
             //NotificationTileHelper.UpdateTileWithImage(new List<NotificationTile>());
             //NotificationTileHelper.UpdateTileWithText(new NotificationTile());
 
-            NotificationTileHelper.UpdateTileWithImage(null);
-            NotificationTileHelper.UpdateTileWithText(null);
+            //NotificationTileHelper.UpdateTileWithImage(null);
+            //NotificationTileHelper.UpdateTileWithText(null);
+
+            //测试
+            NotificationTile nt = new NotificationTile();
+            nt.ImageUri = "http://ww2.sinaimg.cn/bmiddle/6a8980e1jw1dyenrqn7wtj.jpg";
+            nt.ImageAltName = "后台推送美女照片";
+            nt.NotificationTileTag = "mat";
+            nt.TextHeading = "后台推送";
+            nt.TextBodyWrap = "后台推送内容内容内容内容内容内容内容内容";
+            NotificationTileHelper.UpdateTileWithImage(nt);
+            //
 
             defferal.Complete();
         }

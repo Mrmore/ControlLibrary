@@ -20,6 +20,7 @@ namespace ControlLibrary.Tools
             if (notificationTile != null)
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(false);
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                 ITileWidePeekImage05 tileContent = TileContentFactory.CreateTileWidePeekImage05();
                 tileContent.ImageMain.Src = tileContent.ImageSecondary.Src = notificationTile.ImageUri;
                 tileContent.ImageMain.Alt = tileContent.ImageSecondary.Alt = notificationTile.ImageAltName;
@@ -46,6 +47,7 @@ namespace ControlLibrary.Tools
                     if (i < 5)
                     {
                         TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(true);
+                        TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                         ITileWidePeekImage05 tileContent = TileContentFactory.CreateTileWidePeekImage05();
                         tileContent.ImageMain.Src = tileContent.ImageSecondary.Src = notificationTileList[i].ImageUri;
                         tileContent.ImageMain.Alt = tileContent.ImageSecondary.Alt = notificationTileList[i].ImageAltName;
@@ -74,6 +76,7 @@ namespace ControlLibrary.Tools
             if (notificationTile != null)
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(false);
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                 var statusTile = TileUpdateManager.GetTemplateContent(TileTemplateType.TileSquareText02);
                 TileNotification tileNotification  = new TileNotification(statusTile.AddText(new[]
                 {
@@ -93,6 +96,7 @@ namespace ControlLibrary.Tools
             if (notificationTileList != null)
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(true);
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                 for (int i = 0; i < notificationTileList.Count; i++)
                 {
                     if (i < 5)
@@ -122,6 +126,7 @@ namespace ControlLibrary.Tools
             if (notificationTile != null)
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(false);
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                 var photoTileSmall = TileUpdateManager.GetTemplateContent(TileTemplateType.TileSquarePeekImageAndText02);
                 var photoTileWide = TileUpdateManager.GetTemplateContent(TileTemplateType.TileWideImageAndText01);
 
@@ -147,6 +152,7 @@ namespace ControlLibrary.Tools
             if (notificationTileList != null)
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(true);
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                 for (int i = 0; i < notificationTileList.Count; i++)
                 {
                     if (i < 5)
@@ -182,6 +188,7 @@ namespace ControlLibrary.Tools
             if (notificationTile != null)
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(false);
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                 ITileWideImageAndText01 tileContent = TileContentFactory.CreateTileWideImageAndText01();
                 tileContent.Image.Src = notificationTile.ImageUri;
                 tileContent.Image.Alt = notificationTile.ImageAltName;
@@ -207,6 +214,7 @@ namespace ControlLibrary.Tools
             if (notificationTileList != null)
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(true);
+                TileUpdateManager.CreateTileUpdaterForApplication().Clear();
                 for (int i = 0; i < notificationTileList.Count; i++)
                 {
                     if (i < 5)
