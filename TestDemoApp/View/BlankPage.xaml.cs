@@ -257,7 +257,50 @@ namespace TestDemoApp
 
         private void BtTile_Click(object sender, RoutedEventArgs e)
         {
-            UpdateTile();
+            //UpdateTile();
+            List<NotificationTile> ntList = new List<NotificationTile>();
+            NotificationTile nt = new NotificationTile();
+            nt.ImageUri = "http://ww3.sinaimg.cn/bmiddle/643be833jw1e5jg5horgij20dc0hsabq.jpg";
+            nt.ImageAltName = "美女";
+            nt.NotificationTileTag = "mat";
+            nt.TextHeading = "标题";
+            nt.TextBodyWrap = "内容内容内容内容内容内容内容内容";
+            ntList.Add(nt);
+
+            NotificationTile nt1 = new NotificationTile();
+            nt1.ImageUri = "http://ww4.sinaimg.cn/bmiddle/6cef4748jw1e5l83hufyvj21kw2cn4qq.jpg";
+            nt1.ImageAltName = "美女1";
+            nt1.NotificationTileTag = "mat1";
+            nt1.TextHeading = "标题1";
+            nt1.TextBodyWrap = "内容1内容1内容1内容1内容1内容1内容1内容1";
+            ntList.Add(nt1);
+
+            NotificationTile nt2 = new NotificationTile();
+            nt2.ImageUri = "http://ww3.sinaimg.cn/bmiddle/7f811e76jw1e4zjsf7ksuj20qa0yotcw.jpg";
+            nt2.ImageAltName = "美女2";
+            nt2.NotificationTileTag = "mat2";
+            nt2.TextHeading = "标题2";
+            nt2.TextBodyWrap = "内容2内容2内容2内容2内容2内容2内容2内容2";
+            ntList.Add(nt2);
+
+            NotificationTile nt3 = new NotificationTile();
+            nt3.ImageUri = "http://ww2.sinaimg.cn/bmiddle/7f811e76jw1e4xmts5ay0j20dc0hs75c.jpg";
+            nt3.ImageAltName = "美女3";
+            nt3.NotificationTileTag = "mat3";
+            nt3.TextHeading = "标题3";
+            nt3.TextBodyWrap = "内容3内容3内容3内容3内容3内容3内容3内容3";
+            ntList.Add(nt3);
+
+            NotificationTile nt4 = new NotificationTile();
+            nt4.ImageUri = "http://ww4.sinaimg.cn/bmiddle/7f811e76jw1e4rcc8f54oj20lb0sg0vi.jpg";
+            nt4.ImageAltName = "美女4";
+            nt4.NotificationTileTag = "mat4";
+            nt4.TextHeading = "标题4";
+            nt4.TextBodyWrap = "内容4内容4内容4内容4内容4内容4内容4内容4";
+            ntList.Add(nt4);
+
+            //NotificationTileHelper.UpdateTileWithImage(nt);
+            NotificationTileHelper.UpdateTileWithImages(ntList);
         }
     }
 }

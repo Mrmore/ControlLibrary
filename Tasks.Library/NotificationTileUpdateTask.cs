@@ -29,8 +29,11 @@ namespace Tasks.Library
             updater.Clear();
 
             //正式项目要把ViewModel的值带进来
-            NotificationTileHelper.UpdateTileWithImages(new List<NotificationTile>());
-            NotificationTileHelper.UpdateTileWithText(new NotificationTile());
+            //NotificationTileHelper.UpdateTileWithImage(new List<NotificationTile>());
+            //NotificationTileHelper.UpdateTileWithText(new NotificationTile());
+
+            NotificationTileHelper.UpdateTileWithImage(null);
+            NotificationTileHelper.UpdateTileWithText(null);
 
             defferal.Complete();
         }
