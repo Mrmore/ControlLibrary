@@ -190,7 +190,7 @@ namespace TestDemoApp.Helper.System
             {
                 shareLocalFolder = await tempLocalFolder.GetFolderAsync(myFolder);
             }
-            if (isShareLocalFolder != null)
+            if (shareLocalFolder != null)
             {
                 var rass = RandomAccessStreamReference.CreateFromUri(new Uri(WebUri, UriKind.RelativeOrAbsolute));
                 IRandomAccessStreamWithContentType streamRandom = await rass.OpenReadAsync();

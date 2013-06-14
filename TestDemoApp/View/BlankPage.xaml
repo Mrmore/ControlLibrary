@@ -60,7 +60,9 @@
 
         <StackPanel x:Name="sp2" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,300,0,0">
             <Button x:Name="BtCropImageControl" Content="截屏控件" Click="BtCropImageControl_Click"/>
-            <Button x:Name="BtTile" Content="测试Tile" HorizontalAlignment="Left" Margin="100,0,0,0" Click="BtTile_Click" />
+            <Button x:Name="BtTile" Content="测试Tile" HorizontalAlignment="Left" Margin="50,0,0,0" Click="BtTile_Click" />
+            <Button x:Name="BtPin" Content="PinSecondaryTile" HorizontalAlignment="Left" Margin="50,0,0,0" Click="BtPin_Click" />
+            <Button x:Name="BtUnPin" Content="UnPinSecondaryTile" HorizontalAlignment="Left" Margin="50,0,0,0" Click="BtUnPin_Click" />
         </StackPanel>
         
         <Button x:Name="Btclose" Content="关闭" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,340,0,0" Click="Btclose_Click_1"/>

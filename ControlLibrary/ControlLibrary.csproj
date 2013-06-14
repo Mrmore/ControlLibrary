@@ -369,6 +369,12 @@
     <Compile Include="Tools\CompressionGif\OpenFrame.cs" />
     <Compile Include="Tools\CompressionGif\SynthesisGifEncoder.cs" />
     <Compile Include="Tools\Constants.cs" />
+    <Compile Include="Tools\Downloader\IDownloader.cs" />
+    <Compile Include="Tools\Downloader\ImageBackgroundDownloader.cs" />
+    <Compile Include="Tools\Downloader\BaseBackgroundDownloader.cs" />
+    <Compile Include="Tools\Downloader\BaseDownloader.cs" />
+    <Compile Include="Tools\Downloader\StorageFileDownloader.cs" />
+    <Compile Include="Tools\Notification\NotificationSecondaryTile\NotificationSecondaryTileHelper.cs" />
     <Compile Include="Tools\Notification\NotificationTile\NotificationTileConstants.cs" />
     <Compile Include="Tools\Notification\NotificationTile\NotificationTile.cs" />
     <Compile Include="Tools\Notification\NotificationTile\NotificationTileHelper.cs" />
@@ -418,6 +424,7 @@
     <Compile Include="Tools\UIUtil.cs" />
     <Compile Include="Tools\UniqueID\HelperUniqueID.cs" />
     <Compile Include="Tools\UniqueID\Machine.cs" />
+    <Compile Include="Tools\Downloader\UriDownloader.cs" />
     <Compile Include="Tools\WriteableBitmapExtension\WriteableBitmapConvolutionExtensions.cs" />
     <Compile Include="Tools\WriteableBitmapImage\ImageHelper.cs" />
     <Compile Include="Tools\Xml\Xml.cs" />

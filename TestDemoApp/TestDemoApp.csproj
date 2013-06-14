@@ -241,6 +241,7 @@
     <None Include="Images\SlideView\Images\OnDemand\Thumbs.db" />
     <None Include="TestDemoApp_TemporaryKey.pfx" />
     <Content Include="Assets\BadgeLogo.png" />
+    <Content Include="Assets\blue_squ.png" />
     <Content Include="Assets\WideLogo.png" />
     <Content Include="Video\aac.flv" />
     <Content Include="Video\mp322.flv" />

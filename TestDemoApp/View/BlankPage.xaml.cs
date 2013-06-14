@@ -226,6 +226,7 @@ namespace TestDemoApp
 
         private void UpdateTile()
         {
+            TileUpdateManager.CreateTileUpdaterForApplication().Clear();
             ITileWidePeekImage05 tileContent = TileContentFactory.CreateTileWidePeekImage05();
 
             tileContent.ImageMain.Src = "http://ww3.sinaimg.cn/bmiddle/643be833jw1e5jg5horgij20dc0hsabq.jpg";
@@ -255,10 +256,8 @@ namespace TestDemoApp
             TileUpdateManager.CreateTileUpdaterForApplication().Update(tileContent.CreateNotification());
         }
 
-        private void BtTile_Click(object sender, RoutedEventArgs e)
+        private List<NotificationTile> GetNotificationTileList()
         {
-            TileUpdateManager.CreateTileUpdaterForApplication().Clear();
-            //UpdateTile();
             List<NotificationTile> ntList = new List<NotificationTile>();
             NotificationTile nt = new NotificationTile();
             nt.ImageUri = "http://ww3.sinaimg.cn/bmiddle/643be833jw1e5jg5horgij20dc0hsabq.jpg";
@@ -300,8 +299,37 @@ namespace TestDemoApp
             nt4.TextBodyWrap = "内容4内容4内容4内容4内容4内容4内容4内容4";
             ntList.Add(nt4);
 
-            //NotificationTileHelper.UpdateTileWithImage(nt);
-            NotificationTileHelper.UpdateTileWithImages(ntList);
+            return ntList;
+        }
+
+        private NotificationTile GetNotificationTile()
+        {
+            NotificationTile nt = new NotificationTile();
+            nt.ImageUri = "http://ww3.sinaimg.cn/bmiddle/643be833jw1e5jg5horgij20dc0hsabq.jpg";
+            nt.ImageAltName = "美女";
+            nt.NotificationTileTag = "mat";
+            nt.TextHeading = "标题";
+            nt.TextBodyWrap = "内容内容内容内容内容内容内容内容";
+            return nt;
+        }
+
+        private void BtTile_Click(object sender, RoutedEventArgs e)
+        {
+            //UpdateTile();
+            //NotificationTileHelper.UpdateTileWithImage(GetNotificationTile());
+            NotificationTileHelper.UpdateTileWithImages(GetNotificationTileList());           
+        }
+
+        private async void BtPin_Click(object sender, RoutedEventArgs e)
+        {
+            //await NotificationSecondaryTileHelper.PinSecondaryTileWithImage("mat1", GetNotificationTile());
+            await NotificationSecondaryTileHelper.PinSecondaryTileWithImages("mats", GetNotificationTileList());
+        }
+
+        private async void BtUnPin_Click(object sender, RoutedEventArgs e)
+        {
+            //await NotificationSecondaryTileHelper.UnPinSecondaryTileWithImage("mat1");
+            await NotificationSecondaryTileHelper.UnPinSecondaryTileWithImage("mats");
         }
     }
 }
