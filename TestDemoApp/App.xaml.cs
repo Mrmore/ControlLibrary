@@ -76,6 +76,7 @@ namespace TestDemoApp
                 //TODO: Load state from previously suspended application
             }
 
+            //添加注册后台任务,更新主屏Tile
             var localsettings = ApplicationData.Current.LocalSettings;
             var tile = new NotificationTileUpdateTaskRegistration();
             tile.CreateTileUpdateTasks(localsettings.CreateContainer(NotificationTileConstants.TaskSettingsContainer,
