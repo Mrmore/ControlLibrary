@@ -19,6 +19,7 @@ using Windows.Storage.Streams;
 using ControlLibrary.Tools.Multimedia;
 using TestDemoApp.Helper.System;
 using NotificationsExtensions.TileContent;
+using System.Diagnostics;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -206,15 +207,22 @@ namespace TestDemoApp
         private async void BtYouTube_Click(object sender, RoutedEventArgs e)
         {
             var youtubeurl = YouTube.GetYouTubeId("http://www.youtube.com/watch?v=eAX85PXl408");
-            //获取相对应源的Uri地址
-            var url = await YouTube.GetVideoUriAsync(youtubeurl, YouTubeQuality.QualityMP3_FLV_44KHZ);
+            try
+            {
+                //获取相对应源的Uri地址
+                var url = await YouTube.GetVideoUriAsync(youtubeurl, YouTubeQuality.QualityMP3_FLV_44KHZ);
 
-            //获取所有源的Uri地址列表
-            var uriAllList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.All);
-            var uriFlvOrMp3List = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Flv);
-            var uriMp3OrFlvList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Mp3);
-            var uriMp4List = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Mp4);
-            var uriQualityList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.YouTubeQuality);
+                //获取所有源的Uri地址列表
+                var uriAllList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.All);
+                var uriFlvOrMp3List = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Flv);
+                var uriMp3OrFlvList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Mp3);
+                var uriMp4List = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Mp4);
+                var uriQualityList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.YouTubeQuality);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message + "无法连接到远程服务" + "Unable to connect to the remote serve");
+            }
         }
 
         private void BtShare_Click(object sender, RoutedEventArgs e)
