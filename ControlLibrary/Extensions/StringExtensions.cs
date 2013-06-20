@@ -52,5 +52,17 @@ namespace ControlLibrary.Extensions
             var res = CryptographicBuffer.EncodeToHexString(hashed);
             return res;
         }
+
+        /// <summary>
+        /// string to TimeString
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string ConvertStringToTimeString(this string str)
+        {
+            DateTime time = Convert.ToDateTime(str); // Converts only the time
+            string strTime = time.ToString("HH:mm:ss");
+            return strTime;
+        }
     }
 }
