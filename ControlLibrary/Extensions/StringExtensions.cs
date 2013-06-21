@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,9 +61,37 @@ namespace ControlLibrary.Extensions
         /// <returns></returns>
         public static string ConvertStringToTimeString(this string str)
         {
-            DateTime time = Convert.ToDateTime(str); // Converts only the time
-            string strTime = time.ToString("HH:mm:ss");
-            return strTime;
+            try
+            {
+                DateTime time = Convert.ToDateTime(str, CultureInfo.InvariantCulture); // Converts only the time
+                string strTime = time.ToString("HH:mm:ss");
+                return strTime;
+            }
+            catch (Exception)
+            {
+                //第3个参数IFormatProvider provider 可以为null
+                return DateTime.ParseExact(str, "HH:mm:ss", CultureInfo.InvariantCulture).ToString();
+            }
+        }
+
+        /// <summary>
+        /// int to TimeString
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string ConvertIntToTimeString(this string str)
+        {
+            string temp = string.Empty;
+            DateTime time = new DateTime().Add(TimeSpan.FromSeconds(System.Convert.ToInt32(str)));
+            if (System.Convert.ToInt32(str) >= 3600)
+            {
+                temp = time.ToString("HH:mm:ss");
+            }
+            else
+            {
+                temp = time.ToString("mm:ss");
+            }
+            return temp;
         }
     }
 }
