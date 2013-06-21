@@ -215,6 +215,7 @@
     <Compile Include="Extensions\AsyncAwaitExtensions\ScrollViewerAsyncAwaitExtensions.cs" />
     <Compile Include="Extensions\AsyncAwaitExtensions\SelectorAsyncAwaitExtensions.cs" />
     <Compile Include="Extensions\AsyncAwaitExtensions\WriteableBitmapAsyncAwaitExtensions.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\DoubleExtensions.cs" />
     <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\PointExtensions.cs" />
@@ -381,6 +382,7 @@
     <Compile Include="Tools\Notification\NotificationTile\NotificationTileCreationExtensions.cs" />
     <Compile Include="Tools\Notification\NotificationTile\NotificationTileXmlHelper.cs" />
     <Compile Include="Tools\Notification\NotificationTile\NotificationTileUpdateTaskRegistration.cs" />
+    <Compile Include="Tools\Collection\ObservableRangeCollection.cs" />
     <Compile Include="Tools\Thread\CustomQueue.cs" />
     <Compile Include="Tools\Encryption\Sha256.cs" />
     <Compile Include="Tools\FlickrHelp.cs" />
