@@ -148,6 +148,23 @@ namespace ControlLibrary
             }
         }
 
+        public AnimationType AnimationType
+        {
+            get { return (AnimationType)GetValue(AnimationTypeProperty); }
+            set { SetValue(AnimationTypeProperty, value); }
+        }
+
+        public static readonly DependencyProperty AnimationTypeProperty = DependencyProperty.Register("AnimationType", typeof(AnimationType), typeof(ClipImageBrush), new PropertyMetadata(AnimationType.AanimationFadeOut, new PropertyChangedCallback(OnAnimationTypePropertyChanged)));
+
+        private static void OnAnimationTypePropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var ClipImageBrush = sender as ClipImageBrush;
+            if (ClipImageBrush != null && ClipImageBrush.clipImageBrushCache != null && !string.IsNullOrEmpty(ClipImageBrush.Source))
+            {
+                ClipImageBrush.ChangeSourceAndCacheType();
+            }
+        }
+
         public CacheImageDateType CacheType
         {
             get { return (CacheImageDateType)GetValue(CacheTypeProperty); }
@@ -257,12 +274,20 @@ namespace ControlLibrary
         {
             if (this.IsAnimation)
             {
-                this.gridRoot.Opacity = 0;
+                if (this.AnimationType == ControlLibrary.AnimationType.AanimationFadeOut)
+                {
+                    this.gridRoot.Opacity = 0;
+                }
+                else
+                {
+                    this.planeProjection.RotationX = 90;
+                }
                 CreateAnimationBegin();
             }
             else
             {
                 this.gridRoot.Opacity = 1.0;
+                this.planeProjection.RotationX = 0;
             }
 
             BitmapImage bi = new BitmapImage();
@@ -379,6 +404,7 @@ namespace ControlLibrary
                 clipImageBrushCache.ImageOpened += clipImageBrushCache_ImageOpened;
                 clipImageBrushCache.ImageFailed -= clipImageBrushCache_ImageFailed;
                 clipImageBrushCache.ImageFailed += clipImageBrushCache_ImageFailed;
+                this.AddProjection(gridRoot);
                 if (!string.IsNullOrEmpty(this.Source))
                 {
                     this.ChangeSourceAndCacheType();
@@ -391,18 +417,50 @@ namespace ControlLibrary
             }
         }
 
-        //简写动画方法(淡入)
+        private PlaneProjection planeProjection = null;
+        private void AddProjection(UIElement control)
+        {
+            if (control.Projection == null)
+            {
+                planeProjection = new PlaneProjection();
+                planeProjection.RotationX = 0;
+                planeProjection.CenterOfRotationX = planeProjection.CenterOfRotationY = 0.5;
+                control.Projection = planeProjection;
+            }
+        }
+
+        //简写动画方法(淡入) 与 （翻转）
         protected virtual void CreateAnimationBegin()
         {
             sbVisible = new Storyboard();
-            DoubleAnimationUsingKeyFrames keyFramesOpacity = new DoubleAnimationUsingKeyFrames();
-            Storyboard.SetTarget(keyFramesOpacity, gridRoot);
-            Storyboard.SetTargetProperty(keyFramesOpacity, "(UIElement.Opacity)");
-            KeyTime ktOpacity1 = KeyTime.FromTimeSpan(TimeSpan.FromSeconds(0));
-            keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity1, Value = 0 });
-            KeyTime ktOpacity2 = KeyTime.FromTimeSpan(this.AnimationTime);
-            keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity2, Value = 1 });
-            sbVisible.Children.Add(keyFramesOpacity);
+            if (this.AnimationType == ControlLibrary.AnimationType.AanimationFadeOut)
+            {
+                DoubleAnimationUsingKeyFrames keyFramesOpacity = new DoubleAnimationUsingKeyFrames();
+                Storyboard.SetTarget(keyFramesOpacity, gridRoot);
+                Storyboard.SetTargetProperty(keyFramesOpacity, "(UIElement.Opacity)");
+                KeyTime ktOpacity1 = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0));
+                keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity1, Value = 0 });
+                KeyTime ktOpacity2 = KeyTime.FromTimeSpan(this.AnimationTime);
+                keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity2, Value = 1 });
+                sbVisible.Children.Add(keyFramesOpacity);
+            }
+            else
+            {
+                DoubleAnimationUsingKeyFrames keyFramesRotationX = new DoubleAnimationUsingKeyFrames();
+                Storyboard.SetTarget(keyFramesRotationX, gridRoot);
+                Storyboard.SetTargetProperty(keyFramesRotationX, "(UIElement.Projection).(PlaneProjection.RotationX)");
+                KeyTime ktRotationX1 = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0));
+                keyFramesRotationX.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktRotationX1, Value = 90 });
+                KeyTime ktRotationX2 = KeyTime.FromTimeSpan(this.AnimationTime);
+                keyFramesRotationX.KeyFrames.Add(new EasingDoubleKeyFrame()
+                {
+                    KeyTime = ktRotationX2,
+                    Value = 360,
+                    //EasingFunction = new PowerEase() { EasingMode = EasingMode.EaseOut, Power = 4 }
+                    EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut }
+                });
+                sbVisible.Children.Add(keyFramesRotationX);
+            }
         }
 
         private void AnimationBeginStart()
@@ -425,14 +483,21 @@ namespace ControlLibrary
         protected virtual void CreateAnimationEnd()
         {
             sbNotVisible = new Storyboard();
-            DoubleAnimationUsingKeyFrames keyFramesOpacity = new DoubleAnimationUsingKeyFrames();
-            Storyboard.SetTarget(keyFramesOpacity, gridRoot);
-            Storyboard.SetTargetProperty(keyFramesOpacity, "(UIElement.Opacity)");
-            KeyTime ktOpacity1 = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0));
-            keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity1, Value = 1 });
-            KeyTime ktOpacity2 = KeyTime.FromTimeSpan(this.AnimationTime);
-            keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity2, Value = 0 });
-            sbNotVisible.Children.Add(keyFramesOpacity);
+            if (this.AnimationType == ControlLibrary.AnimationType.AanimationFadeOut)
+            {
+                DoubleAnimationUsingKeyFrames keyFramesOpacity = new DoubleAnimationUsingKeyFrames();
+                Storyboard.SetTarget(keyFramesOpacity, gridRoot);
+                Storyboard.SetTargetProperty(keyFramesOpacity, "(UIElement.Opacity)");
+                KeyTime ktOpacity1 = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0));
+                keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity1, Value = 1 });
+                KeyTime ktOpacity2 = KeyTime.FromTimeSpan(this.AnimationTime);
+                keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity2, Value = 0 });
+                sbNotVisible.Children.Add(keyFramesOpacity);
+            }
+            else
+            {
+
+            }
         }
 
         private void AnimationEndStart()

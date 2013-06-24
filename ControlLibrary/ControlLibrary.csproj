@@ -162,6 +162,7 @@
     <Compile Include="Behaviors\SetInitialOpacityBehavior.cs" />
     <Compile Include="Behaviors\StartStoryboardBehavior.cs" />
     <Compile Include="Behaviors\WidthPercentageBehavior.cs" />
+    <Compile Include="Controls\ImageControls\AnimationType.cs" />
     <Compile Include="Controls\ImageControls\CacheImage\CacheImage.cs" />
     <Compile Include="CacheManagement\CacheBitmapImage.cs" />
     <Compile Include="CacheManagement\CacheManagement.cs" />

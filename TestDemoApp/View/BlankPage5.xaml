@@ -36,7 +36,7 @@
         </ControlLibrary:CacheImage>
         
         <ControlLibrary:ClipImageBrush AlignmentX="Center" AlignmentY="Center" x:Name="clipImageBrush" Height="200" Width="200" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="100,558,0,10" 
-                                       IsCacheImage="True" IsAnimation="True" AnimationTime="0:0:9">
+                                       IsCacheImage="True" IsAnimation="True" AnimationTime="0:0:1" AnimationType="AanimationTurnOver">
         </ControlLibrary:ClipImageBrush>
         <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="100,511,0,0" VerticalAlignment="Top" Width="200" SelectedIndex="3" SelectionChanged="ComboBox_SelectionChanged_1">
             <ComboBoxItem Content="None"/>
