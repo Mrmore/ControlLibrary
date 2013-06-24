@@ -10,17 +10,17 @@ namespace ControlLibrary
     {
         TopLeft = 0,
         //Top,
-        TopRight,
+        TopRight = 1,
         //Right,
-        BottomRight,
+        BottomRight = 2,
         //Bottom,
-        BottomLeft,
+        BottomLeft = 3,
         //Left,
-        Random,
-        Shuffle,
-        TopCenter,
-        BottomCenter,
-        LeftCenter,
-        RightCenter
+        Random = 4,
+        Shuffle = 5,
+        TopCenter = 6,
+        BottomCenter = 7,
+        LeftCenter = 8,
+        RightCenter = 9
     }
 }

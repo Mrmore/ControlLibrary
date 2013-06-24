@@ -90,6 +90,12 @@
                 <ComboBoxItem Content="true"/>
                 <ComboBoxItem Content="false" IsSelected="True"/>
             </ComboBox>
+            <TextBlock
+                Text="CascadeAanimation" Margin="0,20,0,0"/>
+            <ComboBox Margin="0,20,0,0" x:Name="comboboxCascadeAanimation" SelectionChanged="comboboxCascadeAanimation_SelectionChanged">
+                <ComboBoxItem Content="AanimationFlash"/>
+                <ComboBoxItem Content="AanimationCollapse" IsSelected="True"/>
+            </ComboBox>
         </StackPanel>
         <Grid
             Grid.Row="1"

@@ -11,10 +11,10 @@ namespace ControlLibrary
         /// <summary>
         /// The tile cascade animations end at the same time
         /// </summary>
-        EndTogether,
+        EndTogether = 0,
         /// <summary>
         /// The tile cascade animations are equal duration
         /// </summary>
-        EqualDuration
+        EqualDuration = 1
     }
 }

@@ -450,37 +450,6 @@ namespace ControlLibrary
         }
         #endregion
 
-        #region CascadeAanimation
-        /// <summary>
-        /// CascadeAanimation Dependency Property
-        /// </summary>
-        public static readonly DependencyProperty CascadeAanimationProperty =
-            DependencyProperty.Register(
-                "CascadeAanimation",
-                typeof(CascadeAanimation),
-                typeof(CascadingImageControl),
-                new PropertyMetadata(CascadeAanimation.AanimationCollapse, new PropertyChangedCallback(OnCascadeAanimationChanged)));
-
-        /// <summary>
-        /// Gets or sets the CascadeAanimation property. This dependency property 
-        /// indicates the direction of the cascade animation.
-        /// </summary>
-        public CascadeAanimation CascadeAanimation
-        {
-            get { return (CascadeAanimation)GetValue(CascadeAanimationProperty); }
-            set { SetValue(CascadeAanimationProperty, value); }
-        }
-
-        private static void OnCascadeAanimationChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
-        {
-            var cascadingImageControl = sender as CascadingImageControl;
-            if (cascadingImageControl != null && cascadingImageControl._layoutCanvas != null)
-            {
-                cascadingImageControl.Cascade();
-            }
-        }
-        #endregion
-
         #region CascadeInEasingFunction
         /// <summary>
         /// CascadeInEasingFunction Dependency Property
@@ -548,7 +517,7 @@ namespace ControlLibrary
             set { SetValue(IsClipProperty, value); }
         }
 
-        private static void OnIsClipPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+         private static void OnIsClipPropertyChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
             var cascadingImageControl = sender as CascadingImageControl;
             if (cascadingImageControl != null && cascadingImageControl._layoutCanvas != null)
@@ -563,7 +532,7 @@ namespace ControlLibrary
                 }
             }
         }
-
+        
         #endregion
 
         public CascadingImageControl()
@@ -612,7 +581,7 @@ namespace ControlLibrary
                 Columns = 1;
 
             _layoutCanvas.Children.Clear();
-
+            
             var sb = new Storyboard();
 
             var totalDurationInSeconds = RowDelay.TotalSeconds * (Rows - 1) +
@@ -713,10 +682,7 @@ namespace ControlLibrary
                     //设置填充图片笔刷矩形的透视投影
                     var projection = new PlaneProjection();
                     projection.CenterOfRotationY = projection.CenterOfRotationX = 0.5;
-                    if (this.CascadeAanimation == ControlLibrary.CascadeAanimation.AanimationCollapse)
-                        projection.RotationX = 90;
-                    else
-                        projection.RotationX = 0;
+                    projection.RotationX = 90;
                     rect.Projection = projection;
 
                     //设置填充图片笔刷矩形的呈现位置
@@ -729,7 +695,7 @@ namespace ControlLibrary
                     rect.RenderTransform = rectTransform;
 
                     _layoutCanvas.Children.Add(rect);
-
+                    
                 }
             GetRHAndRW();
             if (!double.IsNaN(RH) && !double.IsNaN(RW))
@@ -748,12 +714,12 @@ namespace ControlLibrary
                     rects[i].Height = this.RH;
                     rects[i].SetValue(Canvas.LeftProperty, ((Point)rects[i].Tag).X * this.RW);
                     rects[i].SetValue(Canvas.TopProperty, 0);
-
+                    
                     /*
                     var brush = await GetImageBrush((uint)(((Point)rects[i].Tag).X * this.RW), (uint)(((Point)rects[i].Tag).Y * this.RH), (uint)this.RW, (uint)this.RH);
                     brush.Stretch = this.Stretch;
                     rects[i].Fill = brush;
-                    */
+                    */ 
 
                     //var transform = rects[i].RenderTransform as CompositeTransform;
                     //transform.TranslateX = transform.TranslateX * RW;
@@ -769,288 +735,239 @@ namespace ControlLibrary
                     indices = indices.Shuffle();
                 }
 
-                #region CascadeAanimation.AanimationCollapse
-                if (this.CascadeAanimation == ControlLibrary.CascadeAanimation.AanimationCollapse)
+                //for (int ii = 0; ii < indices.Count; ii++)
+                for (int ii = 0; ii < indices.Count;)
                 {
-                    //for (int ii = 0; ii < indices.Count; ii++)
-                    for (int ii = 0; ii < indices.Count; )
-                    {
-                        sb = new Storyboard();
-                        var i = indices[ii];
-                        var projection = rects[i].Projection;
-                        var rect = rects[i];
-                        var column = rectCoords[ii].Item1;
-                        var row = rectCoords[ii].Item2;
-                        //*******************拿到当前的transform
-                        var transfrom = rect.RenderTransform as CompositeTransform;
-                        //Debug.WriteLine("i: {0}, p: {1}, rect: {2}, c: {3}, r: {4}", i, projection.GetHashCode(), rect.GetHashCode(), column, row);
-                        var rotationAnimation = new DoubleAnimationUsingKeyFrames();
-                        Storyboard.SetTarget(rotationAnimation, projection);
-                        Storyboard.SetTargetProperty(rotationAnimation, "RotationX");
+                    sb = new Storyboard();
+                    var i = indices[ii];
+                    var projection = rects[i].Projection;
+                    var rect = rects[i];
+                    var column = rectCoords[ii].Item1;
+                    var row = rectCoords[ii].Item2;
+                    //*******************拿到当前的transform
+                    var transfrom = rect.RenderTransform as CompositeTransform;
+                    //Debug.WriteLine("i: {0}, p: {1}, rect: {2}, c: {3}, r: {4}", i, projection.GetHashCode(), rect.GetHashCode(), column, row);
+                    var rotationAnimation = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(rotationAnimation, projection);
+                    Storyboard.SetTargetProperty(rotationAnimation, "RotationX");
 
-                        var endKeyTime =
-                            this.CascadeSequence == CascadeSequence.EndTogether
-                                ? TimeSpan.FromSeconds(totalDurationInSeconds)
-                                : TimeSpan.FromSeconds(
-                                    (double)row * RowDelay.TotalSeconds +
-                                    (double)column * ColumnDelay.TotalSeconds +
-                                    TileDuration.TotalSeconds);
-                        endKeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 3 * 2);
+                    var endKeyTime =
+                        this.CascadeSequence == CascadeSequence.EndTogether
+                            ? TimeSpan.FromSeconds(totalDurationInSeconds)
+                            : TimeSpan.FromSeconds(
+                                (double)row * RowDelay.TotalSeconds +
+                                (double)column * ColumnDelay.TotalSeconds +
+                                TileDuration.TotalSeconds);
+                    endKeyTime =  TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 3 * 2);
 
-                        rotationAnimation.KeyFrames.Add(
-                            new SplineDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.Zero,
-                                Value = 90
-                            });
-                        rotationAnimation.KeyFrames.Add(
-                            new SplineDoubleKeyFrame
-                            {
-                                //KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
-                                KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
-                                Value = 40
-                            });
-                        rotationAnimation.KeyFrames.Add(
-                            new EasingDoubleKeyFrame
-                            {
-                                KeyTime = endKeyTime,
-                                EasingFunction = CascadeInEasingFunction,
-                                Value = 0
-                            });
+                    rotationAnimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.Zero,
+                            Value = 90
+                        });
+                    rotationAnimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            //KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                            KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
+                            Value = 40
+                        });
+                    rotationAnimation.KeyFrames.Add(
+                        new EasingDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            EasingFunction = CascadeInEasingFunction,
+                            Value = 0
+                        });
 
-                        sb.Children.Add(rotationAnimation);
+                    sb.Children.Add(rotationAnimation);
 
-                        var opacityAnimation = new DoubleAnimationUsingKeyFrames();
-                        Storyboard.SetTarget(opacityAnimation, rect);
-                        Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
+                    #region RotationY 和 RotationZ 没有加入到动画中(暂时不要)
+                    var rotationAnimationY = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(rotationAnimationY, projection);
+                    Storyboard.SetTargetProperty(rotationAnimationY, "RotationY");
 
-                        opacityAnimation.KeyFrames.Add(
-                            new DiscreteDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.Zero,
-                                Value = 0
-                            });
-                        opacityAnimation.KeyFrames.Add(
-                            new DiscreteDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
-                                Value = 0
-                            });
-                        opacityAnimation.KeyFrames.Add(
-                            new EasingDoubleKeyFrame
-                            {
-                                KeyTime = endKeyTime,
-                                EasingFunction = new ElasticEase
-                                {
-                                    EasingMode = EasingMode.EaseOut,
-                                    Oscillations = 3,
-                                    Springiness = 0.0
-                                },
-                                Value = 1
-                            });
+                    rotationAnimationY.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.Zero,
+                            Value = 180
+                        });
+                    rotationAnimationY.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                            Value = 90
+                        });
+                    rotationAnimationY.KeyFrames.Add(
+                        new EasingDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            EasingFunction = CascadeInEasingFunction,
+                            Value = 0
+                        });
 
-                        sb.Children.Add(opacityAnimation);
+                    //sb.Children.Add(rotationAnimationY);
 
-                        //BackEase(缓动函数) BounceEase(弹跳效果) CircleEase(加速和/或减速) CubicEase( f(t) = t3 创建加速和/或减速) 
-                        //ElasticEase(弹簧来回振动直到停止) ExponentialEase(指数公式创建加速和/或减速) PowerEase(f(t) = tp 创建加速和/或减速)
-                        //QuadraticEase(f(t) = t2 创建加速和/或减速) QuarticEase(f(t) = t4 创建加速和/或减速) QuinticEase(f(t) = t5 创建加速和/或减速) 
-                        //SineEase(正弦方程式（见下面的备注）创建加速和/或减速)
-                        var translateXAanimation = new DoubleAnimation();
-                        translateXAanimation.From = transfrom.TranslateX;
-                        translateXAanimation.To = 0;
-                        translateXAanimation.Duration = endKeyTime;
-                        //translateXAanimation.EasingFunction = CascadeInEasingFunction;
-                        Storyboard.SetTarget(translateXAanimation, transfrom);
-                        Storyboard.SetTargetProperty(translateXAanimation, "TranslateX");
-                        sb.Children.Add(translateXAanimation);
+                    var rotationAnimationZ = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(rotationAnimationZ, projection);
+                    Storyboard.SetTargetProperty(rotationAnimationZ, "RotationZ");
 
-                        /*
-                        //暂且不要
-                        var translateYanimation = new DoubleAnimation();
-                        translateYanimation.From = transfrom.TranslateY;
-                        translateYanimation.To = ((Point)rects[i].Tag).Y * rects[i].Height;
-                        translateYanimation.Duration = endKeyTime;
-                        //translateYanimation.EasingFunction = CascadeInEasingFunction;
-                        Storyboard.SetTarget(translateYanimation, transfrom);
-                        Storyboard.SetTargetProperty(translateYanimation, "TranslateY");
-                        sb.Children.Add(translateYanimation);
-                        */
+                    rotationAnimationZ.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.Zero,
+                            Value = 180
+                        });
+                    rotationAnimationZ.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                            Value = 90
+                        });
+                    rotationAnimationZ.KeyFrames.Add(
+                        new EasingDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            EasingFunction = CascadeInEasingFunction,
+                            Value = 0
+                        });
 
-                        //另外一种
-                        var translateYAanimation = new DoubleAnimationUsingKeyFrames();
-                        Storyboard.SetTarget(translateYAanimation, transfrom);
-                        Storyboard.SetTargetProperty(translateYAanimation, "TranslateY");
+                    //sb.Children.Add(rotationAnimationZ);
+                    #endregion
 
-                        translateYAanimation.KeyFrames.Add(
-                            new SplineDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.Zero,
-                                Value = transfrom.TranslateY
-                            });
-                        translateYAanimation.KeyFrames.Add(
-                            new SplineDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
-                                Value = ((Point)rects[i].Tag).Y * rects[i].Height / 4 * 3
-                            });
-                        translateYAanimation.KeyFrames.Add(
-                            new EasingDoubleKeyFrame
-                            {
-                                KeyTime = endKeyTime,
-                                EasingFunction = CascadeInEasingFunction,
-                                Value = ((Point)rects[i].Tag).Y * rects[i].Height
-                            });
+                    var opacityAnimation = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(opacityAnimation, rect);
+                    Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
 
-                        sb.Children.Add(translateYAanimation);
+                    opacityAnimation.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.Zero,
+                            Value = 0
+                        });
+                    opacityAnimation.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
+                            Value = 0
+                        });
+                    opacityAnimation.KeyFrames.Add(
+                        new EasingDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            EasingFunction = new ElasticEase 
+                            { 
+                                EasingMode = EasingMode.EaseOut, Oscillations = 3, Springiness = 0.0 
+                            },
+                            Value = 1
+                        });
 
-                        var scaleTransformYAanimation = new DoubleAnimationUsingKeyFrames();
-                        Storyboard.SetTarget(scaleTransformYAanimation, transfrom);
-                        Storyboard.SetTargetProperty(scaleTransformYAanimation, "ScaleY");
+                    sb.Children.Add(opacityAnimation);
 
-                        scaleTransformYAanimation.KeyFrames.Add(
-                            new SplineDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
-                                Value = -1
-                            });
-                        scaleTransformYAanimation.KeyFrames.Add(
-                            new SplineDoubleKeyFrame
-                            {
-                                KeyTime = endKeyTime,
-                                Value = 1
-                            });
+                    //BackEase(缓动函数) BounceEase(弹跳效果) CircleEase(加速和/或减速) CubicEase( f(t) = t3 创建加速和/或减速) 
+                    //ElasticEase(弹簧来回振动直到停止) ExponentialEase(指数公式创建加速和/或减速) PowerEase(f(t) = tp 创建加速和/或减速)
+                    //QuadraticEase(f(t) = t2 创建加速和/或减速) QuarticEase(f(t) = t4 创建加速和/或减速) QuinticEase(f(t) = t5 创建加速和/或减速) 
+                    //SineEase(正弦方程式（见下面的备注）创建加速和/或减速)
+                    var translateXAanimation = new DoubleAnimation();
+                    translateXAanimation.From = transfrom.TranslateX;
+                    translateXAanimation.To = 0;
+                    translateXAanimation.Duration = endKeyTime;
+                    //translateXAanimation.EasingFunction = CascadeInEasingFunction;
+                    Storyboard.SetTarget(translateXAanimation, transfrom);
+                    Storyboard.SetTargetProperty(translateXAanimation, "TranslateX");
+                    sb.Children.Add(translateXAanimation);
 
-                        sb.Children.Add(scaleTransformYAanimation);
-                        //await sb.BeginAsync();
-                        sb.Begin();
-                        await Task.Delay(TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 10 * 1));
-                        ii++;
-                    }
+                    /*
+                    //暂且不要
+                    var translateYanimation = new DoubleAnimation();
+                    translateYanimation.From = transfrom.TranslateY;
+                    translateYanimation.To = ((Point)rects[i].Tag).Y * rects[i].Height;
+                    translateYanimation.Duration = endKeyTime;
+                    //translateYanimation.EasingFunction = CascadeInEasingFunction;
+                    Storyboard.SetTarget(translateYanimation, transfrom);
+                    Storyboard.SetTargetProperty(translateYanimation, "TranslateY");
+                    sb.Children.Add(translateYanimation);
+                    */
+
+                    /*
+                    //一种形式的动画
+                    var translateYAanimation = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(translateYAanimation, transfrom);
+                    Storyboard.SetTargetProperty(translateYAanimation, "TranslateY");
+
+                    translateYAanimation.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.Zero,
+                            Value = transfrom.TranslateY
+                        });
+                    translateYAanimation.KeyFrames.Add(
+                        new DiscreteDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            Value = ((Point)rects[i].Tag).Y * rects[i].Height
+                        });
+                    */
+
+                    //另外一种
+                    var translateYAanimation = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(translateYAanimation, transfrom);
+                    Storyboard.SetTargetProperty(translateYAanimation, "TranslateY");
+
+                    translateYAanimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.Zero,
+                            Value = transfrom.TranslateY
+                        });
+                    translateYAanimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
+                            Value = ((Point)rects[i].Tag).Y * rects[i].Height / 4 * 3
+                        });
+                    translateYAanimation.KeyFrames.Add(
+                        new EasingDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            EasingFunction = CascadeInEasingFunction,
+                            Value = ((Point)rects[i].Tag).Y * rects[i].Height
+                        });
+
+                    sb.Children.Add(translateYAanimation);
+
+                    var scaleTransformYAanimation = new DoubleAnimationUsingKeyFrames();
+                    Storyboard.SetTarget(scaleTransformYAanimation, transfrom);
+                    Storyboard.SetTargetProperty(scaleTransformYAanimation, "ScaleY");
+
+                    scaleTransformYAanimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
+                            Value = -1
+                        });
+                    scaleTransformYAanimation.KeyFrames.Add(
+                        new SplineDoubleKeyFrame
+                        {
+                            KeyTime = endKeyTime,
+                            Value = 1
+                        });
+
+                    sb.Children.Add(scaleTransformYAanimation);
+                    //await sb.BeginAsync();
+                    sb.Begin();
+                    await Task.Delay(TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 10 * 1));
+                    ii++;
                 }
 
                 //sb.Begin();
-                #endregion
-                #region CascadeAanimation.AanimationFlash
-                else
-                {
-                    for (int ii = 0; ii < indices.Count; ii++)
-                    {
-                        var i = indices[ii];
-                        var projection = rects[i].Projection;
-                        var rect = rects[i];
-                        var column = rectCoords[ii].Item1;
-                        var row = rectCoords[ii].Item2;
-                        //*******************拿到当前的transform
-                        var transfrom = rect.RenderTransform as CompositeTransform;
-                        var rotationAnimation = new DoubleAnimationUsingKeyFrames();
-                        Storyboard.SetTarget(rotationAnimation, projection);
-                        Storyboard.SetTargetProperty(rotationAnimation, "RotationX");
-
-                        var endKeyTime =
-                            this.CascadeSequence == CascadeSequence.EndTogether
-                                ? TimeSpan.FromSeconds(totalDurationInSeconds)
-                                : TimeSpan.FromSeconds(
-                                    (double)row * RowDelay.TotalSeconds +
-                                    (double)column * ColumnDelay.TotalSeconds +
-                                    TileDuration.TotalSeconds);
-
-                        rotationAnimation.KeyFrames.Add(
-                            new SplineDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.Zero,
-                                Value = 90
-                            });
-                        rotationAnimation.KeyFrames.Add(
-                            new SplineDoubleKeyFrame
-                            {
-                                //KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
-                                KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 4 * 3),
-                                Value = 40
-                            });
-                        rotationAnimation.KeyFrames.Add(
-                            new EasingDoubleKeyFrame
-                            {
-                                KeyTime = endKeyTime,
-                                EasingFunction = CascadeInEasingFunction,
-                                Value = 0
-                            });
-
-                        sb.Children.Add(rotationAnimation);
-
-                        var opacityAnimation = new DoubleAnimationUsingKeyFrames();
-                        Storyboard.SetTarget(opacityAnimation, rect);
-                        Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
-
-                        opacityAnimation.KeyFrames.Add(
-                            new DiscreteDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.Zero,
-                                Value = 0
-                            });
-                        opacityAnimation.KeyFrames.Add(
-                            new DiscreteDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.FromSeconds((double)row * RowDelay.TotalSeconds + (double)column * ColumnDelay.TotalSeconds),
-                                Value = 0
-                            });
-                        opacityAnimation.KeyFrames.Add(
-                            new EasingDoubleKeyFrame
-                            {
-                                KeyTime = endKeyTime,
-                                EasingFunction = new ElasticEase
-                                {
-                                    EasingMode = EasingMode.EaseOut,
-                                    Oscillations = 3,
-                                    Springiness = 0.0
-                                },
-                                Value = 1
-                            });
-
-                        sb.Children.Add(opacityAnimation);
-
-                        var translateXAanimation = new DoubleAnimation();
-                        translateXAanimation.From = transfrom.TranslateX;
-                        translateXAanimation.To = 0;
-                        translateXAanimation.Duration = endKeyTime;
-                        Storyboard.SetTarget(translateXAanimation, transfrom);
-                        Storyboard.SetTargetProperty(translateXAanimation, "TranslateX");
-                        sb.Children.Add(translateXAanimation);
-
-                        //一种形式的动画
-                        var translateYAanimation = new DoubleAnimationUsingKeyFrames();
-                        Storyboard.SetTarget(translateYAanimation, transfrom);
-                        Storyboard.SetTargetProperty(translateYAanimation, "TranslateY");
-
-                        translateYAanimation.KeyFrames.Add(
-                            new DiscreteDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.Zero,
-                                Value = transfrom.TranslateY
-                            });
-                        //translateYAanimation.KeyFrames.Add(
-                        //   new SplineDoubleKeyFrame
-                        //   {
-                        //       KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 0.5),
-                        //       Value = ((Point)rects[i].Tag).Y * rects[i].Height / 0.5
-                        //   });
-                        translateYAanimation.KeyFrames.Add(
-                            new DiscreteDoubleKeyFrame
-                            {
-                                KeyTime = endKeyTime,
-                                Value = ((Point)rects[i].Tag).Y * rects[i].Height
-                            });
-
-                        sb.Children.Add(translateYAanimation);
-                    }
-
-                    sb.Begin();
-                }
-                #endregion
-            }
+            }   
         }
 
         protected override Windows.Foundation.Size MeasureOverride(Windows.Foundation.Size availableSize)
-        {
+        {          
             return base.MeasureOverride(availableSize);
         }
 

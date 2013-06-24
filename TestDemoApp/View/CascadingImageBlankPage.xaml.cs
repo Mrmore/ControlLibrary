@@ -82,5 +82,14 @@ namespace TestDemoApp
                 cascadingImageControl.IsClip = (bool)bool.Parse(ss.Content.ToString());
             }
         }
+
+        private void comboboxCascadeAanimation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (comboboxCascadeAanimation != null)
+            {
+                var ss = comboboxCascadeAanimation.SelectedItem as ComboBoxItem;
+                cascadingImageControl.CascadeAanimation = (CascadeAanimation)Enum.Parse(typeof(CascadeAanimation), ss.Content.ToString());
+            }
+        }
     }
 }
