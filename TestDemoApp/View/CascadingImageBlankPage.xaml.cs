@@ -25,6 +25,13 @@ namespace TestDemoApp
         public CascadingImageBlankPage()
         {
             this.InitializeComponent();
+            this.Loaded += CascadingImageBlankPage_Loaded;
+        }
+
+        private void CascadingImageBlankPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            cascadingImageControl.AnimationComplete -= cascadingImageControl_AnimationComplete;
+            cascadingImageControl.AnimationComplete += cascadingImageControl_AnimationComplete;
         }
 
         /// <summary>
@@ -90,6 +97,11 @@ namespace TestDemoApp
                 var ss = comboboxCascadeAanimation.SelectedItem as ComboBoxItem;
                 cascadingImageControl.CascadeAanimation = (CascadeAanimation)Enum.Parse(typeof(CascadeAanimation), ss.Content.ToString());
             }
+        }
+
+        private void cascadingImageControl_AnimationComplete()
+        {
+            
         }
     }
 }

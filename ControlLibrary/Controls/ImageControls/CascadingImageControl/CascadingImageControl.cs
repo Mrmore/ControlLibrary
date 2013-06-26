@@ -47,6 +47,11 @@ namespace ControlLibrary
         private Size size;
         #endregion
 
+        #region EventHandler
+        public delegate void AnimationCompleteHandler();
+        public event AnimationCompleteHandler AnimationComplete;
+        #endregion
+
         #region Columns
         /// <summary>
         /// Columns Dependency Property
@@ -614,6 +619,7 @@ namespace ControlLibrary
             _layoutCanvas.Children.Clear();
 
             var sb = new Storyboard();
+            sb.Completed -= sb_Completed;
 
             var totalDurationInSeconds = RowDelay.TotalSeconds * (Rows - 1) +
                                          ColumnDelay.TotalSeconds * (Columns - 1) +
@@ -776,6 +782,11 @@ namespace ControlLibrary
                     for (int ii = 0; ii < indices.Count; )
                     {
                         sb = new Storyboard();
+                        if (ii == Rows * Columns - 1)
+                        {
+                            sb.Completed -= sb_Completed;
+                            sb.Completed += sb_Completed;
+                        }
                         var i = indices[ii];
                         var projection = rects[i].Projection;
                         var rect = rects[i];
@@ -933,6 +944,8 @@ namespace ControlLibrary
                 #region CascadeAanimation.AanimationFlash
                 else
                 {
+                    sb.Completed -= sb_Completed;
+                    sb.Completed += sb_Completed;
                     for (int ii = 0; ii < indices.Count; ii++)
                     {
                         var i = indices[ii];
@@ -1015,24 +1028,32 @@ namespace ControlLibrary
                         Storyboard.SetTarget(translateXAanimation, transfrom);
                         Storyboard.SetTargetProperty(translateXAanimation, "TranslateX");
                         sb.Children.Add(translateXAanimation);
-
-                        //一种形式的动画
+                        
                         var translateYAanimation = new DoubleAnimationUsingKeyFrames();
                         Storyboard.SetTarget(translateYAanimation, transfrom);
                         Storyboard.SetTargetProperty(translateYAanimation, "TranslateY");
 
-                        translateYAanimation.KeyFrames.Add(
-                            new DiscreteDoubleKeyFrame
-                            {
-                                KeyTime = TimeSpan.Zero,
-                                Value = transfrom.TranslateY
-                            });
+                        //translateYAanimation.KeyFrames.Add(
+                        //    new DiscreteDoubleKeyFrame
+                        //    {
+                        //        KeyTime = TimeSpan.Zero,
+                        //        Value = transfrom.TranslateY
+                        //    });
+
                         //translateYAanimation.KeyFrames.Add(
                         //   new SplineDoubleKeyFrame
                         //   {
                         //       KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 0.5),
                         //       Value = ((Point)rects[i].Tag).Y * rects[i].Height / 0.5
                         //   });
+
+                        translateYAanimation.KeyFrames.Add(
+                           new SplineDoubleKeyFrame
+                           {
+                               KeyTime = TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 5 * 4),
+                               Value = ((Point)rects[i].Tag).Y * rects[i].Height / 12
+                           });
+
                         translateYAanimation.KeyFrames.Add(
                             new DiscreteDoubleKeyFrame
                             {
@@ -1046,6 +1067,14 @@ namespace ControlLibrary
                     sb.Begin();
                 }
                 #endregion
+            }
+        }
+
+        private void sb_Completed(object sender, object e)
+        {
+            if (this.AnimationComplete != null)
+            {
+                this.AnimationComplete();
             }
         }
 
