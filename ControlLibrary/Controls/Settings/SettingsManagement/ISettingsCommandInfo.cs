@@ -50,6 +50,21 @@ namespace ControlLibrary.SettingsManagement
         }
         #endregion
 
+
+        #region ContentBackgroundBrush
+        SolidColorBrush ContentBackgroundBrush
+        {
+            get;
+        }
+        #endregion
+
+        #region ContentForegroundBrush
+        SolidColorBrush ContentForegroundBrush
+        {
+            get;
+        }
+        #endregion
+
         #endregion
     }
 }

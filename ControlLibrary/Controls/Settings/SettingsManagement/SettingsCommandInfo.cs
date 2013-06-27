@@ -10,11 +10,13 @@ namespace ControlLibrary.SettingsManagement
     class SettingsCommandInfo<T> : ISettingsCommandInfo where T : UserControl, new()
     {
         #region constructors
-        public SettingsCommandInfo(string headerText, SettingsFlyout.SettingsFlyoutWidth width, SolidColorBrush headerTextBrush)
+        public SettingsCommandInfo(string headerText, SettingsFlyout.SettingsFlyoutWidth width, SolidColorBrush headerTextBrush, SolidColorBrush contentBackgroundBrush, SolidColorBrush contentForegroundBrush)
         {
             HeaderText = headerText;
             Width = width;
             HeaderTextBrush = headerTextBrush;
+            ContentBackgroundBrush = contentBackgroundBrush;
+            ContentForegroundBrush = contentForegroundBrush;
         }
         #endregion
 
@@ -60,6 +62,22 @@ namespace ControlLibrary.SettingsManagement
 
         #region HeaderTextBrush
         public SolidColorBrush HeaderTextBrush
+        {
+            get;
+            private set;
+        }
+        #endregion
+
+        #region ContentBackgroundBrush
+        public SolidColorBrush ContentBackgroundBrush
+        {
+            get;
+            private set;
+        }
+        #endregion
+
+        #region ContentForegroundBrush
+        public SolidColorBrush ContentForegroundBrush
         {
             get;
             private set;

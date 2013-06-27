@@ -117,7 +117,7 @@ namespace ControlLibrary.SettingsManagement
 
             if (!_commands.ContainsKey(key))
             {
-                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width, null));
+                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width, null, null, null));
             }
         }
 
@@ -127,7 +127,27 @@ namespace ControlLibrary.SettingsManagement
 
             if (!_commands.ContainsKey(key))
             {
-                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width, headerBrush));
+                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width, headerBrush, null, null));
+            }
+        }
+
+        public void AddCommand<T>(string headerText, SolidColorBrush headerBrush, SolidColorBrush contentBackgroundBrush, SettingsFlyout.SettingsFlyoutWidth width = SettingsFlyout.SettingsFlyoutWidth.Narrow) where T : UserControl, new()
+        {
+            string key = headerText.Trim().Replace(" ", "");
+
+            if (!_commands.ContainsKey(key))
+            {
+                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width, headerBrush, contentBackgroundBrush, null));
+            }
+        }
+
+        public void AddCommand<T>(string headerText, SolidColorBrush headerBrush, SolidColorBrush contentBackgroundBrush, SolidColorBrush contentForegroundBrush, SettingsFlyout.SettingsFlyoutWidth width = SettingsFlyout.SettingsFlyoutWidth.Narrow) where T : UserControl, new()
+        {
+            string key = headerText.Trim().Replace(" ", "");
+
+            if (!_commands.ContainsKey(key))
+            {
+                _commands.Add(key, new SettingsCommandInfo<T>(headerText, width, headerBrush, contentBackgroundBrush, contentForegroundBrush));
             }
         }
         #endregion
@@ -180,13 +200,24 @@ namespace ControlLibrary.SettingsManagement
             }
             _settingsFlyout.SmallLogoImageSource = _smallLogoImageSource;
             _settingsFlyout.HeaderText = command.Label;
-#pragma warning disable 612,618
-            if (ContentBackgroundBrush != null)
-#pragma warning restore 612,618
+            if (commandInfo.ContentBackgroundBrush != null)
             {
-#pragma warning disable 612,618
-                _settingsFlyout.ContentBackgroundBrush = ContentBackgroundBrush;    
-#pragma warning restore 612,618
+                _settingsFlyout.ContentBackgroundBrush = commandInfo.ContentBackgroundBrush;
+            }
+            else
+            {
+                #pragma warning disable 612,618
+                            if (ContentBackgroundBrush != null)
+                #pragma warning restore 612,618
+                            {
+                #pragma warning disable 612,618
+                                _settingsFlyout.ContentBackgroundBrush = ContentBackgroundBrush;
+                #pragma warning restore 612,618
+                            }
+            }
+            if (commandInfo.ContentForegroundBrush != null)
+            {
+                _settingsFlyout.ContentForegroundBrush = commandInfo.ContentForegroundBrush;
             }
 
             _settingsFlyout.Content = commandInfo.Instance;

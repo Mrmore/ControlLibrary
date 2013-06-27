@@ -53,7 +53,7 @@ namespace TestDemoApp
         /// <param name="args">Details about the launch request and process.</param>
         protected async override void OnLaunched(LaunchActivatedEventArgs args)
         {
-            AppSettings.Current.AddCommand<SettingsContent>("第一项", new SolidColorBrush(Colors.Red), SettingsFlyout.SettingsFlyoutWidth.Wide);
+            AppSettings.Current.AddCommand<SettingsContent>("第一项", new SolidColorBrush(Colors.Red), new SolidColorBrush(Colors.Gray), new SolidColorBrush(Colors.Blue), SettingsFlyout.SettingsFlyoutWidth.Wide);
             AppSettings.Current.AddCommand<SettingsContent>("第二项", SettingsFlyout.SettingsFlyoutWidth.Wide);
             AppSettings.Current.AddCommand<SettingsContent>("第五项", new SolidColorBrush(Colors.Green), SettingsFlyout.SettingsFlyoutWidth.Wide);
             //AppSettings.Current.ResetConfigureSettings();
