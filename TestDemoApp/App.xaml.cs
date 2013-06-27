@@ -22,6 +22,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using ControlLibrary.Extensions;
 
 // The Blank Application template is documented at http://go.microsoft.com/fwlink/?LinkId=234227
 

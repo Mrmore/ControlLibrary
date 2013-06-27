@@ -66,6 +66,8 @@ namespace TestDemoApp
                 settings.SmallLogoImageSource = bmp;
                 settings.Content = new SettingsContent();
                 settings.IsOpen = true;
+                settings.Closed -= settings_Closed;
+                settings.Closed += settings_Closed;
             });
 
             settingsPaneCommands.Request.ApplicationCommands.Add(cmd);
@@ -83,6 +85,11 @@ namespace TestDemoApp
             });
 
             settingsPaneCommands.Request.ApplicationCommands.Add(cmd1);
+        }
+
+        private void settings_Closed(object sender, object e)
+        {
+            
         }
 
         private void ShowSettings(object sender, RoutedEventArgs e)
