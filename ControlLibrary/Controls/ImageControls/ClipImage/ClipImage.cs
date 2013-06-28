@@ -37,6 +37,13 @@ namespace ControlLibrary
         /// </summary>
         public event ImageDownLoadProgressHandler ImageDownLoadProgress;
 
+        //动画完成的实时代理
+        public delegate void AnimationCompleteHandler();
+        /// <summary>
+        /// 动画完成的实时事件
+        /// </summary>
+        public event AnimationCompleteHandler AnimationComplete;
+
 
         private bool isImageComplete = false;
         /// <summary>
@@ -278,6 +285,8 @@ namespace ControlLibrary
         protected virtual void CreateAnimationBegin()
         {
             sbVisible = new Storyboard();
+            sbVisible.Completed -= sbVisible_Completed;
+            sbVisible.Completed += sbVisible_Completed;
             if (this.AnimationType == ControlLibrary.AnimationType.AanimationFadeOut)
             {
                 DoubleAnimationUsingKeyFrames keyFramesOpacity = new DoubleAnimationUsingKeyFrames();
@@ -305,6 +314,14 @@ namespace ControlLibrary
                     EasingFunction = new CircleEase() { EasingMode = EasingMode.EaseOut }
                 });
                 sbVisible.Children.Add(keyFramesRotationX);
+            }
+        }
+
+        private void sbVisible_Completed(object sender, object e)
+        {
+            if (this.AnimationComplete != null)
+            {
+                this.AnimationComplete();
             }
         }
 
