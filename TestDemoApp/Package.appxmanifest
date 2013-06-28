@@ -17,7 +17,7 @@
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="TestDemoApp.App">
       <VisualElements DisplayName="TestDemoApp" Logo="Assets\Logo.png" SmallLogo="Assets\SmallLogo.png" Description="TestDemoApp" ForegroundText="light" BackgroundColor="#464646" ToastCapable="true">
         <LockScreen Notification="badge" BadgeLogo="Assets\BadgeLogo.png" />
-        <DefaultTile ShowName="allLogos" WideLogo="Assets\WideLogo.png" />
+        <DefaultTile ShowName="allLogos" WideLogo="Assets\WideLogo.png" ShortName="TestDemoApp" />
         <SplashScreen Image="Assets\SplashScreen.png" />
         <InitialRotationPreference>
           <Rotation Preference="landscape" />
