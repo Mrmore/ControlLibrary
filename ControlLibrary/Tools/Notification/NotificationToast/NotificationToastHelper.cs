@@ -93,7 +93,7 @@ namespace ControlLibrary.Tools
         /// <param name="title">主题</param>
         /// <param name="description">内容</param>
         /// <param name="notificationSound">声音(默认是成功的声音)</param>
-        public static void DisplayTextTost(string title, string description, NotificationToastSound notificationSound = NotificationToastSound.Success)
+        public static void DisplayTextCustomTost(string title, string description, NotificationToastSound notificationSound = NotificationToastSound.Success)
         {
             IToastText02 toastContent = ToastContentFactory.CreateToastText02();
             toastContent.TextHeading.Text = title;
@@ -132,7 +132,7 @@ namespace ControlLibrary.Tools
         /// <param name="title">主题</param>
         /// <param name="description">内容</param>
         /// <param name="notificationSound">声音(默认是成功的声音)</param>
-        public static void DisplayWebImageToast(string toastImageSrc, string title, string description, NotificationToastSound notificationSound = NotificationToastSound.Success)
+        public static void DisplayWebImageCustomToast(string toastImageSrc, string title, string description, NotificationToastSound notificationSound = NotificationToastSound.Success)
         {
             IToastImageAndText02 toastContent = ToastContentFactory.CreateToastImageAndText02();
             toastContent.TextHeading.Text = title;
