@@ -106,17 +106,18 @@
             Grid.Column="3"
             Width="620"
             Height="300"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
+            VerticalAlignment="Stretch"
+            HorizontalAlignment="Stretch"
             Columns="{Binding Value, ElementName=ColumnsSlider, Converter={StaticResource DoubleToIntConverter}}"
             Rows="{Binding Value, ElementName=RowsSlider, Converter={StaticResource DoubleToIntConverter}}"
             ColumnDelay="0:0:0.05"
             RowDelay="0:0:0.1"
             TileDuration="0:0:4"
-            Stretch="Uniform"
-            ImageSource="/Images/CascadingImage.jpg"
+            Stretch="Fill"
+            ImageSource="http://ww4.sinaimg.cn/bmiddle/8c81790ajw1e57owup6rwj20i20i2gms.jpg"
             Tapped="UIElement_OnTapped" Opacity="1"/>
-        <Image
+        <!--ImageSource="/Images/CascadingImage.jpg"-->
+        <!--<Image
             x:Name="image"
             Grid.Row="1"
             Grid.Column="3"
@@ -125,6 +126,6 @@
             VerticalAlignment="Center"
             HorizontalAlignment="Center"
             Stretch="Uniform"
-            Source="/Images/CascadingImage.jpg" Opacity="0" Visibility="Collapsed"/>
+            Source="/Images/CascadingImage.jpg" Opacity="0" Visibility="Collapsed"/>-->
     </Grid>
 </Page>

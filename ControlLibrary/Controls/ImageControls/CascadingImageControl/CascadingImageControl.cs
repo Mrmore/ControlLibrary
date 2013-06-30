@@ -20,6 +20,7 @@ using Windows.Storage.Streams;
 using Windows.Graphics.Imaging;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
+using ControlLibrary.Tools.Async;
 
 // “用户控件”项模板在 http://go.microsoft.com/fwlink/?LinkId=234235 上有介绍
 
@@ -575,6 +576,8 @@ namespace ControlLibrary
         {
             this.DefaultStyleKey = typeof(CascadingImageControl);
             this.Loaded += OnLoaded;
+            this.sbList = new List<Storyboard>();
+            this.storyboard = new Storyboard();
         }
 
         protected override void OnApplyTemplate()
@@ -602,6 +605,8 @@ namespace ControlLibrary
             Cascade();
         }
 
+        private List<Storyboard> sbList = null;
+        private Storyboard storyboard = null;
         public async void Cascade()
         {
             RH = RW = double.NaN;
@@ -618,8 +623,8 @@ namespace ControlLibrary
 
             _layoutCanvas.Children.Clear();
 
-            var sb = new Storyboard();
-            sb.Completed -= sb_Completed;
+            storyboard.Stop();
+            storyboard.Completed -= sb_Completed;
 
             var totalDurationInSeconds = RowDelay.TotalSeconds * (Rows - 1) +
                                          ColumnDelay.TotalSeconds * (Columns - 1) +
@@ -781,11 +786,12 @@ namespace ControlLibrary
                     //for (int ii = 0; ii < indices.Count; ii++)
                     for (int ii = 0; ii < indices.Count; )
                     {
-                        sb = new Storyboard();
+                        var sb = new Storyboard();
                         if (ii == Rows * Columns - 1)
                         {
                             sb.Completed -= sb_Completed;
                             sb.Completed += sb_Completed;
+                            sbList.Add(sb);
                         }
                         var i = indices[ii];
                         var projection = rects[i].Projection;
@@ -936,6 +942,23 @@ namespace ControlLibrary
                         sb.Begin();
                         await Task.Delay(TimeSpan.FromSeconds(endKeyTime.TotalSeconds / 10 * 1));
                         ii++;
+                        if (sbList.Count > 0)
+                        {
+                            for (int j = 0; j < sbList.Count; j++)
+                            {
+                                if (j != sbList.Count - 1)
+                                {
+                                    sbList.ElementAt(j).Completed -= sb_Completed;
+                                }
+                                else
+                                {
+                                    if (this.CascadeAanimation == ControlLibrary.CascadeAanimation.AanimationFlash)
+                                    {
+                                        sbList.ElementAt(j).Completed -= sb_Completed;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -944,8 +967,8 @@ namespace ControlLibrary
                 #region CascadeAanimation.AanimationFlash
                 else
                 {
-                    sb.Completed -= sb_Completed;
-                    sb.Completed += sb_Completed;
+                    storyboard.Completed -= sb_Completed;
+                    storyboard.Completed += sb_Completed;
                     for (int ii = 0; ii < indices.Count; ii++)
                     {
                         var i = indices[ii];
@@ -988,7 +1011,7 @@ namespace ControlLibrary
                                 Value = 0
                             });
 
-                        sb.Children.Add(rotationAnimation);
+                        storyboard.Children.Add(rotationAnimation);
 
                         var opacityAnimation = new DoubleAnimationUsingKeyFrames();
                         Storyboard.SetTarget(opacityAnimation, rect);
@@ -1019,7 +1042,7 @@ namespace ControlLibrary
                                 Value = 1
                             });
 
-                        sb.Children.Add(opacityAnimation);
+                        storyboard.Children.Add(opacityAnimation);
 
                         var translateXAanimation = new DoubleAnimation();
                         translateXAanimation.From = transfrom.TranslateX;
@@ -1027,8 +1050,8 @@ namespace ControlLibrary
                         translateXAanimation.Duration = endKeyTime;
                         Storyboard.SetTarget(translateXAanimation, transfrom);
                         Storyboard.SetTargetProperty(translateXAanimation, "TranslateX");
-                        sb.Children.Add(translateXAanimation);
-                        
+                        storyboard.Children.Add(translateXAanimation);
+
                         var translateYAanimation = new DoubleAnimationUsingKeyFrames();
                         Storyboard.SetTarget(translateYAanimation, transfrom);
                         Storyboard.SetTargetProperty(translateYAanimation, "TranslateY");
@@ -1061,10 +1084,10 @@ namespace ControlLibrary
                                 Value = ((Point)rects[i].Tag).Y * rects[i].Height
                             });
 
-                        sb.Children.Add(translateYAanimation);
+                        storyboard.Children.Add(translateYAanimation);
                     }
 
-                    sb.Begin();
+                    storyboard.Begin();
                 }
                 #endregion
             }
