@@ -211,10 +211,10 @@ namespace ControlLibrary
         private void OnImageSourceChanged(
             ImageSource oldImageSource, ImageSource newImageSource)
         {
-            BitmapImage bi = newImageSource as BitmapImage;
-            bi.ImageOpened -= bi_ImageOpened;
-            bi.ImageOpened += bi_ImageOpened;
-            //Cascade();
+            //BitmapImage bi = newImageSource as BitmapImage;
+            //bi.ImageOpened -= bi_ImageOpened;
+            //bi.ImageOpened += bi_ImageOpened;
+            Cascade();
         }
 
         private void bi_ImageOpened(object sender, RoutedEventArgs e)
