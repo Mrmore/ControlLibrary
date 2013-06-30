@@ -77,6 +77,13 @@ namespace ControlLibrary
         /// </summary>
         public event ExceptionRoutedEventHandler ImageFailed;
 
+        //动画完成的实时代理
+        public delegate void AnimationCompleteHandler();
+        /// <summary>
+        /// 动画完成的实时事件
+        /// </summary>
+        public event AnimationCompleteHandler AnimationComplete;
+
         /// <summary>
         /// 避免被释放多次的标记
         /// </summary>
@@ -85,6 +92,8 @@ namespace ControlLibrary
         public ImageGif()
         {
             this.DefaultStyleKey = typeof(ImageGif);
+            sbVisible = new Storyboard();
+            sbNotVisible = new Storyboard();
         }
 
         protected override Windows.Foundation.Size ArrangeOverride(Windows.Foundation.Size finalSize)
@@ -126,10 +135,19 @@ namespace ControlLibrary
             }
         }
 
+        public Storyboard GetStart()
+        {
+            return sbVisible;
+        }
+
         //简写动画方法(淡入)
         private void CreateAnimationBegin()
         {
-            sbVisible = new Storyboard();
+            //sbVisible = new Storyboard();
+            sbVisible.Stop();
+            sbVisible.Children.Clear();
+            sbVisible.Completed -= sbVisible_Completed;
+            sbVisible.Completed += sbVisible_Completed;
             DoubleAnimationUsingKeyFrames keyFramesOpacity = new DoubleAnimationUsingKeyFrames();
             Storyboard.SetTarget(keyFramesOpacity, imageGifGrid);
             Storyboard.SetTargetProperty(keyFramesOpacity, "(UIElement.Opacity)");
@@ -138,6 +156,14 @@ namespace ControlLibrary
             KeyTime ktOpacity2 = KeyTime.FromTimeSpan(this.AnimationTime);
             keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity2, Value = 1 });
             sbVisible.Children.Add(keyFramesOpacity);
+        }
+
+        private void sbVisible_Completed(object sender, object e)
+        {
+            if (this.AnimationComplete != null)
+            {
+                this.AnimationComplete();
+            }
         }
 
         private void AnimationBeginStart()
@@ -156,10 +182,17 @@ namespace ControlLibrary
             }
         }
 
+        public Storyboard GetEnd()
+        {
+            return sbNotVisible;
+        }
+
         //简写动画方法(浅出)
         private void CreateAnimationEnd()
         {
-            sbNotVisible = new Storyboard();
+            //sbNotVisible = new Storyboard();
+            sbNotVisible.Stop();
+            sbNotVisible.Children.Clear();
             DoubleAnimationUsingKeyFrames keyFramesOpacity = new DoubleAnimationUsingKeyFrames();
             Storyboard.SetTarget(keyFramesOpacity, imageGifGrid);
             Storyboard.SetTargetProperty(keyFramesOpacity, "(UIElement.Opacity)");

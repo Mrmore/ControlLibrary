@@ -622,8 +622,9 @@ namespace ControlLibrary
                 Columns = 1;
 
             _layoutCanvas.Children.Clear();
-
+                       
             storyboard.Stop();
+            storyboard.Children.Clear();
             storyboard.Completed -= sb_Completed;
 
             var totalDurationInSeconds = RowDelay.TotalSeconds * (Rows - 1) +
@@ -1086,7 +1087,7 @@ namespace ControlLibrary
 
                         storyboard.Children.Add(translateYAanimation);
                     }
-
+                    
                     storyboard.Begin();
                 }
                 #endregion

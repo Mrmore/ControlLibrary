@@ -377,6 +377,8 @@ namespace ControlLibrary
         public CacheImage()
         {
             this.DefaultStyleKey = typeof(CacheImage);
+            sbVisible = new Storyboard();
+            sbNotVisible = new Storyboard();
         }
 
         protected override void OnApplyTemplate()
@@ -414,10 +416,17 @@ namespace ControlLibrary
             }
         }
 
+        public Storyboard GetStart()
+        {
+            return sbVisible;
+        }
+
         //简写动画方法(淡入) 与 （翻转）
         protected virtual void CreateAnimationBegin()
         {
-            sbVisible = new Storyboard();
+            //sbVisible = new Storyboard();
+            sbVisible.Stop();
+            sbVisible.Children.Clear();
             sbVisible.Completed -= sbVisible_Completed;
             sbVisible.Completed += sbVisible_Completed;
             if (this.AnimationType == ControlLibrary.AnimationType.AanimationFadeOut)
@@ -474,10 +483,17 @@ namespace ControlLibrary
             }
         }
 
+        public Storyboard GetEnd()
+        {
+            return sbNotVisible;
+        }
+
         //简写动画方法(浅出)
         protected virtual void CreateAnimationEnd()
         {
-            sbNotVisible = new Storyboard();
+            //sbNotVisible = new Storyboard();
+            sbNotVisible.Stop();
+            sbNotVisible.Children.Clear();
             if (this.AnimationType == ControlLibrary.AnimationType.AanimationFadeOut)
             {
                 DoubleAnimationUsingKeyFrames keyFramesOpacity = new DoubleAnimationUsingKeyFrames();

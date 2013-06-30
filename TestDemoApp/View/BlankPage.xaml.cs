@@ -339,5 +339,10 @@ namespace TestDemoApp
             //await NotificationSecondaryTileHelper.UnPinSecondaryTileWithImage("mat1");
             await NotificationSecondaryTileHelper.UnPinSecondaryTileWithImage("mats");
         }
+
+        private void BtCasImage_Click(object sender, RoutedEventArgs e)
+        {
+            this.Frame.Navigate(typeof(CascadingImagePage));
+        }
     }
 }
