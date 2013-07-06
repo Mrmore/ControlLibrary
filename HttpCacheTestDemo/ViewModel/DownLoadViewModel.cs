@@ -20,12 +20,27 @@ namespace HttpCacheTestDemo
         {
             DownLoadList = new ObservableCollection<DownLoadEntity>();
             DownLoadHelp = BackgroundDownloaderHelper.Instance;
-            DownLoadHelp.DownloadComplete += DownLoadHelp_DownloadComplete;
-            DownLoadHelp.DownloadFail += DownLoadHelp_DownloadFail;
-            DownLoadHelp.DownloadCancel += DownLoadHelp_DownloadCancel;
+            //DownLoadHelp.DownloadComplete += DownLoadHelp_DownloadComplete;
+            //DownLoadHelp.DownloadFail += DownLoadHelp_DownloadFail;
+            //DownLoadHelp.DownloadCancel += DownLoadHelp_DownloadCancel;
             DownLoadHelp.process += DownLoadHelp_process;
             Ini();
             
+        }
+
+        void DownLoadHelp_process(List<Tuple<string, ulong, ulong, BackgroundTransferStatus>> sender)
+        {
+            if (sender != null && DownLoadList != null)
+                for (int i = 0; i < sender.Count; i++)
+                {
+                    for (int j = 0; j < DownLoadList.Count; j++)
+                    {
+                        if (sender[i].Item1 == DownLoadList[j].Uri)
+                        {
+                            DownLoadList[j].ReceiveBytes = (long)sender[i].Item2;
+                        }
+                    }
+                }
         }
 
         void DownLoadHelp_process(List<Tuple<string, ulong, ulong>> sender)
