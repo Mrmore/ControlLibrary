@@ -176,6 +176,7 @@ namespace ControlLibrary.Tools.Multimedia
         private static List<int> FormatCodeFlvOrMp3 = new List<int>() { 35, 34, 5, 6 };
         private static List<int> FormatCodeMp4 = new List<int>() { 18, 22, 37 };
         private static List<int> FormatCodeQuality = new List<int>() { 36, 35, 34, 5, 6, 18, 22, 37 };
+        private static List<int> FormatCodeMP4OrFlv_mp3 = new List<int>() { 18, 22, 37, 34, 5 };
 
         
         public static Task<List<YouTubeUri>> GetVideoAllUrisAsync(string youTubeId, YouTubeFormat youTubeFormat = YouTubeFormat.All)
@@ -204,6 +205,13 @@ namespace ControlLibrary.Tools.Multimedia
                         result = (from uAll in u
                                   from mp4 in FormatCodeMp4
                                   where uAll.Itag == mp4
+                                  select uAll).ToList();
+                    }
+                    else if (youTubeFormat == YouTubeFormat.MP4OrFlv_mp3)
+                    {
+                        result = (from uAll in u
+                                  from mP4OrFlv_mp3 in FormatCodeMP4OrFlv_mp3
+                                  where uAll.Itag == mP4OrFlv_mp3
                                   select uAll).ToList();
                     }
                     else

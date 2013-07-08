@@ -54,6 +54,7 @@ namespace ControlLibrary.Tools.Multimedia
         Mp4 = 1,
         Flv = 2,
         Mp3 = 3,
-        YouTubeQuality = 4
+        YouTubeQuality = 4,
+        MP4OrFlv_mp3
     }
 }
