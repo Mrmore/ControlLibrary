@@ -54,10 +54,8 @@ namespace ControlLibrary.Tools.Multimedia
         int _sampleRate;
         int _channelMode;
         uint _firstFrameHeader;
-        private StorageFile storageFile = null;
-        private bool isFileSavePicker = true;
 
-        public MP3Writer(string name, List<string> warnings, bool isfsp, StorageFile sf)
+        public MP3Writer(string name, List<string> warnings)
         {
             _name = name;
             _fs = new MemoryStream();
@@ -65,8 +63,6 @@ namespace ControlLibrary.Tools.Multimedia
             _chunkBuffer = new List<byte[]>();
             _frameOffsets = new List<uint>();
             _delayWrite = true;
-            storageFile = sf;
-            isFileSavePicker = isfsp;
         }
 
         public void WriteChunk(byte[] chunk, uint timeStamp)
@@ -95,72 +91,26 @@ namespace ControlLibrary.Tools.Multimedia
             //完成转换写入文件
             if (_fs != null && _fs.Length > 0)
             {
-                if (storageFile != null)
+                FileSavePicker savePicker = new FileSavePicker();
+                savePicker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
+                savePicker.FileTypeChoices.Add("音乐类型", new List<string>() { ".mp3" });
+
+                savePicker.SuggestedFileName = _name;// +".mp3";
+                StorageFile file = await savePicker.PickSaveFileAsync();
+                if (file != null)
                 {
-                    if (isFileSavePicker)
+                    CachedFileManager.DeferUpdates(file);
+                    byte[] bytes = _fs.ToArray();
+                    await FileIO.WriteBytesAsync(file, bytes);
+                    FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                    if (status == FileUpdateStatus.Complete)
                     {
-                        ok = await FileToSavePicker(ok);
-                        if (ok)
-                        {
-                            try
-                            {
-                                await storageFile.DeleteAsync();
-                            }
-                            catch
-                            {
-                                ok = false;
-                            }
-                        }
+                        ok = true;
                     }
-                    else
-                    {
-                        try
-                        {
-                            var name = storageFile.DisplayName;
-                            var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                            var file = await localFolder.CreateFileAsync("temp.mp3", CreationCollisionOption.OpenIfExists);
-                            byte[] bytes = _fs.ToArray();
-                            await FileIO.WriteBytesAsync(file, bytes);
-                            await storageFile.RenameAsync(name + ".mp3", NameCollisionOption.ReplaceExisting);
-                            //await file.CopyAndReplaceAsync(storageFile);
-                            await file.MoveAndReplaceAsync(storageFile);                           
-                            ok = true;
-                        }
-                        catch
-                        {
-                            ok = false;
-                        }
-                    }
-                }
-                else
-                {
-                    ok = await FileToSavePicker(ok);
                 }
             }
             //_fs.Close();
             _fs.Dispose();
-            return ok;
-        }
-
-        private async Task<bool> FileToSavePicker(bool ok)
-        {
-            FileSavePicker savePicker = new FileSavePicker();
-            savePicker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
-            savePicker.FileTypeChoices.Add("音乐类型", new List<string>() { ".mp3" });
-
-            savePicker.SuggestedFileName = _name;// +".mp3";
-            StorageFile file = await savePicker.PickSaveFileAsync();
-            if (file != null)
-            {
-                CachedFileManager.DeferUpdates(file);
-                byte[] bytes = _fs.ToArray();
-                await FileIO.WriteBytesAsync(file, bytes);
-                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-                if (status == FileUpdateStatus.Complete)
-                {
-                    ok = true;
-                }
-            }
             return ok;
         }
 
@@ -759,15 +709,11 @@ namespace ControlLibrary.Tools.Multimedia
         int _aacProfile;
         int _sampleRateIndex;
         int _channelConfig;
-        private StorageFile storageFile = null;
-        private bool isFileSavePicker = true;
 
-        public AACWriter(string name, bool isfsp, StorageFile sf)
+        public AACWriter(string name)
         {
             this._name = name;
             _fs = new MemoryStream();
-            storageFile = sf;
-            isFileSavePicker = isfsp;
         }
 
         public void WriteChunk(byte[] chunk, uint timeStamp)
@@ -825,72 +771,26 @@ namespace ControlLibrary.Tools.Multimedia
             //完成转换写入文件
             if (_fs != null && _fs.Length > 0)
             {
-                if (storageFile != null)
+                FileSavePicker savePicker = new FileSavePicker();
+                savePicker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
+                savePicker.FileTypeChoices.Add("音乐类型", new List<string>() { ".aac" });
+
+                savePicker.SuggestedFileName = _name;// +".mp3";
+                StorageFile file = await savePicker.PickSaveFileAsync();
+                if (file != null)
                 {
-                    if (isFileSavePicker)
+                    CachedFileManager.DeferUpdates(file);
+                    byte[] bytes = _fs.ToArray();
+                    await FileIO.WriteBytesAsync(file, bytes);
+                    FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
+                    if (status == FileUpdateStatus.Complete)
                     {
-                        ok = await FileToSavePicker(ok);
-                        if (ok)
-                        {
-                            try
-                            {
-                                await storageFile.DeleteAsync();
-                            }
-                            catch
-                            {
-                                ok = false;
-                            }
-                        }
+                        ok = true;
                     }
-                    else
-                    {
-                        try
-                        {
-                            var name = storageFile.DisplayName;
-                            var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder;
-                            var file = await localFolder.CreateFileAsync("temp.aac", CreationCollisionOption.OpenIfExists);
-                            byte[] bytes = _fs.ToArray();
-                            await FileIO.WriteBytesAsync(file, bytes);
-                            await storageFile.RenameAsync(name + ".aac", NameCollisionOption.ReplaceExisting);
-                            //await file.CopyAndReplaceAsync(storageFile);
-                            await file.MoveAndReplaceAsync(storageFile);
-                            ok = true;
-                        }
-                        catch
-                        {
-                            ok = false;
-                        }
-                    }
-                }
-                else
-                {
-                    ok = await FileToSavePicker(ok);
                 }
             }
             //_fs.Close();
             _fs.Dispose();
-            return ok;
-        }
-
-        private async Task<bool> FileToSavePicker(bool ok)
-        {
-            FileSavePicker savePicker = new FileSavePicker();
-            savePicker.SuggestedStartLocation = PickerLocationId.MusicLibrary;
-            savePicker.FileTypeChoices.Add("音乐类型", new List<string>() { ".aac" });
-
-            savePicker.SuggestedFileName = _name;// +".mp3";
-            StorageFile file = await savePicker.PickSaveFileAsync();
-            if (file != null)
-            {
-                CachedFileManager.DeferUpdates(file);
-                byte[] bytes = _fs.ToArray();
-                await FileIO.WriteBytesAsync(file, bytes);
-                FileUpdateStatus status = await CachedFileManager.CompleteUpdatesAsync(file);
-                if (status == FileUpdateStatus.Complete)
-                {
-                    ok = true;
-                }
-            }
             return ok;
         }
 

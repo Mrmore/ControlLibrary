@@ -20,6 +20,8 @@ using ControlLibrary.Tools.Multimedia;
 using TestDemoApp.Helper.System;
 using NotificationsExtensions.TileContent;
 using System.Diagnostics;
+using Windows.Storage;
+using ControlLibrary.GifSynthesis;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -193,15 +195,30 @@ namespace TestDemoApp
 
         private async void BtFlvToMp3OrAac_Click(object sender, RoutedEventArgs e)
         {
-            //var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.baseUri, "Video/mp322.flv"));
-            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.baseUri, "Video/aac.flv"));
+            var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.baseUri, "Video/mp322.flv"));
+            //var rass = RandomAccessStreamReference.CreateFromUri(new Uri(this.baseUri, "Video/aac.flv"));
             var streamRandom = await rass.OpenReadAsync();
 
-            using (YouTubeFlvToMp3OrAac youTubeFlvToMp3OrAac = new YouTubeFlvToMp3OrAac("aac", streamRandom))
+            using (YouTubeFlvToMp3OrAac youTubeFlvToMp3OrAac = new YouTubeFlvToMp3OrAac("mp322", streamRandom))
             {
                 youTubeFlvToMp3OrAac.ExtractStreams();
                 youTubeFlvToMp3OrAac.Dispose();
             }
+
+            /*
+            RandomAccessStreamReference ras = RandomAccessStreamReference.CreateFromUri(new Uri(baseUri,"Video/mp322.flv"));
+            var streamRandom = await ras.OpenReadAsync();
+           
+            var localFolder = KnownFolders.MusicLibrary;
+            var file = await localFolder.CreateFileAsync("mp322.flv", CreationCollisionOption.OpenIfExists);
+            byte[] bytes = streamRandom.ConvertIRandomAccessStreamToByte();
+            await FileIO.WriteBytesAsync(file, bytes);
+            using (YouTubeFlvToMp3OrAac youTubeFlvToMp3OrAac = new YouTubeFlvToMp3OrAac(file, false))
+            {
+                youTubeFlvToMp3OrAac.ExtractStreams();
+                youTubeFlvToMp3OrAac.Dispose();
+            }
+            */ 
         }
 
         private async void BtYouTube_Click(object sender, RoutedEventArgs e)

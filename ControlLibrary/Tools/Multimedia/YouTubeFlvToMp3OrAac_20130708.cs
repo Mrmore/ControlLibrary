@@ -19,13 +19,10 @@ namespace ControlLibrary.Tools.Multimedia
         List<uint> _videoTimeStamps;
         bool _extractedAudio;
         List<string> _warnings;
-        private StorageFile storageFile = null;
-        private bool isFileSavePicker = true;
 
-        public YouTubeFlvToMp3OrAac(string name, IRandomAccessStream ias, bool isFileSavePicker = true)
+        public YouTubeFlvToMp3OrAac(string name, IRandomAccessStream ias)
         {
             this._name = name;
-            this.isFileSavePicker = isFileSavePicker;
             _warnings = new List<string>();
             if (ias == null)
             {
@@ -36,32 +33,6 @@ namespace ControlLibrary.Tools.Multimedia
             _fileLength = _fs.Length;
             //ExtractStreams();
         }
-
-        public YouTubeFlvToMp3OrAac(StorageFile storageFile, bool isFileSavePicker = true)
-        {
-            InitFlvToMp3OrAac(storageFile, isFileSavePicker);
-        }
-
-        private async void InitFlvToMp3OrAac(StorageFile storageFile, bool isFileSavePicker)
-        {
-            this.storageFile = storageFile;
-            //this._name = Path.GetFileNameWithoutExtension(storageFile.Name);
-            this._name = storageFile.DisplayName;
-            this.isFileSavePicker = isFileSavePicker;
-            //var ias = storageFile.OpenAsync(FileAccessMode.Read).GetResults();
-            var ias = await storageFile.OpenAsync(FileAccessMode.Read);
-            _warnings = new List<string>();
-            if (ias == null)
-            {
-                return;
-            }
-            _fs = WriteableBitmapExpansion.ConvertIRandomAccessStreamToMemoryStream(ias);
-            _fileOffset = 0;
-            _fileLength = _fs.Length;
-            //ExtractStreams();
-        }
-
-
 
         public List<string> Warnings
         {
@@ -171,7 +142,7 @@ namespace ControlLibrary.Tools.Multimedia
             if ((format == 2) || (format == 14))
             { // MP3
                 path = _name + ".mp3";
-                return new MP3Writer(path, _warnings, isFileSavePicker, storageFile);
+                return new MP3Writer(path, _warnings);
             }
             /*		else if ((format == 0) || (format == 3))
                     { // PCM (WAVE format)
@@ -195,7 +166,7 @@ namespace ControlLibrary.Tools.Multimedia
             */		else if (format == 10)
             { // AAC
                 path = _name + ".aac";
-                return new AACWriter(path, isFileSavePicker, storageFile);
+                return new AACWriter(path);
             }
             /*		else if (format == 11)
                     { // Speex
