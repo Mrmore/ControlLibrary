@@ -247,6 +247,8 @@ namespace TestDemoApp
             SystemShareHelper.Instance.Init();
             //http://www.youtube.com/channel/HCp-Rdqh3z4Uc  http://blogs.msdn.com/b/b8/
             SystemShareHelper.Instance.ShowShare("你好啊小陈er", "http://www.youtube.com/channel/HCp-Rdqh3z4Uc", "http://ww3.sinaimg.cn/bmiddle/67c1cd54jw1e5gz0kz5hij20zz14r0xi.jpg", "测试测试测试");
+
+            //NotificationTileHelper.UpdateTileWithImages(GetNotificationTileList2());      
         }
 
         private void UpdateTile()
@@ -326,6 +328,53 @@ namespace TestDemoApp
 
             return ntList;
         }
+
+        private List<NotificationTile> GetNotificationTileList2()
+        {
+            List<NotificationTile> ntList = new List<NotificationTile>();
+            NotificationTile nt = new NotificationTile();
+            nt.ImageUri = "http://ww2.sinaimg.cn/bmiddle/6a03cfedjw1e6i31q4a5jj20d40hsq4x.jpg";
+            nt.ImageAltName = "美女";
+            nt.NotificationTileTag = "mat";
+            nt.TextHeading = "标题";
+            nt.TextBodyWrap = "内容内容内容内容内容内容内容内容";
+            ntList.Add(nt);
+
+            NotificationTile nt1 = new NotificationTile();
+            nt1.ImageUri = "http://ww2.sinaimg.cn/bmiddle/49ce04b7jw1e6i2u2v5swj20k00qo408.jpg";
+            nt1.ImageAltName = "美女1";
+            nt1.NotificationTileTag = "mat1";
+            nt1.TextHeading = "标题1";
+            nt1.TextBodyWrap = "内容1内容1内容1内容1内容1内容1内容1内容1";
+            ntList.Add(nt1);
+
+            NotificationTile nt2 = new NotificationTile();
+            nt2.ImageUri = "http://ww2.sinaimg.cn/bmiddle/636b6f59jw1e6i2gxhco8j20hs0nptc0.jpg";
+            nt2.ImageAltName = "美女2";
+            nt2.NotificationTileTag = "mat2";
+            nt2.TextHeading = "标题2";
+            nt2.TextBodyWrap = "内容2内容2内容2内容2内容2内容2内容2内容2";
+            ntList.Add(nt2);
+
+            NotificationTile nt3 = new NotificationTile();
+            nt3.ImageUri = "http://ww3.sinaimg.cn/bmiddle/6ac1a4b8jw1e6i2wfucy8j20xc18ggz9.jpg";
+            nt3.ImageAltName = "美女3";
+            nt3.NotificationTileTag = "mat3";
+            nt3.TextHeading = "标题3";
+            nt3.TextBodyWrap = "内容3内容3内容3内容3内容3内容3内容3内容3";
+            ntList.Add(nt3);
+
+            NotificationTile nt4 = new NotificationTile();
+            nt4.ImageUri = "http://ww3.sinaimg.cn/bmiddle/6ac1a4b8jw1e6i2wje4suj20xc18gtlr.jpg";
+            nt4.ImageAltName = "美女4";
+            nt4.NotificationTileTag = "mat4";
+            nt4.TextHeading = "标题4";
+            nt4.TextBodyWrap = "内容4内容4内容4内容4内容4内容4内容4内容4";
+            ntList.Add(nt4);
+
+            return ntList;
+        }
+
 
         private NotificationTile GetNotificationTile()
         {
