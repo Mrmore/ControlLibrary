@@ -47,7 +47,7 @@ namespace ControlLibrary.Tools
 
         public static void UpdateTileWithWidePeekImages(List<NotificationTile> notificationTileList)
         {
-            if (notificationTileList != null)
+            if (notificationTileList != null && notificationTileList.Count > 0)
             {
                 for (int i = 0; i < notificationTileList.Count; i++)
                 {
@@ -119,7 +119,7 @@ namespace ControlLibrary.Tools
 
         public static void UpdateTileWithTexts(List<NotificationTile> notificationTileList)
         {
-            if (notificationTileList != null)
+            if (notificationTileList != null && notificationTileList.Count > 0)
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(true);
                 TileUpdateManager.CreateTileUpdaterForApplication().Clear();
@@ -192,7 +192,7 @@ namespace ControlLibrary.Tools
 
         public static void UpdateTileWithWideTextImageImages(List<NotificationTile> notificationTileList)
         {
-            if (notificationTileList != null)
+            if (notificationTileList != null && notificationTileList.Count > 0)
             {
                 TileUpdateManager.CreateTileUpdaterForApplication().EnableNotificationQueue(true);
                 TileUpdateManager.CreateTileUpdaterForApplication().Clear();
