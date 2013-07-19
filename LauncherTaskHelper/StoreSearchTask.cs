@@ -8,6 +8,9 @@ using Windows.System;
 
 namespace LauncherTaskHelper
 {
+    /// <summary>
+    /// 程序搜索Task
+    /// </summary>
     public sealed class StoreSearchTask : IStoreSearchTask
 	{
 		public string SearchQuery

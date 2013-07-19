@@ -8,6 +8,9 @@ using Windows.System;
 
 namespace LauncherTaskHelper
 {
+    /// <summary>
+    /// 跳转邮箱Task
+    /// </summary>
     public sealed class EmailComposeTask : IEmailComposeTask
     {
         //ep:

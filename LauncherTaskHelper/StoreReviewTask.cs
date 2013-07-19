@@ -9,6 +9,9 @@ using Windows.System;
 
 namespace LauncherTaskHelper
 {
+    /// <summary>
+    /// 程序评论Task
+    /// </summary>
     public sealed class StoreReviewTask : IStoreReviewTask
 	{
 		public string Application

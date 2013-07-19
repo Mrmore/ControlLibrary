@@ -9,6 +9,9 @@ using Windows.System;
 
 namespace LauncherTaskHelper
 {
+    /// <summary>
+    /// 程序详情Task
+    /// </summary>
     public sealed class StoreDetailTask : IStoreDetailTask
 	{
 		public string Application
