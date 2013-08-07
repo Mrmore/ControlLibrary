@@ -202,6 +202,128 @@ namespace ControlLibrary.Extensions
         }
         #endregion
 
+        #region ScrollToHorizontalOffsetAnimation()
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToHorizontalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToHorizontalOffset() does not update HorizontalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static void ScrollToHorizontalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset)
+        {
+            scrollViewer.ScrollToHorizontalOffsetAnimation(offset, DefaultAnimatedScrollDuration);
+        }
+
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToHorizontalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToHorizontalOffset() does not update HorizontalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <param name="durationInSeconds"></param>
+        /// <returns></returns>
+        public static void ScrollToHorizontalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset,
+            double durationInSeconds)
+        {
+            scrollViewer.ScrollToHorizontalOffsetAnimation(
+                offset,
+                TimeSpan.FromSeconds(durationInSeconds),
+                DefaultEasingFunction);
+        }
+
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToHorizontalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToHorizontalOffset() does not update HorizontalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <param name="durationInSeconds"></param>
+        /// <param name="easingFunction"></param>
+        /// <returns></returns>
+        public static void ScrollToHorizontalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset,
+            double durationInSeconds,
+            EasingFunctionBase easingFunction)
+        {
+            scrollViewer.ScrollToHorizontalOffsetAnimation(
+                offset,
+                TimeSpan.FromSeconds(durationInSeconds),
+                easingFunction);
+        }
+
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToHorizontalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToHorizontalOffset() does not update HorizontalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <param name="duration"></param>
+        /// <returns></returns>
+        public static void ScrollToHorizontalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset,
+            TimeSpan duration)
+        {
+            scrollViewer.ScrollToHorizontalOffsetAnimation(
+                offset,
+                duration,
+                DefaultEasingFunction);
+        }
+
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToHorizontalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToHorizontalOffset() does not update HorizontalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <param name="duration"></param>
+        /// <param name="easingFunction"></param>
+        /// <returns></returns>
+        public static void ScrollToHorizontalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset,
+            TimeSpan duration,
+            EasingFunctionBase easingFunction)
+        {
+            var handler = GetAnimatedScrollHandler(scrollViewer);
+
+            if (handler == null)
+            {
+                handler = new ScrollViewerAnimatedScrollHandler();
+                SetAnimatedScrollHandler(scrollViewer, handler);
+            }
+
+            handler.ScrollToHorizontalOffsetAnimation(
+                offset, duration, easingFunction);
+        }
+        #endregion
+
         #region ScrollToVerticalOffsetWithAnimation()
         /// <summary>
         /// Scrolls to the specified offset using an animation instead of
@@ -320,6 +442,128 @@ namespace ControlLibrary.Extensions
             }
 
             await handler.ScrollToVerticalOffsetWithAnimation(
+                offset, duration, easingFunction);
+        }
+        #endregion
+
+        #region ScrollToVerticalOffsetAnimation()
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToVerticalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToVerticalOffset() does not update VerticalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <returns></returns>
+        public static void ScrollToVerticalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset)
+        {
+            scrollViewer.ScrollToVerticalOffsetAnimation(offset, DefaultAnimatedScrollDuration);
+        }
+
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToVerticalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToVerticalOffset() does not update VerticalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <param name="durationInSeconds"></param>
+        /// <returns></returns>
+        public static void ScrollToVerticalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset,
+            double durationInSeconds)
+        {
+            scrollViewer.ScrollToVerticalOffsetAnimation(
+                offset,
+                TimeSpan.FromSeconds(durationInSeconds),
+                DefaultEasingFunction);
+        }
+
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToVerticalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToVerticalOffset() does not update VerticalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <param name="durationInSeconds"></param>
+        /// <param name="easingFunction"></param>
+        /// <returns></returns>
+        public static void ScrollToVerticalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset,
+            double durationInSeconds,
+            EasingFunctionBase easingFunction)
+        {
+            scrollViewer.ScrollToVerticalOffsetAnimation(
+                offset,
+                TimeSpan.FromSeconds(durationInSeconds),
+                easingFunction);
+        }
+
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToVerticalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToVerticalOffset() does not update VerticalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <param name="duration"></param>
+        /// <returns></returns>
+        public static void ScrollToVerticalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset,
+            TimeSpan duration)
+        {
+            scrollViewer.ScrollToVerticalOffsetAnimation(
+                offset,
+                duration,
+                DefaultEasingFunction);
+        }
+
+        /// <summary>
+        /// Scrolls to the specified offset using an animation instead of
+        /// immediately jumping to that offset as with ScrollToVerticalOffset().
+        /// </summary>
+        /// <remarks>
+        /// Note that calling ScrollToVerticalOffset() does not update VerticalOffset immediately,
+        /// so it is important to wait for it to change before calling this method.
+        /// </remarks>
+        /// <param name="scrollViewer"></param>
+        /// <param name="offset"></param>
+        /// <param name="duration"></param>
+        /// <param name="easingFunction"></param>
+        /// <returns></returns>
+        public static void ScrollToVerticalOffsetAnimation(
+            this ScrollViewer scrollViewer,
+            double offset,
+            TimeSpan duration,
+            EasingFunctionBase easingFunction)
+        {
+            var handler = GetAnimatedScrollHandler(scrollViewer);
+
+            if (handler == null)
+            {
+                handler = new ScrollViewerAnimatedScrollHandler();
+                SetAnimatedScrollHandler(scrollViewer, handler);
+            }
+
+            handler.ScrollToVerticalOffsetAnimation(
                 offset, duration, easingFunction);
         }
         #endregion
@@ -575,6 +819,26 @@ namespace ControlLibrary.Extensions
         }
         #endregion
 
+        #region ScrollToHorizontalOffsetAnimation()
+        internal void ScrollToHorizontalOffsetAnimation(
+            double offset,
+            TimeSpan duration,
+            EasingFunctionBase easingFunction)
+        {
+            var sb = new Storyboard();
+            var da = new DoubleAnimation();
+            da.EnableDependentAnimation = true;
+            da.From = _scrollViewer.HorizontalOffset;
+            da.To = offset;
+            da.EasingFunction = easingFunction;
+            da.Duration = duration;
+            sb.Children.Add(da);
+            Storyboard.SetTarget(sb, _sliderHorizontal);
+            Storyboard.SetTargetProperty(da, "Value");
+            sb.Begin();
+        }
+        #endregion
+
         #region ScrollToVerticalOffsetWithAnimation()
         internal async Task ScrollToVerticalOffsetWithAnimation(
             double offset,
@@ -592,6 +856,26 @@ namespace ControlLibrary.Extensions
             Storyboard.SetTarget(sb, _sliderVertical);
             Storyboard.SetTargetProperty(da, "Value");
             await sb.BeginAsync();
+        }
+        #endregion
+
+        #region ScrollToVerticalOffsetAnimation()
+        internal void ScrollToVerticalOffsetAnimation(
+            double offset,
+            TimeSpan duration,
+            EasingFunctionBase easingFunction)
+        {
+            var sb = new Storyboard();
+            var da = new DoubleAnimation();
+            da.EnableDependentAnimation = true;
+            da.From = _scrollViewer.VerticalOffset;
+            da.To = offset;
+            da.EasingFunction = easingFunction;
+            da.Duration = duration;
+            sb.Children.Add(da);
+            Storyboard.SetTarget(sb, _sliderVertical);
+            Storyboard.SetTargetProperty(da, "Value");
+            sb.Begin();
         }
         #endregion
 
