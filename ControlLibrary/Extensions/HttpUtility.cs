@@ -52,5 +52,21 @@ namespace ControlLibrary.Extensions
         {
             return System.Net.WebUtility.UrlDecode(urlText);
         }
+
+        public static byte[] UrlEncodeToBytes(this byte[] urlBytes, int offset = 0, int count = int.MaxValue)
+        {
+            if (count == int.MaxValue)
+                return System.Net.WebUtility.UrlEncodeToBytes(urlBytes, offset, urlBytes.Length);
+            else
+                return System.Net.WebUtility.UrlEncodeToBytes(urlBytes, offset, count);
+        }
+
+        public static byte[] UrlDecodeToBytes(this byte[] urlBytes, int offset = 0, int count = int.MaxValue)
+        {
+            if (count == int.MaxValue)
+                return System.Net.WebUtility.UrlDecodeToBytes(urlBytes, offset, urlBytes.Length);
+            else
+                return System.Net.WebUtility.UrlDecodeToBytes(urlBytes, offset, count);
+        }
     }
 }
