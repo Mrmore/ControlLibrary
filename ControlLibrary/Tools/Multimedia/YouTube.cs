@@ -16,6 +16,7 @@ using MyToolkit.UI;
 #if WINRT
 using System.Net.Http.Headers;
 using System.Net.Http;
+using System.Net;
 #endif
 
 namespace ControlLibrary.Tools.Multimedia
@@ -44,9 +45,16 @@ namespace ControlLibrary.Tools.Multimedia
 #if WINRT
         public static async Task<YouTubeUri> GetVideoUriAsync(string youTubeId, YouTubeQuality maxQuality = YouTubeQuality.Quality360P_MP4)
         {
+            //HttpClientHandler handler = new HttpClientHandler();
+            //handler.UseDefaultCredentials = true;
+            //handler.AllowAutoRedirect = true;
+            //handler.CookieContainer = new CookieContainer();
+            //using (var client = new HttpClient(handler))
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
+                //client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
+                //client.DefaultRequestHeaders.Add("Accept", "text/html");
+                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");               
                 var response = await client.GetAsync("https://www.youtube.com/watch?v=" + youTubeId + "&nomobile=1");
 
                 var task = new TaskCompletionSource<YouTubeUri>();
@@ -377,7 +385,8 @@ namespace ControlLibrary.Tools.Multimedia
                                 //else if (key == "type" && value.Contains("video/mp4")) //只获取Mp4
                                 else if (key == "type") //获取全部
                                     tuple.Type = value;
-                                else if (key == "sig")
+                                //else if (key == "s")
+                                else if (key == "sig")                            
                                     signature = value;
                             }
                             catch { }
