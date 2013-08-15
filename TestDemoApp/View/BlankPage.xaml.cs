@@ -227,8 +227,14 @@ namespace TestDemoApp
             try
             {
                 //获取相对应源的Uri地址
-                var url = await YouTube.GetVideoUriAsync(youtubeurl, YouTubeQuality.QualityMP3_FLV_44KHZ);
-
+                //普通 视频测试
+                //var url = await YouTube.GetVideoUriAsync(youtubeurl, YouTubeQuality.QualityMP3_FLV_44KHZ);
+                //长视频 例如金瓶梅
+                //var url = await YouTube.GetVideoUriAsync("rtD-8mQnzRs", YouTubeQuality.Quality720P_MP4);
+                //vevo 视频测试
+                var url = await YouTube.GetVideoUriAsync("LrUvu1mlWco", YouTubeQuality.Quality720P_MP4);
+                
+                
                 //获取所有源的Uri地址列表
                 var uriAllList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.All);
                 var uriFlvOrMp3List = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Flv);
