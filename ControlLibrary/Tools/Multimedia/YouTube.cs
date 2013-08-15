@@ -207,25 +207,6 @@ namespace ControlLibrary.Tools.Multimedia
         
         public static async Task<List<YouTubeUri>> GetVideoAllUrisAsync(string youTubeId, YouTubeFormat youTubeFormat = YouTubeFormat.All)
         {
-            //using (var client = new HttpClient())
-            //{
-            //    client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
-            //    var response = await client.GetAsync("https://www.youtube.com/watch?v=" + youTubeId + "&nomobile=1");
-
-            //    var task = new TaskCompletionSource<YouTubeUri>();
-            //    OnHtmlDownloaded(await response.Content.ReadAsStringAsync(), YouTubeQuality.QualityMP3_FLV_22KHZ, maxQuality, (u, e) =>
-            //    {
-            //        if (u != null)
-            //            task.SetResult(u);
-            //        else if (e == null)
-            //            task.SetResult(u);
-            //        //task.SetCanceled();
-            //        else
-            //            task.SetException(e);
-            //    });
-            //    return await task.Task;
-            //}
-
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
