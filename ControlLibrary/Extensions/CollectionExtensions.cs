@@ -61,6 +61,59 @@ namespace ControlLibrary.Extensions
             }
         }
 
+        public static int RemoveAll<T>(this ObservableCollection<T> coll, Func<T, bool> condition)
+        {
+            var itemsToRemove = coll.Where(condition).ToList();
+            foreach (var itemToRemove in itemsToRemove)
+            {
+                coll.Remove(itemToRemove);
+            }
+            return itemsToRemove.Count;
+        }
+
+        public static void RemoveRange<T>(this ObservableCollection<T> destination, int index, int count)
+        {
+            if (destination == null)
+            {
+                throw new ArgumentNullException();
+            }
+            if ((uint)index >= (uint)destination.Count || (uint)destination.Count < (uint)(index + count))
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+            for (int i = 0; i < count; i++)
+            {
+                destination.RemoveAt(index);
+            }
+        }
+
+        public static int FirstIndexMatch<T>(this IEnumerable<T> items, Func<T, bool> matchCondition)
+        {
+            var index = 0;
+            foreach (var item in items)
+            {
+                if (matchCondition.Invoke(item))
+                {
+                    return index;
+                }
+                index++;
+            }
+            return -1;
+        }
+
+        /*
+        public static void RemoveAll<T>(this ObservableCollection<T> collection, Func<T, bool> condition)
+        {
+            for (int i = collection.Count - 1; i >= 0; i--)
+            {
+                if (condition(collection[i]))
+                {
+                    collection.RemoveAt(i);
+                }
+            }
+        }
+        */
+
         /*
         public static void InsertRange<T>(this ICollection<T> destination, int index,
                                        IEnumerable<T> source)
