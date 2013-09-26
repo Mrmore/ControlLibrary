@@ -386,7 +386,7 @@ namespace ControlLibrary.Tools.Multimedia
                                 else if (key == "type") //获取全部
                                     tuple.Type = value;
                                 //else if (key == "s")
-                                else if (key == "sig")                            
+                                else if (key == "sig")
                                     signature = value;
                             }
                             catch { }
