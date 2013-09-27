@@ -93,5 +93,15 @@ namespace ControlLibrary.Extensions
             }
             return temp;
         }
+
+        /// <summary>
+        /// 反转字符串
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static string Reverse(this string s)
+        {
+            return new string(s.ToCharArray().Reverse().ToArray());
+        }
     }
 }

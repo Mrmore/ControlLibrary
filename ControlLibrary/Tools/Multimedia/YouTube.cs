@@ -305,6 +305,11 @@ namespace ControlLibrary.Tools.Multimedia
                                 //else if (key == "type" && value.Contains("video/mp4")) //只获取Mp4
                                 else if (key == "type") //获取全部
                                     tuple.Type = value;
+                                else if (key == "s")
+                                {
+                                    //signature = await DecryptWebSignature(value);
+                                    signature = DecryptLocalSignature(value);
+                                }
                                 else if (key == "sig")
                                     signature = value;
                             }
@@ -355,7 +360,7 @@ namespace ControlLibrary.Tools.Multimedia
             }
         }
 #endif
-        private static void OnHtmlDownloaded(string response, YouTubeQuality minQuality, YouTubeQuality maxQuality, Action<YouTubeUri, Exception> completed)
+        private static async void OnHtmlDownloaded(string response, YouTubeQuality minQuality, YouTubeQuality maxQuality, Action<YouTubeUri, Exception> completed)
         {
             var urls = new List<YouTubeUri>();
             try
@@ -385,7 +390,11 @@ namespace ControlLibrary.Tools.Multimedia
                                 //else if (key == "type" && value.Contains("video/mp4")) //只获取Mp4
                                 else if (key == "type") //获取全部
                                     tuple.Type = value;
-                                //else if (key == "s")
+                                else if (key == "s")
+                                {
+                                    //signature = await DecryptWebSignature(value);
+                                    signature = DecryptLocalSignature(value);
+                                }
                                 else if (key == "sig")
                                     signature = value;
                             }
@@ -421,6 +430,118 @@ namespace ControlLibrary.Tools.Multimedia
                 //completed(null, new Exception("no_video_urls_found"));
                 completed(entry, null);
         }
+
+        //
+        //签名验证算法(外网)
+        public async static Task<string> DecryptWebSignature(string sig)
+        {
+            using (var getHc = new HttpClient())
+            {
+                sig = await getHc.GetStringAsync("http://vevo.ytdplus.com/index.php?sign=" + sig);
+                return sig;
+            }
+        }
+
+        //签名验证算法(本地)
+        public static string DecryptLocalSignature(string sig)
+        {
+            switch (sig.Length)
+            {
+                case 79:
+                    {
+                        sig = Sub(54, sig) + SubR(77, 54, sig) + Sub(39, sig) + SubR(53, 39, sig) + Sub(78, sig) + SubR(38, 34, sig) + Sub(0, sig) + SubR(33, 29, sig) + Sub(34, sig) + SubR(28, 9, sig) + Sub(29, sig) + SubR(8, 0, sig) + Sub(9, sig);
+                    }
+                    break;
+                case 80:
+                    {
+                        sig = Sub(1, 19, sig) + Sub(0, sig) + Sub(20, 68, sig) + Sub(19, sig) + Sub(69, 80, sig);
+                    }
+                    break;
+                case 81:
+                    {
+                        sig = Sub(56, sig) + SubR(79, 56, sig) + Sub(41, sig) + SubR(55, 41, sig) + Sub(80, sig) + SubR(40, 34, sig) + Sub(0, sig) + SubR(33, 29, sig) + Sub(34, sig) + SubR(28, 9, sig) + Sub(29, sig) + SubR(8, 0, sig) + Sub(9, sig);
+                    }
+                    break;
+                case 82:
+                    {
+                        sig = SubR(80, 73, sig) + Sub(81, sig) + SubR(72, 54, sig) + Sub(2, sig) + SubR(53, 43, sig) + Sub(0, sig) + SubR(42, 2, sig) + Sub(43, sig) + Sub(1, sig) + Sub(54, sig);
+                    }
+                    break;
+                case 83:
+                    {
+                        //sig = sig.Substring(64, 17).Reverse() + sig.Substring(0, 1) + sig.Substring(1, 62).Reverse() + sig.Substring(63, 1);
+                        sig = SubR(80, 63, sig) + Sub(0, sig) + SubR(62, 0, sig) + Sub(63, sig);
+                    }
+                    break;
+                case 84:
+                    {
+                        sig = SubR(78, 70, sig) + Sub(14, sig) + SubR(69, 37, sig) + Sub(70, sig) + SubR(36, 14, sig) + Sub(80, sig) + sig.Substring(0, 14).Reverse();
+                    }
+                    break;
+                case 85:
+                    {
+                        sig = Sub(3, 11, sig) + Sub(0, sig) + Sub(12, 55, sig) + Sub(84, sig) + Sub(56, 84, sig);
+                    }
+                    break;
+                case 86:
+                    {
+                        sig = SubR(80, 72, sig) + Sub(16, sig) + SubR(71, 39, sig) + Sub(72, sig) + SubR(38, 16, sig) + Sub(82, sig) + sig.Substring(0, 15).Reverse();
+                    }
+                    break;
+                case 87:
+                    {
+                        sig = Sub(6, 27, sig) + Sub(4, sig) + Sub(28, 39, sig) + Sub(27, sig) + Sub(40, 59, sig) + Sub(2, sig) + sig.Substring(60);
+                    }
+                    break;
+                case 88:
+                    {
+                        sig = Sub(7, 28, sig) + Sub(87, sig) + Sub(29, 45, sig) + Sub(55, sig) + Sub(46, 55, sig) + Sub(2, sig) + Sub(56, 87, sig) + Sub(28, sig);
+                    }
+                    break;
+                case 89:
+                    {
+                        sig = SubR(84, 78, sig) + Sub(87, sig) + SubR(77, 60, sig) + Sub(0, sig) + SubR(59, 3, sig);
+                    }
+                    break;
+                case 90:
+                    {
+                        sig = Sub(25, sig) + Sub(3, 25, sig) + Sub(2, sig) + Sub(26, 40, sig) + Sub(77, sig) + Sub(41, 77, sig) + Sub(89, sig) + Sub(78, 81, sig);
+                    }
+                    break;
+                case 91:
+                    {
+                        sig = SubR(84, 27, sig) + Sub(86, sig) + SubR(26, 5, sig);
+                    }
+                    break;
+                case 92:
+                    {
+                        sig = Sub(25, sig) + Sub(3, 25, sig) + Sub(0, sig) + Sub(26, 42, sig) + Sub(79, sig) + Sub(43, 79, sig) + Sub(91, sig) + Sub(80, 83, sig);
+                    }
+                    break;
+                case 93:
+                    {
+                        sig = SubR(86, 29, sig) + Sub(88, sig) + SubR(28, 5, sig);
+                    }
+                    break;
+            }
+            return sig;
+        }
+
+        private static string SubR(int a, int b, string c)
+        {
+            return c.Substring(b + 1, a - b).Reverse();
+        }
+
+        private static string Sub(int a, int b, string c)
+        {
+            return c.Substring(a, Math.Abs(b - a));
+        }
+
+        private static string Sub(int a, string c)
+        {
+            return c.Substring(a, 1);
+        }
+        //
 
         public class YouTubeUri
         {

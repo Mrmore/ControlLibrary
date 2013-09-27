@@ -88,5 +88,6 @@
 
         <Button Content="测试微软的原生动画" HorizontalAlignment="Left" Margin="1124,207,0,0" VerticalAlignment="Top" Width="92" Height="93" Click="Button_Click_9"/>
         <Button Content="FilpView" HorizontalAlignment="Left" Margin="1224,207,0,0" VerticalAlignment="Top" Width="92" Height="93" Click="Button_Click_10"/>
+        <MediaElement x:Name="me" Height="200" Width="300" HorizontalAlignment="Center" VerticalAlignment="Top"/>
     </Grid>
 </Page>
