@@ -464,7 +464,8 @@ namespace ControlLibrary.Tools.Multimedia
                     break;
                 case 82:
                     {
-                        sig = Sub(12, sig) + SubR(79, 12, sig) + Sub(80, sig) + sig.Substring(0, 12).Reverse();
+                        //sig = Sub(12, sig) + SubR(79, 12, sig) + Sub(80, sig) + sig.Substring(0, 12).Reverse();
+                        sig = SubR(80, 37, sig) + Sub(7, sig) + SubR(36, 7, sig) + Sub(0, sig) + SubR(6, 0, sig) + Sub(37, sig);
                     }
                     break;
                 case 83:
