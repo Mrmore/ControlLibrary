@@ -211,6 +211,7 @@
     <Compile Include="Effects\SegmentEffect.cs" />
     <Compile Include="Effects\SharpenEffect.cs" />
     <Compile Include="Effects\SunlightEffect.cs" />
+    <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\AsyncAwaitExtensions\BitmapImageAsyncAwaitExtensions.cs" />
     <Compile Include="Extensions\AsyncAwaitExtensions\ControlAsyncAwaitExtensions.cs" />
     <Compile Include="Extensions\AsyncAwaitExtensions\FrameworkElementAsyncAwaitExtensions.cs" />

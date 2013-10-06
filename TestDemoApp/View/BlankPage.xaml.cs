@@ -237,6 +237,7 @@ namespace TestDemoApp
                 me.Play();
                 
                 //获取所有源的Uri地址列表
+                //youtubeurl = "LrUvu1mlWco";
                 var uriAllList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.All);
                 var uriFlvOrMp3List = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Flv);
                 var uriMp3OrFlvList = await YouTube.GetVideoAllUrisAsync(youtubeurl, YouTubeFormat.Mp3);

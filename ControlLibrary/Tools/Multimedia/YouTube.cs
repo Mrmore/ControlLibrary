@@ -275,7 +275,7 @@ namespace ControlLibrary.Tools.Multimedia
             }
         }
 
-        private static void OnHtmlParse(string response, Action<List<YouTubeUri>, Exception> completed)
+        private static async void OnHtmlParse(string response, Action<List<YouTubeUri>, Exception> completed)
         {
             var urls = new List<YouTubeUri>();
             try
@@ -307,8 +307,8 @@ namespace ControlLibrary.Tools.Multimedia
                                     tuple.Type = value;
                                 else if (key == "s")
                                 {
-                                    //signature = await DecryptWebSignature(value);
-                                    signature = DecryptLocalSignature(value);
+                                    signature = await DecryptWebSignature(value);
+                                    //signature = DecryptLocalSignature(value);
                                 }
                                 else if (key == "sig")
                                     signature = value;
@@ -392,8 +392,8 @@ namespace ControlLibrary.Tools.Multimedia
                                     tuple.Type = value;
                                 else if (key == "s")
                                 {
-                                    //signature = await DecryptWebSignature(value);
-                                    signature = DecryptLocalSignature(value);
+                                    signature = await DecryptWebSignature(value);
+                                    //signature = DecryptLocalSignature(value);
                                 }
                                 else if (key == "sig")
                                     signature = value;
@@ -432,14 +432,67 @@ namespace ControlLibrary.Tools.Multimedia
         }
 
         //
+        private static List<Tuple<string, int>> sigCodes = null;
         //签名验证算法(外网)
-        public async static Task<string> DecryptWebSignature(string sig)
+        public async static Task<string> DecryptWebSignature(string sig, bool isVerify = true)
         {
-            using (var getHc = new HttpClient())
+            if (!isVerify)
             {
-                sig = await getHc.GetStringAsync("http://vevo.ytdplus.com/index.php?sign=" + sig);
-                return sig;
+                if (sigCodes != null && sigCodes.Count > 0)
+                    sigCodes.Clear();
+                using (var getHc = new HttpClient())
+                {
+                    sig = await getHc.GetStringAsync("http://vevo.ytdplus.com/index.php?sign=" + sig);
+                }
             }
+            else
+            {
+                if (sigCodes == null || sigCodes.Count <= 0)
+                {
+                    using (var getHc = new HttpClient())
+                    {
+                        var codes = await getHc.GetStringAsync("http://add0n.com/signature.php?request=alg");
+                        if (!string.IsNullOrEmpty(codes) && !string.IsNullOrWhiteSpace(codes))
+                        {
+                            codes = codes.Trim().Replace("[", "").Replace("]", "").Replace("\"", "");
+                            var codeArray = codes.Split(',');
+                            sigCodes = new List<Tuple<string, int>>();
+                            for (int i = 0; i < codeArray.Length; i++)
+                            {
+                                if (codeArray[i] == "w" || codeArray[i] == "s")
+                                {
+                                    var key = codeArray[i].Trim();
+                                    var value = System.Convert.ToInt32(codeArray[i + 1].Trim());
+                                    sigCodes.Add(new Tuple<string, int>(key, value));
+                                }
+                                else if (codeArray[i] == "r")
+                                {
+                                    sigCodes.Add(new Tuple<string, int>(codeArray[i], 0));
+                                }
+                            }
+                        }
+                    }
+                }
+                if (sigCodes != null && sigCodes.Count > 0)
+                {
+                    foreach (var item in sigCodes)
+                    {
+                        if (item.Item1 == "r")
+                        {
+                            sig = sig.Reverse();
+                        }
+                        else if (item.Item1 == "s")
+                        {
+                            sig = sig.Slice(item.Item2);
+                        }
+                        else if (item.Item1 == "w")
+                        {
+                            sig = new string(Swap(sig.ToCharArray(), item.Item2));
+                        }
+                    }
+                }
+            }
+            return sig;
         }
 
         //签名验证算法(本地)
@@ -541,6 +594,14 @@ namespace ControlLibrary.Tools.Multimedia
         private static string Sub(int a, string c)
         {
             return c.Substring(a, 1);
+        }
+
+        private static char[] Swap(char[] a, int b)
+        {
+            var c = a[0];
+            a[0] = a[b % a.Length];
+            a[b] = c;
+            return a;
         }
         //
 

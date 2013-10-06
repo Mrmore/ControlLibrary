@@ -103,5 +103,10 @@ namespace ControlLibrary.Extensions
         {
             return new string(s.ToCharArray().Reverse().ToArray());
         }
+
+        public static string Slice(this string source, int start)
+        {
+            return new string(source.ToCharArray().Slice(start));
+        }
     }
 }
