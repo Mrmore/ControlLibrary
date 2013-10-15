@@ -254,9 +254,11 @@ namespace TestDemoApp
         {
             SystemShareHelper.Instance.Init();
             //http://www.youtube.com/channel/HCp-Rdqh3z4Uc  http://blogs.msdn.com/b/b8/
-            SystemShareHelper.Instance.ShowShare("你好啊小陈er", "http://www.youtube.com/channel/HCp-Rdqh3z4Uc", "http://ww3.sinaimg.cn/bmiddle/67c1cd54jw1e5gz0kz5hij20zz14r0xi.jpg", "测试测试测试");
+            SystemShareHelper.Instance.ShowShare("你好啊小陈er", "http://www.youtube.com/channel/HCp-Rdqh3z4Uc", SystemShareType.Link, "http://ww3.sinaimg.cn/bmiddle/67c1cd54jw1e5gz0kz5hij20zz14r0xi.jpg", "测试测试测试");
 
-            //NotificationTileHelper.UpdateTileWithImages(GetNotificationTileList2());      
+            //NotificationTileHelper.UpdateTileWithImages(GetNotificationTileList2());
+
+            //SystemShareHelper.Instance.Reset();
         }
 
         private void UpdateTile()

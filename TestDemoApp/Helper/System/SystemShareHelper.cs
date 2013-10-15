@@ -13,6 +13,12 @@ using Windows.Storage.Streams;
 
 namespace TestDemoApp.Helper.System
 {
+    public enum SystemShareType
+    { 
+        Link = 0,
+        Text = 1
+    }
+
     public class SystemShareHelper
     {
         private volatile static SystemShareHelper _instance = null;
@@ -41,9 +47,10 @@ namespace TestDemoApp.Helper.System
         private StorageFile ImageFile = null;
         private string ShareTitle = "Share YouTube Video.";
         private string ShareDescription = string.Empty;
-        private string ShareLink = string.Empty;
+        private string ShareLinkOrText = string.Empty;
         private string ImageUri = string.Empty;
         private bool isImageFile = false;
+        private SystemShareType ShareType = SystemShareType.Link;
 
         public void Init()
         {
@@ -62,21 +69,23 @@ namespace TestDemoApp.Helper.System
             this.dataTransferManager.DataRequested -= dataTransferManager_DataRequested;
         }
 
-        public void ShowShare(string shareDescription, string shareLink, StorageFile imageFile = null, string shareTitle = "Share YouTube Video.")
+        public void ShowShare(string shareDescription, string shareLinkOrText, SystemShareType systemShareType = SystemShareType.Link, StorageFile imageFile = null, string shareTitle = "Share YouTube Video.")
         {
             isImageFile = true;
             this.ShareDescription = shareDescription;
-            this.ShareLink = shareLink;
+            this.ShareLinkOrText = shareLinkOrText;
+            this.ShareType = systemShareType;
             this.ShareTitle = shareTitle;
             this.ImageFile = imageFile;
             DataTransferManager.ShowShareUI();
         }
 
-        public void ShowShare(string shareDescription, string shareLink, string imageUri = "", string shareTitle = "Share YouTube Video.")
+        public void ShowShare(string shareDescription, string shareLinkOrText, SystemShareType systemShareType = SystemShareType.Link, string imageUri = "", string shareTitle = "Share YouTube Video.")
         {
             isImageFile = false;
             this.ShareDescription = shareDescription;
-            this.ShareLink = shareLink;
+            this.ShareLinkOrText = shareLinkOrText;
+            this.ShareType = systemShareType;
             this.ShareTitle = shareTitle;
             this.ImageUri = imageUri;
             DataTransferManager.ShowShareUI();
@@ -97,13 +106,69 @@ namespace TestDemoApp.Helper.System
         {
             bool succeeded = false;
 
-            Uri dataPackageUri = ValidateAndGetUri(ShareLink);
-            if (dataPackageUri != null)
+            //Uri dataPackageUri = ValidateAndGetUri(ShareLink);
+            //if (dataPackageUri != null)
+            //{
+            //    DataPackage requestData = request.Data;
+            //    requestData.Properties.Title = ShareTitle;
+            //    requestData.Properties.Description = ShareDescription;
+            //    requestData.SetUri(dataPackageUri);
+
+            //    if (!isImageFile && !string.IsNullOrEmpty(this.ImageUri) && !string.IsNullOrWhiteSpace(this.ImageUri))
+            //    {
+            //        await GetlocalUri(this.ImageUri);
+            //    }
+
+            //    if (this.ImageFile != null)
+            //    {
+            //        List<IStorageItem> imageItems = new List<IStorageItem>();
+            //        imageItems.Add(this.ImageFile);
+            //        requestData.SetStorageItems(imageItems);
+
+            //        RandomAccessStreamReference imageStreamRef = RandomAccessStreamReference.CreateFromFile(this.ImageFile);
+            //        if (imageStreamRef != null && (await imageStreamRef.OpenReadAsync()).Size > 0)
+            //        {
+            //            requestData.Properties.Thumbnail = imageStreamRef;
+            //            requestData.SetBitmap(imageStreamRef);
+            //        }
+            //    }
+            //    succeeded = true;
+            //}
+            //else
+            //{
+            //    request.FailWithDisplayText("Select an YouTube Link you would like to share and try again.");
+            //}
+
+            if (!String.IsNullOrEmpty(ShareTitle) && !string.IsNullOrWhiteSpace(ShareTitle))
             {
                 DataPackage requestData = request.Data;
                 requestData.Properties.Title = ShareTitle;
                 requestData.Properties.Description = ShareDescription;
-                requestData.SetUri(dataPackageUri);
+                if (ShareType == SystemShareType.Link)
+                {
+                    Uri dataPackageUri = ValidateAndGetUri(ShareLinkOrText);
+                    if (dataPackageUri != null)
+                    {
+                        requestData.SetUri(dataPackageUri);
+                    }
+                    else
+                    {
+                        request.FailWithDisplayText("Select an YouTube link you would like to share and try again.");
+                        return succeeded;
+                    }
+                }
+                else
+                {
+                    if (!string.IsNullOrEmpty(ShareLinkOrText) && !string.IsNullOrWhiteSpace(ShareLinkOrText))
+                    {
+                        requestData.SetText(ShareLinkOrText);
+                    }
+                    else
+                    {
+                        request.FailWithDisplayText("Select an YouTube content you would like to share and try again.");
+                        return succeeded;
+                    }
+                }
 
                 if (!isImageFile && !string.IsNullOrEmpty(this.ImageUri) && !string.IsNullOrWhiteSpace(this.ImageUri))
                 {
@@ -122,26 +187,30 @@ namespace TestDemoApp.Helper.System
                         requestData.Properties.Thumbnail = imageStreamRef;
                         requestData.SetBitmap(imageStreamRef);
                     }
-                }              
+                }
                 succeeded = true;
             }
             else
             {
-                request.FailWithDisplayText("Select an YouTube Link you would like to share and try again.");
+                request.FailWithDisplayText("Enter a title for what you are sharing and try again.");
             }
+
             return succeeded;
         }
 
         private Uri ValidateAndGetUri(string uriString)
         {
             Uri uri = null;
-            try
+            if (!string.IsNullOrEmpty(uriString) && !string.IsNullOrWhiteSpace(uriString))
             {
-                uri = new Uri(uriString);
-            }
-            catch (FormatException fe)
-            {
-                Debug.WriteLine(fe.Message);
+                try
+                {
+                    uri = new Uri(uriString);
+                }
+                catch (FormatException fe)
+                {
+                    Debug.WriteLine(fe.Message);
+                }
             }
             return uri;
         }
