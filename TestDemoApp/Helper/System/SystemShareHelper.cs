@@ -172,7 +172,7 @@ namespace TestDemoApp.Helper.System
 
                 if (!isImageFile && !string.IsNullOrEmpty(this.ImageUri) && !string.IsNullOrWhiteSpace(this.ImageUri))
                 {
-                    await GetlocalUri(this.ImageUri);
+                    await GetLocalUri(this.ImageUri);
                 }
 
                 if (this.ImageFile != null)
@@ -241,7 +241,7 @@ namespace TestDemoApp.Helper.System
         /// </summary>
         /// <param name="WebUri"></param>
         /// <returns></returns>
-        private async Task<Uri> GetlocalUri(string WebUri)
+        private async Task<Uri> GetLocalUri(string WebUri)
         {
             var fileName = string.Empty;
             StorageFolder shareLocalFolder = null;
