@@ -95,7 +95,7 @@ namespace TestDemoApp.Helper.System
         {
             if ((await GetShareContent(args.Request)))
             {
-                if (String.IsNullOrEmpty(args.Request.Data.Properties.Title))
+                if (String.IsNullOrEmpty(args.Request.Data.Properties.Title) || String.IsNullOrWhiteSpace(args.Request.Data.Properties.Title))
                 {
                     args.Request.FailWithDisplayText("Enter a title for what you are sharing and try again.");
                 }
