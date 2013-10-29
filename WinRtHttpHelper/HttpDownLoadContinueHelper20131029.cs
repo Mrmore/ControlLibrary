@@ -55,8 +55,6 @@ namespace WinRtHttpHelper
         private List<byte> Bytes = null;
         //下载是否为暂停，默认为false没有暂停
         private bool isPause = false;
-        //是否服务器支持断点续传
-        private bool isRange = true;
 
         //不声明委托
         //public delegate void DownLoadChanging(object sender, DownLoadChangingEventArgs args);
@@ -159,13 +157,7 @@ namespace WinRtHttpHelper
             request = new HttpRequestMessage(HttpMethod.Get, uri);
             request.Headers.Range = new RangeHeaderValue(0, 0);
             response = await hc.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cts.Token);
-            if (response.Content.Headers.ContentRange != null)
-                DownloadBytesCount.TotalBytesToReceive = response.Content.Headers.ContentRange.Length.Value;
-            else
-            {               
-                isRange = false;
-                return DownloadBytesCount.TotalBytesToReceive = response.Content.Headers.ContentLength.Value;
-            }
+            DownloadBytesCount.TotalBytesToReceive = response.Content.Headers.ContentRange.Length.Value;
             if (response.Content.Headers.ContentRange.Length.Value > 10000)
             {
                 percentageCoefficient = 100;
@@ -314,33 +306,27 @@ namespace WinRtHttpHelper
         /// <returns></returns>
         public async Task<IRandomAccessStream> ContinueDownload(Uri uri, long fromBytes = 0, long toBytes = 0, byte[] CompletedBytes = null)
         {
-            if (isRange)
+            hc = new HttpClient();
+            cts = new CancellationTokenSource();
+            byte[] bytes = null;
+            if (Bytes == null)
             {
-                hc = new HttpClient();
-                cts = new CancellationTokenSource();
-                byte[] bytes = null;
-                if (Bytes == null)
-                {
-                    Bytes = new List<byte>();
-                }
-                Bytes.AddRange(CompletedBytes);
-                IRandomAccessStream idaStream = null;
-
-                try
-                {
-                    idaStream = await DownLoadIRandomAccessStream(uri, fromBytes, toBytes, cts.Token);
-                    bytes = Combine(idaStream);
-                    TriggerDownLoadComplete(new DownLoadCompleteEventArgs((await this.ByteToInMemoryRandomAccessStream((byte[])bytes.Clone()))));
-                    return (await this.ByteToInMemoryRandomAccessStream(bytes));
-                }
-                catch (Exception ex)
-                {
-                    //return null;
-                    Debug.WriteLine(ex.Message);
-                    return this.ByteToInMemoryRandomAccessStream(bytes).Result;
-                }
+                Bytes = new List<byte>();
             }
-            return null;
+            Bytes.AddRange(CompletedBytes);
+            IRandomAccessStream idaStream = null;
+
+            try
+            {
+                idaStream = await DownLoadIRandomAccessStream(uri, fromBytes, toBytes, cts.Token);
+                bytes = Combine(idaStream);
+                TriggerDownLoadComplete(new DownLoadCompleteEventArgs((await this.ByteToInMemoryRandomAccessStream((byte[])bytes.Clone()))));
+                return (await this.ByteToInMemoryRandomAccessStream(bytes));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -351,63 +337,59 @@ namespace WinRtHttpHelper
         /// <returns></returns>
         public async Task<IRandomAccessStream> ContinueDownload(Uri uri, long fromBytes = 0, byte[] CompletedBytes = null)
         {
-            if (isRange)
+            hc = new HttpClient();
+            cts = new CancellationTokenSource();
+            if (Bytes == null)
             {
-                hc = new HttpClient();
-                cts = new CancellationTokenSource();
-                if (Bytes == null)
+                Bytes = new List<byte>();
+            }
+            //防止字节数组传递到事件，修改数组内容，所以拼大数组时，做了一个拷贝浅表副本
+            Bytes.AddRange((byte[])CompletedBytes.Clone());
+            byte[] bytes = null;
+            IRandomAccessStream idaStream = null;
+            await GetTotalBytes(uri, fromBytes);
+            TriggerDownLoadChanging(new DownLoadChangingEventArgs(DownloadBytesCount, completePercentage, CompletedBytes));
+            try
+            {
+                //100, 10, 1
+                for (int i = completePercentage; i < percentageCoefficient; )
                 {
-                    Bytes = new List<byte>();
-                }
-                //防止字节数组传递到事件，修改数组内容，所以拼大数组时，做了一个拷贝浅表副本
-                Bytes.AddRange((byte[])CompletedBytes.Clone());
-                byte[] bytes = null;
-                IRandomAccessStream idaStream = null;
-                await GetTotalBytes(uri, fromBytes);
-                TriggerDownLoadChanging(new DownLoadChangingEventArgs(DownloadBytesCount, completePercentage, CompletedBytes));
-                try
-                {
-                    //100, 10, 1
-                    for (int i = completePercentage; i < percentageCoefficient; )
+                    if (cts.IsCancellationRequested)
                     {
-                        if (cts.IsCancellationRequested)
-                        {
-                            return (await this.ByteToInMemoryRandomAccessStream(bytes));
-                        }
+                        return (await this.ByteToInMemoryRandomAccessStream(bytes));
+                    }
 
-                        if (i == 0)
+                    if (i == 0)
+                    {
+                        idaStream = (await DownLoadIRandomAccessStream(uri, i * percentage, (i + 1) * percentage, cts.Token));
+                    }
+                    else
+                    {
+                        idaStream = (await DownLoadIRandomAccessStream(uri, i * percentage + 1, (i + 1) * percentage, cts.Token));
+                    }
+                    if (idaStream != null)
+                    {
+                        bytes = Combine(idaStream);
+                        DownloadBytesCount.BytesReceived = (i + 1) * percentage;
+                        i++;
+                        TriggerDownLoadChanging(new DownLoadChangingEventArgs(DownloadBytesCount, i * progressCoefficient, bytes));
+                        if (i * progressCoefficient == 100)
                         {
-                            idaStream = (await DownLoadIRandomAccessStream(uri, i * percentage, (i + 1) * percentage, cts.Token));
-                        }
-                        else
-                        {
-                            idaStream = (await DownLoadIRandomAccessStream(uri, i * percentage + 1, (i + 1) * percentage, cts.Token));
-                        }
-                        if (idaStream != null)
-                        {
-                            bytes = Combine(idaStream);
-                            DownloadBytesCount.BytesReceived = (i + 1) * percentage;
-                            i++;
-                            TriggerDownLoadChanging(new DownLoadChangingEventArgs(DownloadBytesCount, i * progressCoefficient, bytes));
-                            if (i * progressCoefficient == 100)
-                            {
-                                TriggerDownLoadComplete(new DownLoadCompleteEventArgs((await this.ByteToInMemoryRandomAccessStream(bytes))));
-                            }
-                        }
-                        else
-                        {
-                            return (await this.ByteToInMemoryRandomAccessStream(Bytes.ToArray()));
+                            TriggerDownLoadComplete(new DownLoadCompleteEventArgs((await this.ByteToInMemoryRandomAccessStream(bytes))));
                         }
                     }
-                    return (await this.ByteToInMemoryRandomAccessStream(bytes));
+                    else
+                    {
+                        return (await this.ByteToInMemoryRandomAccessStream(Bytes.ToArray()));
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                    return this.ByteToInMemoryRandomAccessStream(bytes).Result;
-                }
+                return (await this.ByteToInMemoryRandomAccessStream(bytes));
             }
-            return null;
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+                return this.ByteToInMemoryRandomAccessStream(bytes).Result;
+            }
         }
 
         /// <summary>
@@ -417,17 +399,10 @@ namespace WinRtHttpHelper
         /// <returns></returns>
         public async Task<IRandomAccessStream> ContinueDownload(Uri uri)
         {
-            if (isRange)
+            if (isPause)
             {
-                if (isPause)
-                {
-                    isPause = false;
-                    return (await Download(uri, DownLoadState.Continue));
-                }
-            }
-            else
-            {
-                return (await Download(uri, DownLoadState.Start));
+                isPause = false;
+                return (await Download(uri, DownLoadState.Continue));
             }
             return null;
         }
@@ -476,55 +451,46 @@ namespace WinRtHttpHelper
                 await GetTotalBytes(uri);
             }
 
-            if (isRange)
+            try
             {
-                try
+                //100, 10, 1
+                for (int i = completePercentage; i < percentageCoefficient; )
                 {
-                    //100, 10, 1
-                    for (int i = completePercentage; i < percentageCoefficient; )
+                    if (cts.IsCancellationRequested)
                     {
-                        if (cts.IsCancellationRequested)
-                        {
-                            return (await this.ByteToInMemoryRandomAccessStream(bytes));
-                        }
+                        return (await this.ByteToInMemoryRandomAccessStream(bytes));
+                    }
 
-                        if (i == 0)
+                    if (i == 0)
+                    {
+                        idaStream = (await DownLoadIRandomAccessStream(uri, i * percentage, (i + 1) * percentage, cts.Token));
+                    }
+                    else
+                    {
+                        idaStream = (await DownLoadIRandomAccessStream(uri, i * percentage + 1, (i + 1) * percentage, cts.Token));
+                    }
+                    if (idaStream != null)
+                    {
+                        bytes = Combine(idaStream);
+                        DownloadBytesCount.BytesReceived = (i + 1) * percentage;
+                        i++;
+                        TriggerDownLoadChanging(new DownLoadChangingEventArgs(DownloadBytesCount, i * progressCoefficient, bytes));
+                        if (i * progressCoefficient == 100)
                         {
-                            idaStream = (await DownLoadIRandomAccessStream(uri, i * percentage, (i + 1) * percentage, cts.Token));
-                        }
-                        else
-                        {
-                            idaStream = (await DownLoadIRandomAccessStream(uri, i * percentage + 1, (i + 1) * percentage, cts.Token));
-                        }
-                        if (idaStream != null)
-                        {
-                            bytes = Combine(idaStream);
-                            DownloadBytesCount.BytesReceived = (i + 1) * percentage;
-                            i++;
-                            TriggerDownLoadChanging(new DownLoadChangingEventArgs(DownloadBytesCount, i * progressCoefficient, bytes));
-                            if (i * progressCoefficient == 100)
-                            {
-                                TriggerDownLoadComplete(new DownLoadCompleteEventArgs((await this.ByteToInMemoryRandomAccessStream(bytes))));
-                            }
-                        }
-                        else
-                        {
-                            return (await this.ByteToInMemoryRandomAccessStream(Bytes.ToArray()));
+                            TriggerDownLoadComplete(new DownLoadCompleteEventArgs((await this.ByteToInMemoryRandomAccessStream(bytes))));
                         }
                     }
-                    return (await this.ByteToInMemoryRandomAccessStream(bytes));
+                    else
+                    {
+                        return (await this.ByteToInMemoryRandomAccessStream(Bytes.ToArray()));
+                    }
                 }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex.Message);
-                    return this.ByteToInMemoryRandomAccessStream(bytes).Result;
-                }
+                return (await this.ByteToInMemoryRandomAccessStream(bytes));
             }
-            else
+            catch (Exception ex)
             {
-                idaStream = await DownLoadIRandomAccessStream(uri, 0, -1, cts.Token);
-                TriggerDownLoadComplete(new DownLoadCompleteEventArgs(idaStream));
-                return idaStream;
+                Debug.WriteLine(ex.Message);
+                return this.ByteToInMemoryRandomAccessStream(bytes).Result;
             }
         }
 
