@@ -255,34 +255,18 @@ namespace WinRtHttpHelper
             }
         }
 
-        /*
         //下载全部
-        private async Task<IRandomAccessStream> DownLoadIRandomAccessStream(Uri uri, long rangeFromValue, long rangeToValue, CancellationToken ct)
+        private async Task<IRandomAccessStream> DownLoadIRandomAccessStream(Uri uri, CancellationToken ct)
         {
             request = new HttpRequestMessage(HttpMethod.Get, uri);
             request.Headers.Add("keepAlive", "false");
-            //request.Headers.Range = new RangeHeaderValue(0, 500);
-            if (rangeToValue > 0 && rangeToValue > rangeFromValue)
-            {
-                request.Headers.Add("Range", "bytes=" + rangeFromValue + "-" + rangeToValue);
-            }
-            else
-            {
-                request.Headers.Add("Range", "bytes=" + rangeFromValue + "-");
-            }
-            response = await hc.SendAsync(request,
-                HttpCompletionOption.ResponseHeadersRead, ct);
-            DownloadBytesCount.TotalBytesToReceive = response.Content.Headers.ContentRange.Length.Value;
-            using (Stream responseStream = await response.Content.ReadAsStreamAsync())
-            {
-                var randomAccessStream = new InMemoryRandomAccessStream();
-                var outputStream = randomAccessStream.GetOutputStreamAt(0);
-                await RandomAccessStream.CopyAsync(responseStream.AsInputStream(), outputStream);
-                DownloadBytesCount.BytesReceived = Convert.ToInt64(randomAccessStream.Size);
-                return randomAccessStream as IRandomAccessStream;
-            }
+            response = await hc.SendAsync(request, ct);
+            DownloadBytesCount.TotalBytesToReceive = response.Content.Headers.ContentLength.Value;
+            byte[] bytes = await response.Content.ReadAsByteArrayAsync();
+            InMemoryRandomAccessStream randomAccessStream = await ByteToInMemoryRandomAccessStream(bytes);
+            DownloadBytesCount.BytesReceived = Convert.ToInt64(randomAccessStream.Size);
+            return randomAccessStream as IRandomAccessStream;
         }
-        */
 
         public void Dispose()
         {
