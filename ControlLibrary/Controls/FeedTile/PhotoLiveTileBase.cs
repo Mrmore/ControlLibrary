@@ -34,6 +34,9 @@ namespace ControlLibrary
         private Image currentImg;
         private Image hiddenImg;
 
+        public event Action<object, RoutedEventArgs> ImageOpened = null;
+        public event Action AnimationCompleted = null;
+
         public String Source
         {
             get { return (String)GetValue(SourceProperty); }
@@ -76,7 +79,7 @@ namespace ControlLibrary
             }
         }
 
-        void LiveTile_Loaded(object sender, RoutedEventArgs e)
+        private void LiveTile_Loaded(object sender, RoutedEventArgs e)
         {
             this.Loaded -= LiveTile_Loaded;
 
@@ -108,7 +111,7 @@ namespace ControlLibrary
             }
         }
 
-        void Image_ImageOpened(object sender, RoutedEventArgs e)
+        private void Image_ImageOpened(object sender, RoutedEventArgs e)
         {
             var img = sender as Image;
             img.ImageOpened -= Image_ImageOpened;
@@ -144,6 +147,11 @@ namespace ControlLibrary
             else
             {
                 switchImage();
+            }
+
+            if (ImageOpened != null)
+            {
+                ImageOpened(sender, e);
             }
         }
 
@@ -240,6 +248,11 @@ namespace ControlLibrary
 
         private void switchAnimation_Completed(object sender, object e)
         {
+            if (AnimationCompleted != null)
+            {
+                AnimationCompleted();
+            }
+
             var img = currentImg;
             currentImg = hiddenImg;
             hiddenImg = img;
@@ -250,6 +263,11 @@ namespace ControlLibrary
 
         private void animation_Completed(object sender, object e)
         {
+            if (AnimationCompleted != null)
+            {
+                AnimationCompleted();
+            }
+
             (sender as Storyboard).Completed -= animation_Completed;
             int index = getNextIndex();
             if (index > -1)
@@ -311,7 +329,6 @@ namespace ControlLibrary
             if (originalSize.Height * scale < newSize.Height) scale = newSize.Height / originalSize.Height;
             return scale;
         }
-
 
         private int getNextIndex()
         {

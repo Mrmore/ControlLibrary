@@ -40,7 +40,7 @@ namespace TestDemoApp
             this.Loaded += BlankPage_Loaded;
         }
 
-        void BlankPage_Loaded(object sender, RoutedEventArgs e)
+        private void BlankPage_Loaded(object sender, RoutedEventArgs e)
         {
             StringBuilder photoList = new StringBuilder();
             string photoUrl1 = "http://ww3.sinaimg.cn/bmiddle/7a73a8e1tw1dqdefnrn1gj.jpg";
@@ -52,6 +52,12 @@ namespace TestDemoApp
             feedPhotoLiveTileBase.Source = photoList.ToString();
             photoLiveTile.Source = photoList.ToString();
             feedPhotoLiveTile.Source = photoList.ToString();
+            feedPhotoLiveTile.ImageOpened += feedPhotoLiveTile_ImageOpened;
+        }
+
+        private void feedPhotoLiveTile_ImageOpened(object arg1, RoutedEventArgs arg2)
+        {
+            
         }
 
         /// <summary>

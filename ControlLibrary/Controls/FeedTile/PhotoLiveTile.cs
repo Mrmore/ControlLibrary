@@ -11,6 +11,10 @@ namespace ControlLibrary
     public class PhotoLiveTile : Control
     {
         private PhotoLiveTileBase photoLiveTileBase = null;
+
+        public event Action<object, RoutedEventArgs> ImageOpened = null;
+        public event Action AnimationCompleted = null;
+
         public int CurrentPhotoIndex
         {
             get
@@ -54,12 +58,35 @@ namespace ControlLibrary
         {
             base.OnApplyTemplate();
             photoLiveTileBase = this.GetTemplateChild("photoLiveTileBase") as PhotoLiveTileBase;
-            if (this.photoLiveTileBase != null && this.Source != null && this.Source != string.Empty)
+            if (this.photoLiveTileBase != null)
             {
-                if (!string.IsNullOrWhiteSpace(this.Source))
+                photoLiveTileBase.ImageOpened -= photoLiveTileBase_ImageOpened;
+                photoLiveTileBase.ImageOpened += photoLiveTileBase_ImageOpened;
+                photoLiveTileBase.AnimationCompleted -= photoLiveTileBase_AnimationCompleted;
+                photoLiveTileBase.AnimationCompleted += photoLiveTileBase_AnimationCompleted;
+                if (this.Source != null && this.Source != string.Empty)
                 {
-                    this.photoLiveTileBase.Source = this.Source;
+                    if (!string.IsNullOrWhiteSpace(this.Source))
+                    {
+                        this.photoLiveTileBase.Source = this.Source;
+                    }
                 }
+            }
+        }
+
+        private void photoLiveTileBase_AnimationCompleted()
+        {
+            if (AnimationCompleted != null)
+            {
+                AnimationCompleted();
+            }
+        }
+
+        private void photoLiveTileBase_ImageOpened(object arg1, RoutedEventArgs arg2)
+        {
+            if (ImageOpened != null)
+            {
+                ImageOpened(arg1, arg2);
             }
         }
     }
