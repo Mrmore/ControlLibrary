@@ -37,6 +37,28 @@ namespace ControlLibrary.Extensions
             }
         }
 
+        public static IEnumerable<FrameworkElement> FindVisualChilds(this FrameworkElement root, string name)
+        {
+            if (root != null)
+            {
+                List<FrameworkElement> feList = new List<FrameworkElement>();
+                foreach (FrameworkElement element in root.GetVisualDescendents())
+                {
+                    var temp = element.FindName(name) as FrameworkElement;
+                    if (temp != null)
+                        feList.Add(temp);
+                }
+                if (feList.Count > 0)
+                    return feList;
+                else
+                    return null;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
         /// <summary>
         /// Gets the visual parent of the element
         /// </summary>
