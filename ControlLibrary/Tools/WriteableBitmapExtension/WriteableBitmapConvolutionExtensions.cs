@@ -243,6 +243,7 @@ namespace ControlLibrary.Tools.WriteableBitmapExtension
         }
 
         private static byte[] pixel;
+        //高斯模糊
         public static void BoxBlur(this WriteableBitmap bmp, int range)
         {
             if ((range & 1) == 0)
@@ -254,6 +255,19 @@ namespace ControlLibrary.Tools.WriteableBitmapExtension
             //pixel = WindowsRuntimeBufferExtensions.ToArray(bmp.PixelBuffer);
             bmp.BoxBlurHorizontal(range);
             bmp.BoxBlurVertical(range);
+        }
+
+        //高斯模糊
+        public static void BoxBlur(this WriteableBitmap bmp, int x, int y)
+        {
+            if ((x & 1) == 0 || (y & 1) == 0)
+            {
+                Debug.WriteLine("Range must be odd!");
+                return;
+            }
+
+            bmp.BoxBlurHorizontal(x);
+            bmp.BoxBlurVertical(y);
         }
 
         //BitConverter
@@ -399,6 +413,11 @@ namespace ControlLibrary.Tools.WriteableBitmapExtension
         public static int[] ToInt(this byte[] bytes)
         {
             return bytes.Select(x => (int)x).ToArray();
+        }
+
+        public static int[] ToDouble(this double[] doubles)
+        {
+            return doubles.Select(x => (int)x).ToArray();
         }
 
         private static double[,] GaussFuc(int r, double sigma)

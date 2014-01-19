@@ -86,7 +86,7 @@ namespace TestDemoApp
         {
             if (sliderRadius != null && sliderSigma != null)
             {
-                this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(sliderSigma.Value), e.NewValue);
+                this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(sliderRadius.Value), e.NewValue);
                 wb.Invalidate();
             }
         }
