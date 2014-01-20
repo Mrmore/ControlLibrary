@@ -20,12 +20,8 @@ namespace ControlLibrary
 {
     public class ClipImage : Control
     {
-        //图片打开成功的代理
-        public delegate void RoutedEventHandler(object sender, RoutedEventArgs e);
-        /// <summary>
-        /// 图片打开成功的事件
-        /// </summary>
-        public event RoutedEventHandler ImageOpened;
+        public delegate void ClipImageOpened(object sender);
+        public event ClipImageOpened ImageOpened;
 
         //图片打开失败的代理
         public delegate void ExceptionRoutedEventHandler(object sender, ExceptionRoutedEventArgs e);
@@ -129,12 +125,11 @@ namespace ControlLibrary
                         clipImage.isSbComplete = false;
                         clipImage.imageClip.Opacity = 0.0;
                         clipImage.imageClip.Source = clipImage.oldUri = ((BitmapImage)clipImage.Source).UriSource.AbsoluteUri;
-                        clipImage.IsImageComplete = false;
                     }
                 }
 
-                clipImage.imageClip.ImageOpened -= clipImage.imageClip_ImageOpened;
-                clipImage.imageClip.ImageOpened += clipImage.imageClip_ImageOpened;
+                //clipImage.imageClip.ImageOpened -= clipImage.imageClip_ImageOpened;
+                //clipImage.imageClip.ImageOpened += clipImage.imageClip_ImageOpened;
 
                 /*clipImage.imageClip.ImageOpened -= clipImage.imageClip_ImageOpened;
                 if (clipImage.IsClipImage)
@@ -155,7 +150,7 @@ namespace ControlLibrary
                     clipImage.InitImageTransforms();
                 }*/
 
-                //clipImage.IsClipImage = true;
+                clipImage.IsClipImage = true;
             }
         }
 
@@ -173,9 +168,24 @@ namespace ControlLibrary
             if (clipImage != null && clipImage.imageClip != null)
             {
                 clipImage.imageClip.ImageOpened -= clipImage.imageClip_ImageOpened;
-                clipImage.imageClip.ImageOpened += clipImage.imageClip_ImageOpened;
-                if (!clipImage.imageClip.IsImageComplete)
-                    clipImage.imageClip_ImageOpened(clipImage.imageClip.GetImage(), null);
+                if (clipImage.IsClipImage)
+                {
+
+                    clipImage.imageClip.ImageOpened += clipImage.imageClip_ImageOpened;
+                    if (clipImage.desiredSizeHeight != double.NaN && clipImage.desiredSizeWidth != double.NaN)
+                    {
+                        clipImage.ScaleXY(clipImage.imageClip.GetImage());
+                    }
+                    else
+                    {
+                        //clipImage.imageClip.Visibility = Visibility.Collapsed;
+                        clipImage.imageClip.Opacity = 0.0;
+                    }
+                }
+                else
+                {
+                    clipImage.InitImageTransforms();
+                }
             }
         }
 
@@ -248,7 +258,6 @@ namespace ControlLibrary
                 }
                 else
                 {
-                    this.imageClip.Opacity = 1;
                     this.planeProjection.RotationX = 90;
                 }
                 CreateAnimationBegin();
@@ -298,14 +307,8 @@ namespace ControlLibrary
             }
             else
             {
-                DoubleAnimationUsingKeyFrames keyFramesOpacity = new DoubleAnimationUsingKeyFrames();
-                Storyboard.SetTarget(keyFramesOpacity, imageClip);
-                Storyboard.SetTargetProperty(keyFramesOpacity, "(UIElement.Opacity)");
-                KeyTime ktOpacity1 = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0));
-                keyFramesOpacity.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktOpacity1, Value = 1 });
-                sbVisible.Children.Add(keyFramesOpacity);
                 DoubleAnimationUsingKeyFrames keyFramesRotationX = new DoubleAnimationUsingKeyFrames();
-                Storyboard.SetTarget(keyFramesRotationX, gridRoot); //20140121原目标对象imageClip
+                Storyboard.SetTarget(keyFramesRotationX, imageClip);
                 Storyboard.SetTargetProperty(keyFramesRotationX, "(UIElement.Projection).(PlaneProjection.RotationX)");
                 KeyTime ktRotationX1 = KeyTime.FromTimeSpan(new TimeSpan(0, 0, 0));
                 keyFramesRotationX.KeyFrames.Add(new EasingDoubleKeyFrame() { KeyTime = ktRotationX1, Value = 90 });
@@ -404,9 +407,7 @@ namespace ControlLibrary
             imageClip = this.GetTemplateChild("clipImage") as CacheImage;
             if (gridRoot != null && imageClip != null)
             {
-                //this.AddProjection(imageClip);
-                //20140121原目标对象imageClip
-                this.AddProjection(gridRoot);
+                this.AddProjection(imageClip);
                 this.AnimationChange();
 
                 this.ct = new CompositeTransform();
@@ -423,19 +424,25 @@ namespace ControlLibrary
                 }
                 //this.SizeChanged += ClipImage_SizeChanged;
                 this.imageClip.ImageOpened -= this.imageClip_ImageOpened;
-                this.imageClip.ImageOpened += this.imageClip_ImageOpened;
-                if (!imageClip.IsImageComplete)
-                    this.imageClip_ImageOpened(this.imageClip.GetImage(), null);
+                if (this.IsClipImage)
+                {
+                    this.imageClip.ImageOpened += this.imageClip_ImageOpened;
+                    if (this.desiredSizeHeight != double.NaN && this.desiredSizeWidth != double.NaN)
+                    {
+                        this.ScaleXY(this.imageClip.GetImage());
+                    }
+                }
 
                 this.imageClip.ImageFailed -= imageClip_ImageFailed;
                 this.imageClip.ImageFailed += imageClip_ImageFailed;
 
                 this.imageClip.ImageDownLoadProgress -= imageClip_ImageDownLoadProgress;
                 this.imageClip.ImageDownLoadProgress += imageClip_ImageDownLoadProgress;
+                this.IsImageComplete = imageClip.IsImageComplete;
             }
         }
 
-        private void imageClip_ImageDownLoadProgress(int downloadValue)
+        void imageClip_ImageDownLoadProgress(int downloadValue)
         {
             if (this.ImageDownLoadProgress != null)
             {
@@ -443,7 +450,7 @@ namespace ControlLibrary
             }
         }
 
-        private void imageClip_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        void imageClip_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
             if (this.ImageFailed != null)
             {
@@ -451,75 +458,82 @@ namespace ControlLibrary
             }
         }
 
-        private void ClipImage_SizeChanged(object sender, SizeChangedEventArgs e)
+        void ClipImage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             size = e.NewSize;
             Init(e.NewSize);
             //后续可能会加入，时时改变大小重绘
             this.imageClip.ImageOpened -= this.imageClip_ImageOpened;
-            this.imageClip.ImageOpened += this.imageClip_ImageOpened;
-            if (!imageClip.IsImageComplete)
-                this.imageClip_ImageOpened(this.imageClip, null);
+            if (this.IsClipImage)
+            {
+                this.imageClip.ImageOpened += this.imageClip_ImageOpened;
+                //if (this.desiredSizeHeight != double.NaN && this.desiredSizeWidth != double.NaN)
+                //{
+                //    this.ScaleXY(this.imageClip);
+                //}
+                if (!double.IsNaN(this.desiredSizeHeight) && !double.IsNaN(this.desiredSizeWidth))
+                {
+                    this.ScaleXY(this.imageClip.GetImage());
+                }
+            }
         }
 
-        private void ScaleXY(Image image)
+        private void ScaleXY(object sender)
         {
             try
             {
-                if (image != null)
+                if (sender != null)
                 {
                     InitImageTransforms();
                     var interpolationX = 1.0;
                     var interpolationY = 1.0;
 
-                    this.desiredSizeHeight = image.ActualHeight;
-                    this.desiredSizeWidth = image.ActualWidth;
+                    this.desiredSizeHeight = (sender as Image).ActualHeight;
+                    this.desiredSizeWidth = (sender as Image).ActualWidth;
 
                     /*this.desiredSizeHeight = (sender as CacheImage).ActualHeight;
                     this.desiredSizeWidth = (sender as CacheImage).ActualWidth;*/
-                    if (!double.IsNaN(this.desiredSizeHeight) && !double.IsNaN(this.desiredSizeWidth))
+
+                    var interpolationH = this.imageClip.Height - desiredSizeHeight;
+                    var interpolationW = this.imageClip.Width - desiredSizeWidth;
+                    if (interpolationH <= 0)
                     {
-                        var interpolationH = this.imageClip.Height - desiredSizeHeight;
-                        var interpolationW = this.imageClip.Width - desiredSizeWidth;
-                        if (interpolationH <= 0)
-                        {
-                            interpolationH = 0;
-                        }
-                        else
-                        {
-                            //interpolationH = interpolationH / this.imageClip.Height;
-                            interpolationH = interpolationH / this.desiredSizeHeight;
-                        }
+                        interpolationH = 0;
+                    }
+                    else
+                    {
+                        //interpolationH = interpolationH / this.imageClip.Height;
+                        interpolationH = interpolationH / this.desiredSizeHeight;
+                    }
 
-                        if (interpolationW <= 0)
-                        {
-                            interpolationW = 0;
-                        }
-                        else
-                        {
-                            //interpolationW = interpolationW / this.imageClip.Width;
-                            interpolationW = interpolationW / this.desiredSizeWidth;
-                        }
+                    if (interpolationW <= 0)
+                    {
+                        interpolationW = 0;
+                    }
+                    else
+                    {
+                        //interpolationW = interpolationW / this.imageClip.Width;
+                        interpolationW = interpolationW / this.desiredSizeWidth;
+                    }
 
-                        if (interpolationH > interpolationW)
-                        {
-                            //interpolationX = interpolationX + interpolationH;
-                            interpolationX = interpolationX + System.Math.Round(interpolationH, 15, MidpointRounding.AwayFromZero) + 0.005;
-                        }
-                        else
-                        {
-                            //interpolationY = interpolationY + interpolationW;
-                            interpolationY = interpolationY + System.Math.Round(interpolationW, 15, MidpointRounding.AwayFromZero) + 0.005;
-                        }
+                    if (interpolationH > interpolationW)
+                    {
+                        //interpolationX = interpolationX + interpolationH;
+                        interpolationX = interpolationX + System.Math.Round(interpolationH, 15, MidpointRounding.AwayFromZero) + 0.005;
+                    }
+                    else
+                    {
+                        //interpolationY = interpolationY + interpolationW;
+                        interpolationY = interpolationY + System.Math.Round(interpolationW, 15, MidpointRounding.AwayFromZero) + 0.005;
+                    }
 
-                        if (interpolationX > interpolationY)
-                        {
-                            ct.ScaleX = ct.ScaleY = interpolationX;
-                        }
-                        else
-                        {
-                            ct.ScaleX = ct.ScaleY = interpolationY;
-                        }
+                    if (interpolationX > interpolationY)
+                    {
+                        ct.ScaleX = ct.ScaleY = interpolationX;
+                    }
+                    else
+                    {
+                        ct.ScaleX = ct.ScaleY = interpolationY;
                     }
 
                     /*this.imageClip.Visibility = Windows.UI.Xaml.Visibility.Visible;*/
@@ -542,9 +556,8 @@ namespace ControlLibrary
 
                     if (this.ImageOpened != null)
                     {
-                        this.ImageOpened(image, new RoutedEventArgs());
+                        this.ImageOpened(sender);
                     }
-                    this.IsImageComplete = true;
                 }
             }
             catch (Exception e)
@@ -553,33 +566,9 @@ namespace ControlLibrary
             }
         }
 
-        private void imageClip_ImageOpened(object sender, RoutedEventArgs e)
+        void imageClip_ImageOpened(object sender, RoutedEventArgs e)
         {
-            if (this.IsClipImage)
-                ScaleXY(sender as Image);
-            else
-            {
-                InitImageTransforms();
-                if (!this.isSbComplete)
-                {
-                    if (this.IsAnimation)
-                    {
-                        this.isSbComplete = true;
-                        this.AnimationBeginStop();
-                        this.AnimationBeginStart();
-                    }
-                    else
-                    {
-                        this.AnimationBeginStop();
-                        this.imageClip.Opacity = 1.0;
-                    }
-                }
-                if (this.ImageOpened != null)
-                {
-                    this.ImageOpened(sender, new RoutedEventArgs());
-                }
-                this.IsImageComplete = true;
-            }
+            ScaleXY(sender);
         }
 
         protected override Windows.Foundation.Size ArrangeOverride(Windows.Foundation.Size finalSize)

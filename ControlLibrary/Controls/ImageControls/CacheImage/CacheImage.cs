@@ -87,7 +87,7 @@ namespace ControlLibrary
             {
                 return isImageComplete;
             }
-            set
+            private set
             {
                 isImageComplete = value;
             }
@@ -259,6 +259,8 @@ namespace ControlLibrary
 
         private void ChangeSourceAndCacheType()
         {
+            //20140120
+            this.IsImageComplete = false;
             if (this.IsAnimation)
             {
                 if (this.AnimationType == ControlLibrary.AnimationType.AanimationFadeOut)
@@ -527,7 +529,7 @@ namespace ControlLibrary
             }
         }
 
-        async void imageCache_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        private async void imageCache_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
             if (this.IsCacheImage)
             {
@@ -590,7 +592,7 @@ namespace ControlLibrary
             }        
         }
 
-        void imageCache_ImageOpened(object sender, RoutedEventArgs e)
+        private void imageCache_ImageOpened(object sender, RoutedEventArgs e)
         {
             //if (this.ImageDownLoadProgress != null)
             //{
@@ -614,6 +616,8 @@ namespace ControlLibrary
                 //this.ImageOpened(this, e);
                 this.ImageOpened(sender, e);
             }
+            //20140120
+            this.IsImageComplete = true;
         }
 
         //提供一个获取Image的方法

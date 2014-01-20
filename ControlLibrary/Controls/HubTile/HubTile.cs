@@ -532,7 +532,7 @@ namespace ControlLibrary
             //}
         }
 
-        void image_ImageOpened(object sender)
+        void image_ImageOpened(object sender, RoutedEventArgs e)
         {
             if (imageDefault != null)
             {
