@@ -459,7 +459,7 @@ namespace ControlLibrary
             this.imageClip.ImageOpened -= this.imageClip_ImageOpened;
             this.imageClip.ImageOpened += this.imageClip_ImageOpened;
             if (!imageClip.IsImageComplete)
-                this.imageClip_ImageOpened(this.imageClip, null);
+                this.imageClip_ImageOpened(this.imageClip.GetImage(), null);
         }
 
         private void ScaleXY(Image image)
