@@ -612,11 +612,14 @@ namespace ControlLibrary.GifSynthesis
         {
             Stream temp = src.PixelBuffer.AsStream();
             byte[] tempBytes = new byte[src.PixelWidth * src.PixelHeight * 3];
-            for (int i = 0; i < tempBytes.Length; i++)
-            {
-                temp.Seek(i, SeekOrigin.Begin);
-                temp.Write(tempBytes, 0, tempBytes.Length);
-            }
+            //for (int i = 0; i < tempBytes.Length; i++)
+            //{
+            //    temp.Seek(i, SeekOrigin.Begin);
+            //    //temp.Write(tempBytes, 0, tempBytes.Length);
+            //    temp.Read(tempBytes, 0, tempBytes.Length);
+            //}
+            temp.Seek(0, SeekOrigin.Begin);
+            temp.Read(tempBytes, 0, tempBytes.Length);
             temp.Dispose();
             return tempBytes;
         }

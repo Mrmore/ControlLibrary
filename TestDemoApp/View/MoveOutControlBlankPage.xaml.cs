@@ -68,8 +68,7 @@ namespace TestDemoApp
 
         private void bt_Click(object sender, RoutedEventArgs e)
         {
-            this.image.Source = BlurEffect.WriteableBitmapBlur(wb, null);
-            //this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(this.tb.Text));       
+            this.image.Source = BlurEffect.WriteableBitmapBlur(wb, Convert.ToInt32(this.tb.Text)); 
             //this.image.Source = BlurEffect.WriteableBitmapBlur(wb);
         }
 
