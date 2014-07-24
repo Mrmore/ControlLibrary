@@ -237,7 +237,7 @@ namespace TestDemoApp
                 //var url = await YouTube.GetVideoUriAsync(youtubeurl, YouTubeQuality.QualityMP3_FLV_44KHZ);
                 //长视频 例如金瓶梅
                 //var url = await YouTube.GetVideoUriAsync("rtD-8mQnzRs", YouTubeQuality.Quality720P_MP4);
-                //vevo 视频测试
+                //vevo 视频测试 //gUVUhWUbj-Y //默认测试 LrUvu1mlWco //KzKLd9p4x3w //-YICuUtkjlg
                 var url = await YouTube.GetVideoUriAsync("LrUvu1mlWco", YouTubeQuality.Quality720P_MP4);
                 me.Source = url.Uri;
                 me.Play();

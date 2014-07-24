@@ -101,7 +101,12 @@ namespace ControlLibrary.Extensions
         /// <returns></returns>
         public static string Reverse(this string s)
         {
-            return new string(s.ToCharArray().Reverse().ToArray());
+            return new string(s.ReverseChar());
+        }
+
+        public static char[] ReverseChar(this string s)
+        {
+            return s.ToCharArray().Reverse().ToArray();
         }
 
         public static string Slice(this string source, int start)

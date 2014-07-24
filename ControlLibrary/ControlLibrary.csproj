@@ -380,6 +380,9 @@
     <Compile Include="Tools\Downloader\BaseBackgroundDownloader.cs" />
     <Compile Include="Tools\Downloader\BaseDownloader.cs" />
     <Compile Include="Tools\Downloader\StorageFileDownloader.cs" />
+    <Compile Include="Tools\Multimedia\YouTube.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Tools\Notification\NotificationSecondaryTile\NotificationSecondaryTileHelper.cs" />
     <Compile Include="Tools\Notification\NotificationTile\NotificationTileConstants.cs" />
     <Compile Include="Tools\Notification\NotificationTile\NotificationTile.cs" />
@@ -411,7 +414,6 @@
     <Compile Include="Tools\StreamExtensions\MicrosoftStreamExtensions.cs" />
     <Compile Include="Tools\Multimedia\AudioWriter.cs" />
     <Compile Include="Tools\Multimedia\YouTubeFlvToMp3OrAac.cs" />
-    <Compile Include="Tools\Multimedia\YouTube.cs" />
     <Compile Include="Tools\Multimedia\YouTubeQuality.cs" />
     <Compile Include="Tools\Multimedia\YouTubeThumbnailSize.cs" />
     <Compile Include="Tools\Networking\Http.cs" />

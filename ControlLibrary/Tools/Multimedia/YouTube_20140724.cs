@@ -17,7 +17,6 @@ using MyToolkit.UI;
 using System.Net.Http.Headers;
 using System.Net.Http;
 using System.Net;
-using System.Diagnostics;
 #endif
 
 namespace ControlLibrary.Tools.Multimedia
@@ -55,7 +54,7 @@ namespace ControlLibrary.Tools.Multimedia
             {
                 //client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; WOW64; Trident/6.0)");
                 //client.DefaultRequestHeaders.Add("Accept", "text/html");
-                client.DefaultRequestHeaders.Add("User-Agent", BotUserAgent);
+                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
                 var response = await client.GetAsync("https://www.youtube.com/watch?v=" + youTubeId + "&nomobile=1");
 
                 var task = new TaskCompletionSource<YouTubeUri>();
@@ -218,7 +217,7 @@ namespace ControlLibrary.Tools.Multimedia
         {
             using (var client = new HttpClient())
             {
-                client.DefaultRequestHeaders.Add("User-Agent", BotUserAgent);
+                client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)");
                 var response = await client.GetAsync("https://www.youtube.com/watch?v=" + youTubeId + "&nomobile=1");
 
                 var task = new TaskCompletionSource<List<YouTubeUri>>();
@@ -281,14 +280,10 @@ namespace ControlLibrary.Tools.Multimedia
             var urls = new List<YouTubeUri>();
             try
             {
-                string javaScriptCode = null;
-
                 var match = Regex.Match(response, "url_encoded_fmt_stream_map\": \"(.*?)\"");
                 var data = Uri.UnescapeDataString(match.Groups[1].Value);
-                match = Regex.Match(response, "adaptive_fmts\": \"(.*?)\"");
-                var data2 = Uri.UnescapeDataString(match.Groups[1].Value);
 
-                var arr = Regex.Split(data + "," + data2, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // split by comma but outside quotes
+                var arr = Regex.Split(data, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // split by comma but outside quotes
                 foreach (var d in arr)
                 {
                     var url = "";
@@ -307,39 +302,22 @@ namespace ControlLibrary.Tools.Multimedia
                                     url = value;
                                 else if (key == "itag")
                                     tuple.Itag = int.Parse(value);
-                                //else if (key == "type" && (value.Contains("video/mp4") || value.Contains("audio/mp4"))) //只获取Mp4
+                                //else if (key == "type" && value.Contains("video/mp4")) //只获取Mp4
                                 else if (key == "type") //获取全部
                                     tuple.Type = value;
                                 else if (key == "s")
                                 {
-                                    if (string.IsNullOrEmpty(javaScriptCode) || string.IsNullOrWhiteSpace(javaScriptCode))
-                                    {
-                                        var javaScriptUri = "http://s.ytimg.com/yts/jsbin/html5player-" +
-                                                            Regex.Match(response,
-                                                                "\"\\\\/\\\\/s.ytimg.com\\\\/yts\\\\/jsbin\\\\/html5player-(.+?)\\.js\"")
-                                                                .Groups[1] + ".js";
-                                        javaScriptCode = await HttpGet(javaScriptUri);
-                                    }
-
-                                    signature = DecryptLocalSignature(value, javaScriptCode);
-                                    if (string.IsNullOrEmpty(signature) || string.IsNullOrWhiteSpace(signature))
-                                        signature = await DecryptWebSignature(value);
+                                    signature = await DecryptWebSignature(value);
+                                    //signature = DecryptLocalSignature(value);
                                 }
                                 else if (key == "sig")
                                     signature = value;
                             }
-                            catch (Exception exception)
-                            {
-                                Debug.WriteLine("YouTube parse exception: " + exception.Message);
-                            }
+                            catch { }
                         }
                     }
 
-                    if (url.Contains("&signature=") || url.Contains("?signature="))
-                        tuple.url = url;
-                    else
-                        tuple.url = url + "&signature=" + signature;
-
+                    tuple.url = url + "&signature=" + signature;
                     if (tuple.IsValid)
                         urls.Add(tuple);
                 }
@@ -387,14 +365,10 @@ namespace ControlLibrary.Tools.Multimedia
             var urls = new List<YouTubeUri>();
             try
             {
-                string javaScriptCode = null;
-                
                 var match = Regex.Match(response, "url_encoded_fmt_stream_map\": \"(.*?)\"");
                 var data = Uri.UnescapeDataString(match.Groups[1].Value);
-                match = Regex.Match(response, "adaptive_fmts\": \"(.*?)\"");
-                var data2 = Uri.UnescapeDataString(match.Groups[1].Value);
 
-                var arr = Regex.Split(data + "," + data2, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // split by comma but outside quotes
+                var arr = Regex.Split(data, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // split by comma but outside quotes
                 foreach (var d in arr)
                 {
                     var url = "";
@@ -413,39 +387,22 @@ namespace ControlLibrary.Tools.Multimedia
                                     url = value;
                                 else if (key == "itag")
                                     tuple.Itag = int.Parse(value);
-                                //else if (key == "type" && (value.Contains("video/mp4") || value.Contains("audio/mp4"))) //只获取Mp4
+                                //else if (key == "type" && value.Contains("video/mp4")) //只获取Mp4
                                 else if (key == "type") //获取全部
                                     tuple.Type = value;
                                 else if (key == "s")
                                 {
-                                    if (string.IsNullOrEmpty(javaScriptCode) || string.IsNullOrWhiteSpace(javaScriptCode))
-                                    {
-                                        var javaScriptUri = "http://s.ytimg.com/yts/jsbin/html5player-" +
-                                                            Regex.Match(response,
-                                                                "\"\\\\/\\\\/s.ytimg.com\\\\/yts\\\\/jsbin\\\\/html5player-(.+?)\\.js\"")
-                                                                .Groups[1] + ".js";
-                                        javaScriptCode = await HttpGet(javaScriptUri);
-                                    }
-
-                                    signature = DecryptLocalSignature(value, javaScriptCode);
-                                    if (string.IsNullOrEmpty(signature) || string.IsNullOrWhiteSpace(signature))
-                                        signature = await DecryptWebSignature(value);
+                                    signature = await DecryptWebSignature(value);
+                                    //signature = DecryptLocalSignature(value);
                                 }
                                 else if (key == "sig")
                                     signature = value;
                             }
-                            catch (Exception exception)
-                            {
-                                Debug.WriteLine("YouTube parse exception: " + exception.Message);
-                            }
+                            catch { }
                         }
                     }
-                    
-                    if (url.Contains("&signature=") || url.Contains("?signature="))
-                        tuple.url = url;
-                    else
-                        tuple.url = url + "&signature=" + signature;
 
+                    tuple.url = url + "&signature=" + signature;
                     if (tuple.IsValid)
                         urls.Add(tuple);
                 }
@@ -477,54 +434,65 @@ namespace ControlLibrary.Tools.Multimedia
         //
         private static List<Tuple<string, int>> sigCodes = null;
         //签名验证算法(外网)
-        public async static Task<string> DecryptWebSignature(string sig)
+        public async static Task<string> DecryptWebSignature(string sig, bool isVerify = true)
         {
-            if (sigCodes == null || sigCodes.Count <= 0)
+            if (!isVerify)
             {
+                if (sigCodes != null && sigCodes.Count > 0)
+                    sigCodes.Clear();
                 using (var getHc = new HttpClient())
                 {
-                    //"http://vevo.ytdplus.com/index.php?sign=" + sig
-                    //http://add0n.com/signature.php?request=alg
-                    //http://add0n.com/signature2.php
-                    //http://inbasic.net/signature2.php
-                    getHc.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0");
-                    var codes = await getHc.GetStringAsync("http://inbasic.net/signature2.php");
-                    if (!string.IsNullOrEmpty(codes) && !string.IsNullOrWhiteSpace(codes))
+                    sig = await getHc.GetStringAsync("http://vevo.ytdplus.com/index.php?sign=" + sig);
+                }
+            }
+            else
+            {
+                if (sigCodes == null || sigCodes.Count <= 0)
+                {
+                    using (var getHc = new HttpClient())
                     {
-                        codes = codes.Trim().Replace("[", "").Replace("]", "").Replace("\"", "");
-                        var codeArray = codes.Split(',');
-                        sigCodes = new List<Tuple<string, int>>();
-                        for (int i = 0; i < codeArray.Length; i++)
+                        //http://add0n.com/signature.php?request=alg
+                        //http://add0n.com/signature2.php
+                        //http://inbasic.net/signature2.php
+                        getHc.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.2; WOW64; rv:22.0) Gecko/20100101 Firefox/22.0");
+                        var codes = await getHc.GetStringAsync("http://inbasic.net/signature2.php");
+                        if (!string.IsNullOrEmpty(codes) && !string.IsNullOrWhiteSpace(codes))
                         {
-                            if (codeArray[i] == "w" || codeArray[i] == "s")
+                            codes = codes.Trim().Replace("[", "").Replace("]", "").Replace("\"", "");
+                            var codeArray = codes.Split(',');
+                            sigCodes = new List<Tuple<string, int>>();
+                            for (int i = 0; i < codeArray.Length; i++)
                             {
-                                var key = codeArray[i].Trim();
-                                var value = System.Convert.ToInt32(codeArray[i + 1].Trim());
-                                sigCodes.Add(new Tuple<string, int>(key, value));
-                            }
-                            else if (codeArray[i] == "r")
-                            {
-                                sigCodes.Add(new Tuple<string, int>(codeArray[i], 0));
+                                if (codeArray[i] == "w" || codeArray[i] == "s")
+                                {
+                                    var key = codeArray[i].Trim();
+                                    var value = System.Convert.ToInt32(codeArray[i + 1].Trim());
+                                    sigCodes.Add(new Tuple<string, int>(key, value));
+                                }
+                                else if (codeArray[i] == "r")
+                                {
+                                    sigCodes.Add(new Tuple<string, int>(codeArray[i], 0));
+                                }
                             }
                         }
                     }
                 }
-            }
-            if (sigCodes != null && sigCodes.Count > 0)
-            {
-                foreach (var item in sigCodes)
+                if (sigCodes != null && sigCodes.Count > 0)
                 {
-                    if (item.Item1 == "r")
+                    foreach (var item in sigCodes)
                     {
-                        sig = sig.Reverse();
-                    }
-                    else if (item.Item1 == "s")
-                    {
-                        sig = sig.Slice(item.Item2);
-                    }
-                    else if (item.Item1 == "w")
-                    {
-                        sig = new string(Swap(sig.ToCharArray(), item.Item2));
+                        if (item.Item1 == "r")
+                        {
+                            sig = sig.Reverse();
+                        }
+                        else if (item.Item1 == "s")
+                        {
+                            sig = sig.Slice(item.Item2);
+                        }
+                        else if (item.Item1 == "w")
+                        {
+                            sig = new string(Swap(sig.ToCharArray(), item.Item2));
+                        }
                     }
                 }
             }
@@ -532,87 +500,104 @@ namespace ControlLibrary.Tools.Multimedia
         }
 
         //签名验证算法(本地)
-        private static string DecryptLocalSignature(string signature, string javaScriptCode)
+        public static string DecryptLocalSignature(string sig)
         {
-            var functionName = Regex.Match(javaScriptCode, "signature=(.*?)\\(").Groups[1].ToString();
-            var functionMath = Regex.Match(javaScriptCode, "function " + Regex.Escape(functionName) + "\\((\\w+)\\)\\{(.+?)\\}", RegexOptions.Singleline);
-
-            var parameterName = Regex.Escape(functionMath.Groups[1].ToString());
-            var functionBody = functionMath.Groups[2].ToString();
-
-            Dictionary<string, Func<string, int, string>> methods = null;
-
-            //var lo={wS:function(a){return a.reverse()},IC:function(a,b){return a.slice(b)},rw:function(a,b){var c=a[0];a[0]=a[b%a.length];a[b]=c;return a}};
-            //function mo(a){a=a.split("");a=lo.rw(a,1);a=lo.rw(a,32);a=lo.IC(a,1);a=lo.wS(a,77);a=lo.IC(a,3);a=lo.wS(a,77);a=lo.IC(a,3);a=lo.wS(a,44);return a.join("")};
-
-            foreach (var line in functionBody.Split(';').Select(l => l.Trim()))
+            switch (sig.Length)
             {
-                if (Regex.IsMatch(line, parameterName + "=" + parameterName + "\\.reverse\\(\\)")) // OLD
-                    signature = Reverse(signature);
-                else if (Regex.IsMatch(line, parameterName + "=" + parameterName + "\\.slice\\(\\d+\\)"))
-                    signature = Slice(signature, Convert.ToInt32(Regex.Match(line, parameterName + "=" + parameterName + "\\.slice\\((\\d+)\\)").Groups[1].ToString()));
-                else if (Regex.IsMatch(line, parameterName + "=\\w+\\(" + parameterName + ",\\d+\\)"))
-                    signature = Swap(signature, Convert.ToInt32(Regex.Match(line, parameterName + "=\\w+\\(" + parameterName + ",(\\d+)\\)").Groups[1].ToString()));
-                else if (Regex.IsMatch(line, parameterName + "\\[0\\]=" + parameterName + "\\[\\d+%" + parameterName + "\\.length\\]"))
-                    signature = Swap(signature, Convert.ToInt32(Regex.Match(line, parameterName + "\\[0\\]=" + parameterName + "\\[(\\d+)%" + parameterName + "\\.length\\]").Groups[1].ToString()));
-                else
-                {
-                    var match = Regex.Match(line, parameterName + "=(.*?)\\.(.*?)\\(" + parameterName + ",(.*?)\\)");
-                    if (match.Success)
+                case 79:
                     {
-                        var root = match.Groups[1].ToString();
-                        var method = match.Groups[2].ToString();
-                        var parameter = int.Parse(match.Groups[3].ToString());
-
-                        if (methods == null)
-                        {
-                            // Parse methods
-                            methods = new Dictionary<string, Func<string, int, string>>();
-
-                            var code = Regex.Match(javaScriptCode, "var " + root + "=\\{(.*?)\\};function").Groups[1].ToString();
-                            var methodsArray = code.Split(new[] { "}," }, StringSplitOptions.None);
-                            foreach (var m in methodsArray)
-                            {
-                                var arr = m.Split(':');
-                                var methodName = arr[0];
-                                var methodBody = arr[1];
-
-                                if (methodBody.Contains("reverse()"))
-                                    methods[methodName] = (s, i) => Reverse(s);
-                                else if (methodBody.Contains(".slice("))
-                                    methods[methodName] = Slice;
-                                else
-                                    methods[methodName] = Swap;
-                            }
-                        }
-
-                        signature = methods[method](signature, parameter);
+                        sig = Sub(54, sig) + SubR(77, 54, sig) + Sub(39, sig) + SubR(53, 39, sig) + Sub(78, sig) + SubR(38, 34, sig) + Sub(0, sig) + SubR(33, 29, sig) + Sub(34, sig) + SubR(28, 9, sig) + Sub(29, sig) + SubR(8, 0, sig) + Sub(9, sig);
                     }
-                }
+                    break;
+                case 80:
+                    {
+                        sig = Sub(1, 19, sig) + Sub(0, sig) + Sub(20, 68, sig) + Sub(19, sig) + Sub(69, 80, sig);
+                    }
+                    break;
+                case 81:
+                    {
+                        sig = Sub(56, sig) + SubR(79, 56, sig) + Sub(41, sig) + SubR(55, 41, sig) + Sub(80, sig) + SubR(40, 34, sig) + Sub(0, sig) + SubR(33, 29, sig) + Sub(34, sig) + SubR(28, 9, sig) + Sub(29, sig) + SubR(8, 0, sig) + Sub(9, sig);
+                    }
+                    break;
+                case 82:
+                    {
+                        //sig = Sub(12, sig) + SubR(79, 12, sig) + Sub(80, sig) + sig.Substring(0, 12).Reverse();
+                        sig = SubR(80, 37, sig) + Sub(7, sig) + SubR(36, 7, sig) + Sub(0, sig) + SubR(6, 0, sig) + Sub(37, sig);
+                    }
+                    break;
+                case 83:
+                    {
+                        //sig = sig.Substring(64, 17).Reverse() + sig.Substring(0, 1) + sig.Substring(1, 62).Reverse() + sig.Substring(63, 1);
+                        sig = SubR(80, 63, sig) + Sub(0, sig) + SubR(62, 0, sig) + Sub(63, sig);
+                    }
+                    break;
+                case 84:
+                    {
+                        sig = SubR(78, 70, sig) + Sub(14, sig) + SubR(69, 37, sig) + Sub(70, sig) + SubR(36, 14, sig) + Sub(80, sig) + sig.Substring(0, 14).Reverse();
+                    }
+                    break;
+                case 85:
+                    {
+                        sig = Sub(3, 11, sig) + Sub(0, sig) + Sub(12, 55, sig) + Sub(84, sig) + Sub(56, 84, sig);
+                    }
+                    break;
+                case 86:
+                    {
+                        sig = SubR(80, 72, sig) + Sub(16, sig) + SubR(71, 39, sig) + Sub(72, sig) + SubR(38, 16, sig) + Sub(82, sig) + sig.Substring(0, 16).Reverse();
+                    }
+                    break;
+                case 87:
+                    {
+                        sig = Sub(6, 27, sig) + Sub(4, sig) + Sub(28, 39, sig) + Sub(27, sig) + Sub(40, 59, sig) + Sub(2, sig) + sig.Substring(60);
+                    }
+                    break;
+                case 88:
+                    {
+                        sig = Sub(7, 28, sig) + Sub(87, sig) + Sub(29, 45, sig) + Sub(55, sig) + Sub(46, 55, sig) + Sub(2, sig) + Sub(56, 87, sig) + Sub(28, sig);
+                    }
+                    break;
+                case 89:
+                    {
+                        sig = SubR(84, 78, sig) + Sub(87, sig) + SubR(77, 60, sig) + Sub(0, sig) + SubR(59, 3, sig);
+                    }
+                    break;
+                case 90:
+                    {
+                        sig = Sub(25, sig) + Sub(3, 25, sig) + Sub(2, sig) + Sub(26, 40, sig) + Sub(77, sig) + Sub(41, 77, sig) + Sub(89, sig) + Sub(78, 81, sig);
+                    }
+                    break;
+                case 91:
+                    {
+                        sig = SubR(84, 27, sig) + Sub(86, sig) + SubR(26, 5, sig);
+                    }
+                    break;
+                case 92:
+                    {
+                        sig = Sub(25, sig) + Sub(3, 25, sig) + Sub(0, sig) + Sub(26, 42, sig) + Sub(79, sig) + Sub(43, 79, sig) + Sub(91, sig) + Sub(80, 83, sig);
+                    }
+                    break;
+                case 93:
+                    {
+                        sig = SubR(86, 29, sig) + Sub(88, sig) + SubR(28, 5, sig);
+                    }
+                    break;
             }
-            return signature;
+            return sig;
         }
 
-        private static string Reverse(string signature)
+        private static string SubR(int a, int b, string c)
         {
-            var charArray = signature.ToCharArray();
-            Array.Reverse(charArray);
-            signature = new string(charArray);
-            return signature;
+            return c.Substring(b + 1, a - b).Reverse();
         }
 
-        private static string Slice(string input, int length)
+        private static string Sub(int a, int b, string c)
         {
-            return input.Substring(length);
+            return c.Substring(a, Math.Abs(b - a));
         }
 
-        private static string Swap(string input, int position)
+        private static string Sub(int a, string c)
         {
-            var str = new StringBuilder(input);
-            var swapChar = str[position];
-            str[position] = str[0];
-            str[0] = swapChar;
-            return str.ToString();
+            return c.Substring(a, 1);
         }
 
         private static char[] Swap(char[] a, int b)
@@ -621,15 +606,6 @@ namespace ControlLibrary.Tools.Multimedia
             a[0] = a[b % a.Length];
             a[b] = c;
             return a;
-        }
-
-        private const string BotUserAgent = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
-        private static async Task<string> HttpGet(string uri)
-        {
-            HttpClient hc = new HttpClient();
-            hc.DefaultRequestHeaders.Add("User-Agent", BotUserAgent);
-            var bytes = await hc.GetByteArrayAsync(uri);
-            return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
         }
         //
 
