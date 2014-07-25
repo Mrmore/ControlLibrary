@@ -44,7 +44,7 @@ namespace ControlLibrary.Tools.Multimedia
 #endif
 
 #if WINRT
-        public static async Task<YouTubeUri> GetVideoUriAsync(string youTubeId, YouTubeQuality maxQuality = YouTubeQuality.Quality360P_MP4)
+        public static async Task<YouTubeUri> GetVideoUriAsync(string youTubeId, YouTubeQuality maxQuality = YouTubeQuality.Quality360P_MP4, DecryptSignatureMode decryptSignatureMode = DecryptSignatureMode.DecryptLocalSignature)
         {
             //HttpClientHandler handler = new HttpClientHandler();
             //handler.UseDefaultCredentials = true;
@@ -59,7 +59,7 @@ namespace ControlLibrary.Tools.Multimedia
                 var response = await client.GetAsync("https://www.youtube.com/watch?v=" + youTubeId + "&nomobile=1");
 
                 var task = new TaskCompletionSource<YouTubeUri>();
-                OnHtmlDownloaded(await response.Content.ReadAsStringAsync(), YouTubeQuality.QualityMP3_FLV_22KHZ, maxQuality, (u, e) =>
+                OnHtmlDownloaded(await response.Content.ReadAsStringAsync(), YouTubeQuality.QualityMP3_FLV_22KHZ, maxQuality, decryptSignatureMode, (u, e) =>
                 {
                     if (u != null)
                         task.SetResult(u);
@@ -213,8 +213,8 @@ namespace ControlLibrary.Tools.Multimedia
         private static List<int> FormatCodeQuality = new List<int>() { 36, 35, 34, 5, 6, 18, 22, 37 };
         private static List<int> FormatCodeMP4OrFlv_mp3 = new List<int>() { 18, 22, 37, 34, 5 };
 
-        
-        public static async Task<List<YouTubeUri>> GetVideoAllUrisAsync(string youTubeId, YouTubeFormat youTubeFormat = YouTubeFormat.All)
+
+        public static async Task<List<YouTubeUri>> GetVideoAllUrisAsync(string youTubeId, YouTubeFormat youTubeFormat = YouTubeFormat.All, DecryptSignatureMode decryptSignatureMode = DecryptSignatureMode.DecryptLocalSignature)
         {
             using (var client = new HttpClient())
             {
@@ -222,7 +222,7 @@ namespace ControlLibrary.Tools.Multimedia
                 var response = await client.GetAsync("https://www.youtube.com/watch?v=" + youTubeId + "&nomobile=1");
 
                 var task = new TaskCompletionSource<List<YouTubeUri>>();
-                OnHtmlParse(await response.Content.ReadAsStringAsync(), (u, e) =>
+                OnHtmlParse(await response.Content.ReadAsStringAsync(), decryptSignatureMode, (u, e) =>
                 {
                     if (u != null)
                     {
@@ -276,13 +276,14 @@ namespace ControlLibrary.Tools.Multimedia
             }
         }
 
-        private static async void OnHtmlParse(string response, Action<List<YouTubeUri>, Exception> completed)
+        private static async void OnHtmlParse(string response, DecryptSignatureMode decryptSignatureMode, Action<List<YouTubeUri>, Exception> completed)
         {
             var urls = new List<YouTubeUri>();
+            if (sigCodes != null && sigCodes.Count > 0)
+                sigCodes.Clear();
+            javaScriptCode = string.Empty;
             try
             {
-                string javaScriptCode = null;
-
                 var match = Regex.Match(response, "url_encoded_fmt_stream_map\": \"(.*?)\"");
                 var data = Uri.UnescapeDataString(match.Groups[1].Value);
                 match = Regex.Match(response, "adaptive_fmts\": \"(.*?)\"");
@@ -312,17 +313,9 @@ namespace ControlLibrary.Tools.Multimedia
                                     tuple.Type = value;
                                 else if (key == "s")
                                 {
-                                    if (string.IsNullOrEmpty(javaScriptCode) || string.IsNullOrWhiteSpace(javaScriptCode))
-                                    {
-                                        var javaScriptUri = "http://s.ytimg.com/yts/jsbin/html5player-" +
-                                                            Regex.Match(response,
-                                                                "\"\\\\/\\\\/s.ytimg.com\\\\/yts\\\\/jsbin\\\\/html5player-(.+?)\\.js\"")
-                                                                .Groups[1] + ".js";
-                                        javaScriptCode = await HttpGet(javaScriptUri);
-                                    }
-
-                                    signature = DecryptLocalSignature(value, javaScriptCode);
-                                    if (string.IsNullOrEmpty(signature) || string.IsNullOrWhiteSpace(signature))
+                                    if (decryptSignatureMode == DecryptSignatureMode.DecryptLocalSignature)
+                                        signature = await DecryptLocalSignature(value, response);
+                                    else
                                         signature = await DecryptWebSignature(value);
                                 }
                                 else if (key == "sig")
@@ -382,13 +375,14 @@ namespace ControlLibrary.Tools.Multimedia
             }
         }
 #endif
-        private static async void OnHtmlDownloaded(string response, YouTubeQuality minQuality, YouTubeQuality maxQuality, Action<YouTubeUri, Exception> completed)
+        private static async void OnHtmlDownloaded(string response, YouTubeQuality minQuality, YouTubeQuality maxQuality, DecryptSignatureMode decryptSignatureMode, Action<YouTubeUri, Exception> completed)
         {
             var urls = new List<YouTubeUri>();
+            if (sigCodes != null && sigCodes.Count > 0)
+                sigCodes.Clear();
+            javaScriptCode = string.Empty;
             try
-            {
-                string javaScriptCode = null;
-                
+            {             
                 var match = Regex.Match(response, "url_encoded_fmt_stream_map\": \"(.*?)\"");
                 var data = Uri.UnescapeDataString(match.Groups[1].Value);
                 match = Regex.Match(response, "adaptive_fmts\": \"(.*?)\"");
@@ -418,17 +412,9 @@ namespace ControlLibrary.Tools.Multimedia
                                     tuple.Type = value;
                                 else if (key == "s")
                                 {
-                                    if (string.IsNullOrEmpty(javaScriptCode) || string.IsNullOrWhiteSpace(javaScriptCode))
-                                    {
-                                        var javaScriptUri = "http://s.ytimg.com/yts/jsbin/html5player-" +
-                                                            Regex.Match(response,
-                                                                "\"\\\\/\\\\/s.ytimg.com\\\\/yts\\\\/jsbin\\\\/html5player-(.+?)\\.js\"")
-                                                                .Groups[1] + ".js";
-                                        javaScriptCode = await HttpGet(javaScriptUri);
-                                    }
-
-                                    signature = DecryptLocalSignature(value, javaScriptCode);
-                                    if (string.IsNullOrEmpty(signature) || string.IsNullOrWhiteSpace(signature))
+                                    if (decryptSignatureMode == DecryptSignatureMode.DecryptLocalSignature)
+                                        signature = await DecryptLocalSignature(value, response);
+                                    else
                                         signature = await DecryptWebSignature(value);
                                 }
                                 else if (key == "sig")
@@ -473,10 +459,9 @@ namespace ControlLibrary.Tools.Multimedia
                 //completed(null, new Exception("no_video_urls_found"));
                 completed(entry, null);
         }
-
-        //
-        private static List<Tuple<string, int>> sigCodes = null;
+        
         //签名验证算法(外网)
+        private static List<Tuple<string, int>> sigCodes = null;
         public async static Task<string> DecryptWebSignature(string sig)
         {
             if (sigCodes == null || sigCodes.Count <= 0)
@@ -491,7 +476,10 @@ namespace ControlLibrary.Tools.Multimedia
                     var codes = await getHc.GetStringAsync("http://inbasic.net/signature2.php");
                     if (!string.IsNullOrEmpty(codes) && !string.IsNullOrWhiteSpace(codes))
                     {
-                        codes = codes.Trim().Replace("[", "").Replace("]", "").Replace("\"", "");
+                        //codes = codes.Trim().Replace("[", "").Replace("]", "").Replace("\"", "");
+                        codes = codes.Substring(codes.Trim().IndexOf('['));
+                        codes = codes.Substring(0, codes.IndexOf(']'));
+                        codes = codes.Replace("[", "").Replace("]", "").Replace("\"", "");
                         var codeArray = codes.Split(',');
                         sigCodes = new List<Tuple<string, int>>();
                         for (int i = 0; i < codeArray.Length; i++)
@@ -532,8 +520,17 @@ namespace ControlLibrary.Tools.Multimedia
         }
 
         //签名验证算法(本地)
-        private static string DecryptLocalSignature(string signature, string javaScriptCode)
+        private static string javaScriptCode = string.Empty;
+        private async static Task<string> DecryptLocalSignature(string signature, string response)
         {
+            if (string.IsNullOrEmpty(javaScriptCode) || string.IsNullOrWhiteSpace(javaScriptCode))
+            {
+                var javaScriptUri = "http://s.ytimg.com/yts/jsbin/html5player-" +
+                                    Regex.Match(response,
+                                        "\"\\\\/\\\\/s.ytimg.com\\\\/yts\\\\/jsbin\\\\/html5player-(.+?)\\.js\"")
+                                        .Groups[1] + ".js";
+                javaScriptCode = await HttpGet(javaScriptUri);
+            }
             var functionName = Regex.Match(javaScriptCode, "signature=(.*?)\\(").Groups[1].ToString();
             var functionMath = Regex.Match(javaScriptCode, "function " + Regex.Escape(functionName) + "\\((\\w+)\\)\\{(.+?)\\}", RegexOptions.Singleline);
 
@@ -557,12 +554,12 @@ namespace ControlLibrary.Tools.Multimedia
                     signature = Swap(signature, Convert.ToInt32(Regex.Match(line, parameterName + "\\[0\\]=" + parameterName + "\\[(\\d+)%" + parameterName + "\\.length\\]").Groups[1].ToString()));
                 else
                 {
-                    var match = Regex.Match(line, parameterName + "=(.*?)\\.(.*?)\\(" + parameterName + ",(.*?)\\)");
+                    var match = Regex.Match(line, "(" + parameterName + "=)?(.*?)\\.(.*?)\\(" + parameterName + ",(.*?)\\)");
                     if (match.Success)
                     {
-                        var root = match.Groups[1].ToString();
-                        var method = match.Groups[2].ToString();
-                        var parameter = int.Parse(match.Groups[3].ToString());
+                        var root = match.Groups[2].ToString();
+                        var method = match.Groups[3].ToString();
+                        var parameter = int.Parse(match.Groups[4].ToString());
 
                         if (methods == null)
                         {
@@ -579,7 +576,7 @@ namespace ControlLibrary.Tools.Multimedia
 
                                 if (methodBody.Contains("reverse()"))
                                     methods[methodName] = (s, i) => Reverse(s);
-                                else if (methodBody.Contains(".slice("))
+                                else if (methodBody.Contains(".splice(") || methodBody.Contains(".slice("))
                                     methods[methodName] = Slice;
                                 else
                                     methods[methodName] = Swap;
@@ -587,6 +584,10 @@ namespace ControlLibrary.Tools.Multimedia
                         }
 
                         signature = methods[method](signature, parameter);
+                    }
+                    else
+                    { 
+                        
                     }
                 }
             }
@@ -626,10 +627,12 @@ namespace ControlLibrary.Tools.Multimedia
         private const string BotUserAgent = "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
         private static async Task<string> HttpGet(string uri)
         {
-            HttpClient hc = new HttpClient();
-            hc.DefaultRequestHeaders.Add("User-Agent", BotUserAgent);
-            var bytes = await hc.GetByteArrayAsync(uri);
-            return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+            using (var getHc = new HttpClient())
+            {
+                getHc.DefaultRequestHeaders.Add("User-Agent", BotUserAgent);
+                var bytes = await getHc.GetByteArrayAsync(uri);
+                return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+            }
         }
         //
 

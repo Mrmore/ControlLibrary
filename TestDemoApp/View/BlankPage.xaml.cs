@@ -22,6 +22,8 @@ using NotificationsExtensions.TileContent;
 using System.Diagnostics;
 using Windows.Storage;
 using ControlLibrary.GifSynthesis;
+using Windows.UI.Core;
+using System.Threading.Tasks;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -229,6 +231,10 @@ namespace TestDemoApp
 
         private async void BtYouTube_Click(object sender, RoutedEventArgs e)
         {
+            //await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            //                         async () => await Task.Delay(1000));
+            //await Window.Current.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+            //                         async () => await Task.Delay(1000));
             var youtubeurl = YouTube.GetYouTubeId("http://www.youtube.com/watch?v=eAX85PXl408");
             try
             {

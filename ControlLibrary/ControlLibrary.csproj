@@ -380,6 +380,7 @@
     <Compile Include="Tools\Downloader\BaseBackgroundDownloader.cs" />
     <Compile Include="Tools\Downloader\BaseDownloader.cs" />
     <Compile Include="Tools\Downloader\StorageFileDownloader.cs" />
+    <Compile Include="Tools\Multimedia\DecryptSignatureMode.cs" />
     <Compile Include="Tools\Multimedia\YouTube.cs">
       <SubType>Code</SubType>
     </Compile>
