@@ -537,6 +537,7 @@ namespace ControlLibrary.Tools.Multimedia
             var functionMath = Regex.Match(javaScriptCode, "function " + Regex.Escape(functionName) + "\\((\\w+)\\)\\{(.+?)\\}", RegexOptions.Singleline);
 
             var parameterName = Regex.Escape(functionMath.Groups[1].ToString());
+            //var functionBody = @"a=a.split("");$er.U8(a,45);$er.Q6(a,7);$er.Q6(a,19);$er.Q6(a,38);$er.Lr(a,3);$er.Q6(a,41);$er.Lr(a,1);$er.U8(a,13);$er.Q6(a,1);return a.join("")";
             var functionBody = functionMath.Groups[2].ToString();
 
             Dictionary<string, Func<string, int, string>> methods = null;
@@ -568,6 +569,9 @@ namespace ControlLibrary.Tools.Multimedia
                             // Parse methods
                             methods = new Dictionary<string, Func<string, int, string>>();
 
+                            if (root.Contains("$"))
+                                root = root.Replace("$", "\\$");
+                            //javaScriptCode = @"var $er={Lr:function(a,b){a.splice(0,b)},U8:function(a){a.reverse()},Q6:function(a,b){var c=a[0];a[0]=a[b%a.length];a[b]=c}};function fr(a){a=a.split("");$er.U8(a,45);$er.Q6(a,7);$er.Q6(a,1);";
                             var code = Regex.Match(javaScriptCode, "var " + root + "=\\{(.*?)\\};function").Groups[1].ToString();
                             var methodsArray = code.Split(new[] { "}," }, StringSplitOptions.None);
                             foreach (var m in methodsArray)
