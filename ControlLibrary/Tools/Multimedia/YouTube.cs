@@ -533,7 +533,7 @@ namespace ControlLibrary.Tools.Multimedia
             }
             //var functionName = Regex.Match(javaScriptCode, "signature=(.*?)\\(").Groups[1].ToString();
             //var functionName = Regex.Match(javaScriptCode, "=[a-zA-Z0-9]+\\.sig\\|\\|(.*?)\\(").Groups[1].ToString();
-            var functionName = Regex.Match(javaScriptCode, "=*\\.sig\\|\\|([a-zA-Z0-9]+?)\\(").Groups[1].ToString();
+            var functionName = Regex.Match(javaScriptCode, "=*\\.sig\\|\\|([a-zA-Z0-9$]+?)\\(").Groups[1].ToString();
             var functionMath = Regex.Match(javaScriptCode, "function " + Regex.Escape(functionName) + "\\((\\w+)\\)\\{(.+?)\\}", RegexOptions.Singleline);
 
             var parameterName = Regex.Escape(functionMath.Groups[1].ToString());
