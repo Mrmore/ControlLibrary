@@ -284,7 +284,8 @@ namespace ControlLibrary.Tools.Multimedia
             javaScriptCode = string.Empty;
             try
             {
-                var match = Regex.Match(response, "url_encoded_fmt_stream_map\": \"(.*?)\"");
+                //var match = Regex.Match(response, "url_encoded_fmt_stream_map\": \"(.*?)\"");
+                var match = Regex.Match(response, "url_encoded_fmt_stream_map\"\\s*:\\s*\"(.*?)\"");
                 var data = Uri.UnescapeDataString(match.Groups[1].Value);
                 match = Regex.Match(response, "adaptive_fmts\": \"(.*?)\"");
                 var data2 = Uri.UnescapeDataString(match.Groups[1].Value);
@@ -383,7 +384,8 @@ namespace ControlLibrary.Tools.Multimedia
             javaScriptCode = string.Empty;
             try
             {             
-                var match = Regex.Match(response, "url_encoded_fmt_stream_map\": \"(.*?)\"");
+                //var match = Regex.Match(response, "url_encoded_fmt_stream_map\": \"(.*?)\"");
+                var match = Regex.Match(response, "url_encoded_fmt_stream_map\"\\s*:\\s*\"(.*?)\"");
                 var data = Uri.UnescapeDataString(match.Groups[1].Value);
                 match = Regex.Match(response, "adaptive_fmts\": \"(.*?)\"");
                 var data2 = Uri.UnescapeDataString(match.Groups[1].Value);
@@ -531,9 +533,17 @@ namespace ControlLibrary.Tools.Multimedia
                                         .Groups[1] + ".js";
                 javaScriptCode = await HttpGet(javaScriptUri);
             }
-            //var functionName = Regex.Match(javaScriptCode, "signature=(.*?)\\(").Groups[1].ToString();
-            //var functionName = Regex.Match(javaScriptCode, "=[a-zA-Z0-9]+\\.sig\\|\\|(.*?)\\(").Groups[1].ToString();
-            var functionName = Regex.Match(javaScriptCode, "=*\\.sig\\|\\|([a-zA-Z0-9$]+?)\\(").Groups[1].ToString();
+            ////var functionName = Regex.Match(javaScriptCode, "signature=(.*?)\\(").Groups[1].ToString();
+            ////var functionName = Regex.Match(javaScriptCode, "=[a-zA-Z0-9]+\\.sig\\|\\|(.*?)\\(").Groups[1].ToString();
+            //var functionName = Regex.Match(javaScriptCode, "=*\\.sig\\|\\|([a-zA-Z0-9$]+?)\\(").Groups[1].ToString();
+            var functionNameMatch = Regex.Match(javaScriptCode, @"\.set\s*\(""signature""\s*,\s*([a-zA-Z0-9_$][\w$]*)\(");
+            if (functionNameMatch.Groups.Count != 2)
+            {
+                functionNameMatch = Regex.Match(javaScriptCode, @"\.sig\s*\|\|\s*([a-zA-Z0-9_$][\w$]*)\(");
+                if (functionNameMatch.Groups.Count != 2)
+                    functionNameMatch = Regex.Match(javaScriptCode, @"\.signature\s*=\s*([a-zA-Z_$][\w$]*)\([a-zA-Z_$][\w$]*\)");
+            }
+            var functionName = functionNameMatch.Groups[1].ToString();
             var functionMath = Regex.Match(javaScriptCode, "function " + Regex.Escape(functionName) + "\\((\\w+)\\)\\{(.+?)\\}", RegexOptions.Singleline);
 
             var parameterName = Regex.Escape(functionMath.Groups[1].ToString());
