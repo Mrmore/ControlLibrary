@@ -44,9 +44,9 @@ namespace WinRtCacheHelper
                 switch (location)
                 {
                     case StorageStrategies.Local:
-                        return (T)Windows.Storage.ApplicationData.Current.LocalSettings.Values[key.ToString()];
+                        return (T)Windows.Storage.ApplicationData.Current.LocalSettings.Values[key];
                     case StorageStrategies.Roaming:
-                        return (T)Windows.Storage.ApplicationData.Current.RoamingSettings.Values[key.ToString()];
+                        return (T)Windows.Storage.ApplicationData.Current.RoamingSettings.Values[key];
                     default:
                         throw new NotSupportedException(location.ToString());
                 }
@@ -64,10 +64,16 @@ namespace WinRtCacheHelper
             switch (location)
             {
                 case StorageStrategies.Local:
-                    Windows.Storage.ApplicationData.Current.LocalSettings.Values[key.ToString()] = value;
+                    if (SettingExists(key))
+                        Windows.Storage.ApplicationData.Current.LocalSettings.Values[key] = value;
+                    else
+                        Windows.Storage.ApplicationData.Current.LocalSettings.Values.Add(key, value);
                     break;
                 case StorageStrategies.Roaming:
-                    Windows.Storage.ApplicationData.Current.RoamingSettings.Values[key.ToString()] = value;
+                    if (SettingExists(key))
+                        Windows.Storage.ApplicationData.Current.RoamingSettings.Values[key] = value;
+                    else
+                        Windows.Storage.ApplicationData.Current.RoamingSettings.Values.Add(key, value);
                     break;
                 default:
                     throw new NotSupportedException(location.ToString());
@@ -76,16 +82,19 @@ namespace WinRtCacheHelper
 
         public static void DeleteSetting(string key, StorageStrategies location = StorageStrategies.Local)
         {
-            switch (location)
+            if (SettingExists(key))
             {
-                case StorageStrategies.Local:
-                    Windows.Storage.ApplicationData.Current.LocalSettings.Values.Remove(key);
-                    break;
-                case StorageStrategies.Roaming:
-                    Windows.Storage.ApplicationData.Current.RoamingSettings.Values.Remove(key);
-                    break;
-                default:
-                    throw new NotSupportedException(location.ToString());
+                switch (location)
+                {
+                    case StorageStrategies.Local:
+                        Windows.Storage.ApplicationData.Current.LocalSettings.Values.Remove(key);
+                        break;
+                    case StorageStrategies.Roaming:
+                        Windows.Storage.ApplicationData.Current.RoamingSettings.Values.Remove(key);
+                        break;
+                    default:
+                        throw new NotSupportedException(location.ToString());
+                }
             }
         }
 
